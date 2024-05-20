@@ -1,6 +1,6 @@
 # wof-cli
 
-Experimental standalone 'wof' command-line tool for common Who's On First operations.
+Experimental 'wof' command-line tool for common Who's On First operations.
 
 ## Documentation
 
