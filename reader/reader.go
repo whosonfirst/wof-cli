@@ -6,7 +6,13 @@ import (
 	"os"
 )
 
+const STDIN string = "-"
+
 func ReadCloserFromURI(ctx context.Context, uri string) (io.ReadCloser, bool, error) {
+
+	if uri == STDIN {
+		return os.Stdin, true, nil
+	}
 
 	r, err := os.Open(uri)
 

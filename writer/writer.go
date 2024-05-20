@@ -1,18 +1,29 @@
 package writer
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"os"
+
+	"github.com/natefinch/atomic"
 )
 
-func Write(ctx context.Context, uri string, body []byte, overwrite bool) error {
+const STDOUT string = "-"
 
-	_, err := os.Stdout.Write(body)
+func Write(ctx context.Context, uri string, body []byte) error {
 
-	if err != nil {
-		return fmt.Errorf("Failed to write body, %w", err)
+	if uri == STDOUT {
+
+		_, err := os.Stdout.Write(body)
+
+		if err != nil {
+			return fmt.Errorf("Failed to write body, %w", err)
+		}
+
+		return nil
 	}
 
-	return nil
+	br := bytes.NewReader(body)
+	return atomic.WriteFile(uri, br)
 }

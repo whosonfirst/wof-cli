@@ -12,8 +12,8 @@ import (
 )
 
 type RunOptions struct {
-	URIs      []string
-	Overwrite bool
+	URIs   []string
+	Stdout bool
 }
 
 type FormatCommand struct {
@@ -38,8 +38,8 @@ func (c *FormatCommand) Run(ctx context.Context, args []string) error {
 	uris := fs.Args()
 
 	opts := &RunOptions{
-		URIs:      uris,
-		Overwrite: overwrite,
+		URIs:   uris,
+		Stdout: stdout,
 	}
 
 	return RunWithOptions(ctx, opts)
@@ -71,7 +71,13 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 			return fmt.Errorf("Failed to format body for '%s', %w", uri, err)
 		}
 
-		err = writer.Write(ctx, uri, new_body, opts.Overwrite)
+		wr_uri := uri
+
+		if opts.Stdout {
+			wr_uri = writer.STDOUT
+		}
+
+		err = writer.Write(ctx, wr_uri, new_body)
 
 		if err != nil {
 			return fmt.Errorf("Failed to write body for '%s', %w", uri, err)

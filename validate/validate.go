@@ -3,7 +3,7 @@ package validate
 import (
 	"context"
 	"fmt"
-	"log/slog"
+	_ "log/slog"
 
 	"github.com/whosonfirst/go-whosonfirst-validate"
 	"github.com/whosonfirst/wof"
@@ -82,8 +82,6 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		if err != nil {
 			return fmt.Errorf("Failed to validate body for '%s', %w", uri, err)
 		}
-
-		slog.Info("Valid Who's On First record", "uri", uri)
 	}
 
 	return nil

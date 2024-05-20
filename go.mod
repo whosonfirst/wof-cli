@@ -4,6 +4,7 @@ go 1.22.3
 
 require (
 	github.com/aaronland/go-roster v1.0.0
+	github.com/natefinch/atomic v1.0.1
 	github.com/sfomuseum/go-flags v0.10.0
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3
 	github.com/whosonfirst/go-whosonfirst-export/v2 v2.7.2
@@ -81,7 +82,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mschoch/smat v0.2.0 // indirect
-	github.com/natefinch/atomic v1.0.1 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/paulmach/orb v0.11.1 // indirect

@@ -23,9 +23,10 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log/slog"
 
 	"github.com/sfomuseum/go-sfomuseum-mapshaper"
+	"github.com/tidwall/sjson"
+	"github.com/whosonfirst/go-whosonfirst-export/v2"
 	_ "github.com/whosonfirst/go-whosonfirst-spatial-pmtiles"
 	_ "github.com/whosonfirst/go-whosonfirst-spatial-sqlite"
 	"github.com/whosonfirst/go-whosonfirst-spatial/database"
@@ -38,11 +39,23 @@ import (
 )
 
 type RunOptions struct {
-	URIs           []string
-	Overwrite      bool
-	Resolver       *hierarchy.PointInPolygonHierarchyResolver
-	ResultsFunc    hierarchy_filter.FilterSPRResultsFunc
-	InputFilters   *filter.SPRInputs
+	// A list of URIs to perform point-in-polygon operations on.
+	URIs []string
+	// Write output to STDOUT
+	Stdout bool
+	// ...
+	Export bool
+	// ...
+	Exporter export.Exporter
+	// ...
+	Placetype string
+	// Resolver is a `PointInPolygonHierarchyResolver` instance which is what manages all the point-in-polygon operations and related decision making.
+	Resolver *hierarchy.PointInPolygonHierarchyResolver
+	// ResultsFunc is function used to derive a single `spr.StandardPlacesResult` from a list of `spr.StandardPlacesResult` instances (point-in-polygon candidates).
+	ResultsFunc hierarchy_filter.FilterSPRResultsFunc
+	// InputFilters are filterd used to limits the point-in-polygon candidates to consider.
+	InputFilters *filter.SPRInputs
+	// UpdateCallback is a function definition for a custom callback to convert point-in-polygon candidates in to a dictionary of properties containining hierarchy information
 	UpdateCallback hierarchy.PointInPolygonHierarchyResolverUpdateCallback
 }
 
@@ -56,7 +69,6 @@ func init() {
 }
 
 func NewPointInPolygonCommand(ctx context.Context, cmd string) (wof.Command, error) {
-
 	c := &PointInPolygonCommand{}
 	return c, nil
 }
@@ -107,11 +119,24 @@ func (c *PointInPolygonCommand) Run(ctx context.Context, args []string) error {
 
 	opts := &RunOptions{
 		URIs:           uris,
-		Overwrite:      overwrite,
+		Stdout:         stdout,
+		Placetype:      placetype,
 		Resolver:       resolver,
 		ResultsFunc:    results_func,
 		InputFilters:   input_filters,
 		UpdateCallback: update_cb,
+	}
+
+	if exportify {
+
+		ex, err := export.NewExporter(ctx, "whosonfirst://")
+
+		if err != nil {
+			return fmt.Errorf("Failed to create new exporter, %w", err)
+		}
+
+		opts.Export = true
+		opts.Exporter = ex
 	}
 
 	return RunWithOptions(ctx, opts)
@@ -137,23 +162,43 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 			return fmt.Errorf("Failed to read '%s', %w", uri, err)
 		}
 
+		if opts.Placetype != "" {
+
+			body, err = sjson.SetBytes(body, "properties.wof:placetype", opts.Placetype)
+
+			if err != nil {
+				return fmt.Errorf("Failed to assign wof:placetype property for '%s', %w", uri, err)
+			}
+		}
+
 		has_changed, new_body, err := opts.Resolver.PointInPolygonAndUpdate(ctx, opts.InputFilters, opts.ResultsFunc, opts.UpdateCallback, body)
 
 		if err != nil {
 			return fmt.Errorf("Failed to perform point in polygon operation, %w", err)
 		}
 
-		if !has_changed {
-			slog.Info("No changes")
-			continue
-		}
+		if has_changed {
 
-		// To do: Still need to "export" record here
+			wr_uri := uri
 
-		err = writer.Write(ctx, uri, new_body, opts.Overwrite)
+			if opts.Stdout {
+				wr_uri = writer.STDOUT
+			}
 
-		if err != nil {
-			return fmt.Errorf("Failed to write body for '%s', %w", uri, err)
+			if opts.Export && opts.Exporter != nil {
+
+				new_body, err = opts.Exporter.Export(ctx, new_body)
+
+				if err != nil {
+					return fmt.Errorf("Failed to export new record for '%s' ('%s'), %w", wr_uri, uri, err)
+				}
+			}
+
+			err = writer.Write(ctx, wr_uri, new_body)
+
+			if err != nil {
+				return fmt.Errorf("Failed to write body for '%s' ('%s'), %w", wr_uri, uri, err)
+			}
 		}
 	}
 

@@ -12,9 +12,9 @@ import (
 )
 
 type RunOptions struct {
-	URIs      []string
-	Overwrite bool
-	Exporter  export.Exporter
+	URIs     []string
+	Stdout   bool
+	Exporter export.Exporter
 }
 
 type ExportCommand struct {
@@ -50,9 +50,9 @@ func (c *ExportCommand) Run(ctx context.Context, args []string) error {
 	uris := fs.Args()
 
 	opts := &RunOptions{
-		URIs:      uris,
-		Overwrite: overwrite,
-		Exporter:  c.exporter,
+		URIs:     uris,
+		Stdout:   stdout,
+		Exporter: c.exporter,
 	}
 
 	return RunWithOptions(ctx, opts)
@@ -84,7 +84,13 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 			return fmt.Errorf("Failed to export body for '%s', %w", uri, err)
 		}
 
-		err = writer.Write(ctx, uri, new_body, opts.Overwrite)
+		wr_uri := uri
+
+		if opts.Stdout {
+			wr_uri = writer.STDOUT
+		}
+
+		err = writer.Write(ctx, wr_uri, new_body)
 
 		if err != nil {
 			return fmt.Errorf("Failed to write body for '%s', %w", uri, err)
