@@ -167,3 +167,6 @@ _Note the default behaviour for successfull validation is to do nothing. That mi
 * https://github.com/whosonfirst/go-whosonfirst-format
 * https://github.com/whosonfirst/go-whosonfirst-validate
 * https://github.com/whosonfirst/go-whosonfirst-spatial
+* https://github.com/whosonfirst/go-whosonfirst-spatial-pmtiles
+* https://github.com/whosonfirst/go-whosonfirst-spatial-sqlite
+* https://github.com/sfomuseum/go-sfomuseum-mapshaper
