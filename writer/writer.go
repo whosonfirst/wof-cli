@@ -2,8 +2,8 @@ package writer
 
 import (
 	"context"
-	"os"
 	"fmt"
+	"os"
 )
 
 func Write(ctx context.Context, uri string, body []byte, overwrite bool) error {
