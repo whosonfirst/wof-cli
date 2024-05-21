@@ -7,11 +7,13 @@ require (
 	github.com/natefinch/atomic v1.0.1
 	github.com/sfomuseum/go-flags v0.10.0
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3
+	github.com/tidwall/sjson v1.2.5
 	github.com/whosonfirst/go-whosonfirst-export/v2 v2.7.2
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
 	github.com/whosonfirst/go-whosonfirst-spatial v0.8.0
 	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.1.0
 	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.7.0
+	github.com/whosonfirst/go-whosonfirst-uri v1.3.0
 	github.com/whosonfirst/go-whosonfirst-validate v0.3.6
 )
 
@@ -102,7 +104,6 @@ require (
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/tidwall/rtree v1.3.1 // indirect
-	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/whosonfirst/go-ioutil v1.0.2 // indirect
 	github.com/whosonfirst/go-reader v1.0.2 // indirect
 	github.com/whosonfirst/go-rfc-5646 v0.1.0 // indirect
@@ -120,7 +121,6 @@ require (
 	github.com/whosonfirst/go-whosonfirst-sql v0.0.3 // indirect
 	github.com/whosonfirst/go-whosonfirst-sqlite-features/v2 v2.0.3 // indirect
 	github.com/whosonfirst/go-whosonfirst-sqlite-spr/v2 v2.0.0 // indirect
-	github.com/whosonfirst/go-whosonfirst-uri v1.3.0 // indirect
 	github.com/whosonfirst/go-writer/v3 v3.1.1 // indirect
 	github.com/whosonfirst/walk v0.0.2 // indirect
 	go.mongodb.org/mongo-driver v1.11.4 // indirect

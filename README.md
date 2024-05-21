@@ -21,6 +21,7 @@ Usage: wof [CMD] [OPTIONS]
 Valid commands are:
 * export
 * fmt
+* open
 * pip
 * validate
 ```
@@ -63,6 +64,17 @@ $> ./bin/wof fmt ~/Desktop/test.geojson
   "bbox": null,
   "geometry": {"coordinates":[[[-122.39515729496134,37.62304022215619,40],[-122.39511251529856,37.62305107289922,40],[-122.39508811697748,37.623056984354164,40],[-122.39509251970546,37.62306848116357,40],[-122.39510034575342,37.62308891418595,40],[-122.39516943471905,37.62307271147819,40],[-122.39515729496134,37.62304022215619,40]]],"type":"Polygon"}
 }
+```
+
+#### wof open
+
+```
+$> ./bin/wof open -h
+Open one or more Who's On First documents in a custom editor.
+Usage:
+	 ./bin/wof path(N) path(N)
+  -editor string
+    	The editor to use for opening Who's On First records. If empty the value of the EDITOR environment variable will be used.
 ```
 
 #### wof pip
