@@ -8,6 +8,7 @@ import (
 	"github.com/whosonfirst/go-whosonfirst-validate"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
+	"github.com/whosonfirst/wof/uris"
 )
 
 type RunOptions struct {
@@ -59,7 +60,7 @@ func (c *ValidateCommand) Run(ctx context.Context, args []string) error {
 
 func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
-	for _, uri := range opts.URIs {
+	cb := func(ctx context.Context, uri string) error {
 
 		r, is_stdin, err := reader.ReadCloserFromURI(ctx, uri)
 
@@ -82,6 +83,14 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		if err != nil {
 			return fmt.Errorf("Failed to validate body for '%s', %w", uri, err)
 		}
+
+		return nil
+	}
+
+	err := uris.ExpandURIsWithCallback(ctx, cb, opts.URIs...)
+
+	if err != nil {
+		return fmt.Errorf("Failed to run, %w", err)
 	}
 
 	return nil

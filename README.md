@@ -173,6 +173,16 @@ $> ./bin/wof validate sfo.geojson
 
 _Note the default behaviour for successfull validation is to do nothing. That might change? Maybe?_
 
+## Paths and URIs
+
+The default behaviour for the `wof` command is to assume that all the URIs it is passed are paths on the local computer.
+
+That being said all the tool also "expand" each path using the [uris.ExpandURIsWithCallback](uris/uris.go) method which allows for more sophisticated behaviour in the future.
+
+Currently there is only one supported "expansion": Treating bare numbers as Who's On First IDs, resolving them to their relative path and looking for that file in a parent "data" directory inside the current working directory. Basically it's a shortcut for resolving a Who's On First record to its GeoJSON representation inside a `whosonfirst-data` repository.
+
+Eventually there may be other "expansions" most notably support for the Go `./...` syntax to process all the Who's On First records in the current working directory.
+
 ## See also
 
 * https://github.com/whosonfirst/go-whosonfirst-export
