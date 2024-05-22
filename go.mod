@@ -12,9 +12,9 @@ require (
 	github.com/tidwall/sjson v1.2.5
 	github.com/whosonfirst/go-whosonfirst-export/v2 v2.7.2
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
-	github.com/whosonfirst/go-whosonfirst-spatial v0.8.0
-	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.1.0
-	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.7.0
+	github.com/whosonfirst/go-whosonfirst-spatial v0.9.0
+	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.2.0
+	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.8.0
 	github.com/whosonfirst/go-whosonfirst-uri v1.3.0
 	github.com/whosonfirst/go-whosonfirst-validate v0.3.6
 )
@@ -64,6 +64,7 @@ require (
 	github.com/bits-and-blooms/bitset v1.2.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.2.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
+	github.com/dhconnelly/rtreego v1.2.0 // indirect
 	github.com/dominikbraun/graph v0.23.0 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/g8rswimmer/error-chain v1.0.0 // indirect
