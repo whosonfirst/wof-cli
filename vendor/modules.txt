@@ -364,6 +364,9 @@ github.com/paulmach/orb/project
 # github.com/paulmach/protoscan v0.2.1
 ## explicit; go 1.15
 github.com/paulmach/protoscan
+# github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
+## explicit; go 1.14
+github.com/pkg/browser
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors

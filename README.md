@@ -23,6 +23,7 @@ Valid commands are:
 * fmt
 * open
 * pip
+* show
 * validate
 ```
 
@@ -141,6 +142,30 @@ There are a few things to note:
 * The `-placetype` flag is a convenience to facilitate point-in-polygon operations without having to first update an input record.
 * By default the `pip` command neither "formats" or "exports" results. Although there is an `-export` flag to enable both it is your responsibility to ensure that input documents have all the necessary properties (for example "wof:name").
 * The `pip` command does _NOT_ yet implement the logic of the [py-mapzen-whosonfirst-hierarchy](https://github.com/whosonfirst/py-mapzen-whosonfirst-hierarchy/blob/master/mapzen/whosonfirst/hierarchy/__init__.py) library. There is an [open issue](https://github.com/whosonfirst/go-whosonfirst-spatial/issues/40) for this.
+
+#### wof show
+
+```
+$> ./bin/wof show -h
+Display one or more Who's On First documents on a map.
+Usage:
+	 ./bin/wof path(N) path(N)
+  -port int
+    	The port number to listen for requests on (on localhost). If 0 then a random port number will be chosen.
+```
+
+For example:
+
+```
+$> ./bin/wof show montreal.geojson 
+Records are viewable at http://localhost:63675
+```
+
+This should automatically open a new window in your default browser like this:
+
+![](docs/images/wof-show-montreal.png)
+
+As of this writing there is minimal styling and little to no interactivity. That may (or may not) change. Right now this tool is principally just to be able to look at one or more Who's On First features on a map.
 
 #### wof validate
 
