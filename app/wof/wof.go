@@ -10,6 +10,7 @@ import (
 	_ "github.com/whosonfirst/wof/format"
 	_ "github.com/whosonfirst/wof/open"
 	_ "github.com/whosonfirst/wof/pip"
+	_ "github.com/whosonfirst/wof/show"
 	_ "github.com/whosonfirst/wof/validate"
 )
 

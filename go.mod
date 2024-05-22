@@ -5,6 +5,7 @@ go 1.22.3
 require (
 	github.com/aaronland/go-roster v1.0.0
 	github.com/natefinch/atomic v1.0.1
+	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/sfomuseum/go-flags v0.10.0
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3
 	github.com/tidwall/sjson v1.2.5
