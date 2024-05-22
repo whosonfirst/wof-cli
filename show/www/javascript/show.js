@@ -13,6 +13,32 @@ window.addEventListener("load", function load(event){
 	.then((rsp) => rsp.json())
 	.then((f) => {
 
+	    var raw_el = document.querySelector("#raw");
+
+	    if (raw_el){
+
+		// Something something something WASM
+		// https://github.com/whosonfirst/go-whosonfirst-format-wasm
+		// Which expects Feature elements rather than FeatureCollections
+		// Something something something WASM
+		
+		var str_f = JSON.stringify(f, "", " ");
+		
+		var pre = document.createElement("pre");
+		pre.appendChild(document.createTextNode(str_f));
+		raw_el.appendChild(pre);
+	    }
+
+	    var pt_handler = whosonfirst.spelunker.leaflet.handlers.point({});
+
+	    var poly_style = whosonfirst.spelunker.leaflet.styles.consensus_polygon();	    
+	    // var lbl_style = whosonfirst.spelunker.leaflet.styles.label_centroid();
+	    
+	    var geojson_args = {
+		style: poly_style,
+		pointToLayer: pt_handler,		
+	    };
+	    
 	    var geojson_layer = L.geoJSON(f);
 	    geojson_layer.addTo(map);
 
