@@ -158,7 +158,7 @@ For example:
 
 ```
 $> ./bin/wof show montreal.geojson 
-Records are viewable at http://localhost:63635
+Records are viewable at http://localhost:63675
 ```
 
 This should automatically open a new window in your default browser like this:
