@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
+	"time"
 
 	"github.com/paulmach/orb/geojson"
 	"github.com/pkg/browser"
@@ -44,6 +46,17 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 
 	uris := fs.Args()
 
+	if port == 0 {
+
+		listener, err := net.Listen("tcp", "localhost:0")
+
+		if err != nil {
+			return fmt.Errorf("Failed to determine next available port, %w", err)
+		}
+
+		port = listener.Addr().(*net.TCPAddr).Port
+	}
+
 	opts := &RunOptions{
 		URIs: uris,
 		Port: port,
@@ -53,6 +66,9 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 }
 
 func RunWithOptions(ctx context.Context, opts *RunOptions) error {
+
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
 
 	fc := geojson.NewFeatureCollection()
 
@@ -101,6 +117,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	mux.Handle("/", fs_handler)
 
 	addr := fmt.Sprintf("localhost:%d", opts.Port)
+	url := fmt.Sprintf("http://%s", addr)
 
 	http_server := http.Server{
 		Addr: addr,
@@ -109,6 +126,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	http_server.Handler = mux
 
 	done_ch := make(chan bool)
+	err_ch := make(chan error)
 
 	go func() {
 
@@ -116,6 +134,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		signal.Notify(sigint, os.Interrupt)
 		<-sigint
 
+		slog.Info("Shutting server down")
 		err := http_server.Shutdown(ctx)
 
 		if err != nil {
@@ -126,10 +145,46 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	}()
 
 	go func() {
-		http_server.ListenAndServe()
+
+		err := http_server.ListenAndServe()
+
+		if err != nil {
+			err_ch <- fmt.Errorf("Failed to start server, %w", err)
+		}
 	}()
 
-	url := fmt.Sprintf("http://%s", addr)
+	server_ready := false
+
+	ticker := time.NewTicker(100 * time.Millisecond)
+	defer ticker.Stop()
+
+	for {
+		select {
+		case err := <-err_ch:
+			return err
+		case <-ticker.C:
+
+			rsp, err := http.Head(url)
+
+			if err != nil {
+				slog.Warn("HEAD request failed", "url", url, "error", err)
+			} else {
+
+				defer rsp.Body.Close()
+
+				if rsp.StatusCode != 200 {
+					slog.Warn("HEAD request did not return expected status code", "url", url, "code", rsp.StatusCode)
+				} else {
+					slog.Debug("HEAD request succeeded", "url", url)
+					server_ready = true
+				}
+			}
+		}
+
+		if server_ready {
+			break
+		}
+	}
 
 	err = browser.OpenURL(url)
 
