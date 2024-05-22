@@ -3,13 +3,16 @@ package show
 import (
 	"context"
 	"fmt"
+	"io"
 	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
 
+	"github.com/paulmach/orb/geojson"
 	"github.com/pkg/browser"
 	"github.com/whosonfirst/wof"
+	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/show/www"
 	"github.com/whosonfirst/wof/uris"
 )
@@ -51,7 +54,33 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 
 func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
+	fc := geojson.NewFeatureCollection()
+
 	cb := func(ctx context.Context, uri string) error {
+
+		r, is_stdin, err := reader.ReadCloserFromURI(ctx, uri)
+
+		if err != nil {
+			return fmt.Errorf("Failed to open '%s' for reading, %w", uri, err)
+		}
+
+		if !is_stdin {
+			defer r.Close()
+		}
+
+		body, err := io.ReadAll(r)
+
+		if err != nil {
+			return fmt.Errorf("Failed to read '%s', %w", uri, err)
+		}
+
+		f, err := geojson.UnmarshalFeature(body)
+
+		if err != nil {
+			return fmt.Errorf("Failed to unmarshal '%s' as GeoJSON, %w", uri, err)
+		}
+
+		fc.Append(f)
 		return nil
 	}
 
@@ -61,10 +90,14 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
 
+	data_handler := dataHandler(fc)
+
 	http_fs := http.FS(www.FS)
 	fs_handler := http.FileServer(http_fs)
 
 	mux := http.NewServeMux()
+	mux.Handle("/features.geojson", data_handler)
+
 	mux.Handle("/", fs_handler)
 
 	addr := fmt.Sprintf("localhost:%d", opts.Port)

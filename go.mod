@@ -5,6 +5,7 @@ go 1.22.3
 require (
 	github.com/aaronland/go-roster v1.0.0
 	github.com/natefinch/atomic v1.0.1
+	github.com/paulmach/orb v0.11.1
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/sfomuseum/go-flags v0.10.0
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3
@@ -87,7 +88,6 @@ require (
 	github.com/mschoch/smat v0.2.0 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
-	github.com/paulmach/orb v0.11.1 // indirect
 	github.com/paulmach/protoscan v0.2.1 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_golang v1.18.0 // indirect
