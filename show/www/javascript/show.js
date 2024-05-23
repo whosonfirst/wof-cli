@@ -17,6 +17,9 @@ window.addEventListener("load", function load(event){
 
 	    var format = function(str){
 
+		// Remember: wof_format is defined by the /wasm/wof_format.wasm binary.
+		// Details below.
+		    
 		wof_format(str).then((rsp) => {
 		    append(rsp);
 		}).catch((err) => {
@@ -32,7 +35,10 @@ window.addEventListener("load", function load(event){
 	    };
 	    
 	    if (raw_el){
-	
+
+		// Remember: Both sfomuseum.wasm.fetch and the WASM binary are imported and registered
+		// in show.go. For details see: https://github.com/whosonfirst/go-whosonfirst-format-wasm
+		
 		sfomuseum.wasm.fetch("/wasm/wof_format.wasm").then(rsp => {
 
 		    var features = f.features;
