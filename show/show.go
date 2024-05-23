@@ -13,6 +13,8 @@ import (
 
 	"github.com/paulmach/orb/geojson"
 	"github.com/pkg/browser"
+	"github.com/whosonfirst/go-whosonfirst-format-wasm/static/javascript"
+	"github.com/whosonfirst/go-whosonfirst-format-wasm/static/wasm"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/show/www"
@@ -111,8 +113,17 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	http_fs := http.FS(www.FS)
 	fs_handler := http.FileServer(http_fs)
 
+	wasm_fs := http.FS(wasm.FS)
+	wasm_handler := http.FileServer(wasm_fs)
+
+	javascript_fs := http.FS(javascript.FS)
+	javascript_handler := http.FileServer(javascript_fs)
+
 	mux := http.NewServeMux()
 	mux.Handle("/features.geojson", data_handler)
+
+	mux.Handle("/javascript/wasm/", http.StripPrefix("/javascript/wasm/", javascript_handler))
+	mux.Handle("/wasm/", http.StripPrefix("/wasm/", wasm_handler))
 
 	mux.Handle("/", fs_handler)
 
