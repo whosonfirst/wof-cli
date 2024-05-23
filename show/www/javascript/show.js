@@ -1,5 +1,5 @@
 window.addEventListener("load", function load(event){
-
+    
     // Null Island
     var map = L.map('map').setView([0.0, 0.0], 12);
     
@@ -15,18 +15,46 @@ window.addEventListener("load", function load(event){
 
 	    var raw_el = document.querySelector("#raw");
 
+	    var format = function(str){
+
+		// Remember: wof_format is defined by the /wasm/wof_format.wasm binary.
+		// Details below.
+		    
+		wof_format(str).then((rsp) => {
+		    append(rsp);
+		}).catch((err) => {
+		    console.log("Unable to format feature", err, str);
+		    append(str);
+		});
+	    };
+	    
+	    var append = function(str) {
+		var pre = document.createElement("pre");
+		pre.appendChild(document.createTextNode(str));		    
+		raw_el.appendChild(pre);
+	    };
+	    
 	    if (raw_el){
 
-		// Something something something WASM
-		// https://github.com/whosonfirst/go-whosonfirst-format-wasm
-		// Which expects Feature elements rather than FeatureCollections
-		// Something something something WASM
+		// Remember: Both sfomuseum.wasm.fetch and the WASM binary are imported and registered
+		// in show.go. For details see: https://github.com/whosonfirst/go-whosonfirst-format-wasm
 		
-		var str_f = JSON.stringify(f, "", " ");
-		
-		var pre = document.createElement("pre");
-		pre.appendChild(document.createTextNode(str_f));
-		raw_el.appendChild(pre);
+		sfomuseum.wasm.fetch("/wasm/wof_format.wasm").then(rsp => {
+
+		    var features = f.features;
+		    var count = features.length;
+
+		    for (var i=0; i < count; i++){
+			var str_f = JSON.stringify(features[i], "", " ");		    			
+			format(str_f);
+		    }
+		    
+		}).catch((err) => {
+		    console.log("Unable to load wof_format.wasm", err);
+		    var str_f = JSON.stringify(f, "", " ");		    
+		    append(str_r);
+		});
+
 	    }
 
 	    var pt_handler = whosonfirst.spelunker.leaflet.handlers.point({});
