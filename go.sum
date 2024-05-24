@@ -305,8 +305,8 @@ github.com/whosonfirst/go-sanitize v0.1.0 h1:ygSqCnakwdzH/m8UEa15zXGDsoo5/JJeRkg
 github.com/whosonfirst/go-sanitize v0.1.0/go.mod h1:p/emgbafMM0p5iVAz2XWwecYPl06Tw4Jos9rhTKIrt8=
 github.com/whosonfirst/go-whosonfirst-crawl v0.2.2 h1:7nwpNV/BFoPR0R7KMMy1iiYAer7wlHJBUOiL+NLzIFs=
 github.com/whosonfirst/go-whosonfirst-crawl v0.2.2/go.mod h1:2GZkaK9jaOisWRnBQGWzmb7H55TUFl9y9F30lrk2hwk=
-github.com/whosonfirst/go-whosonfirst-export/v2 v2.7.2 h1:NAPrLgMsfVJ5lLbvYsqNK9MLttWoBm0HElsDy2BSTHM=
-github.com/whosonfirst/go-whosonfirst-export/v2 v2.7.2/go.mod h1:EHkzZ8dH6RpWvmpvJD1Q9M712J7j0Crc1Z8TxTUAxck=
+github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.0 h1:4EXeyMevpM9Dv8fiLCFuZYFa93JqZse4oFd6Ok/ezjc=
+github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.0/go.mod h1:EHkzZ8dH6RpWvmpvJD1Q9M712J7j0Crc1Z8TxTUAxck=
 github.com/whosonfirst/go-whosonfirst-feature v0.0.27 h1:8RoiadvQEo8RFq8HFezq/Mwm/7UXR+dNJpE9oP8kvfQ=
 github.com/whosonfirst/go-whosonfirst-feature v0.0.27/go.mod h1:vAtQysyMODE/ynMxSrHJ2eCBJRNFj9xUszrURnOy9Xc=
 github.com/whosonfirst/go-whosonfirst-flags v0.5.1 h1:kRzXK7WZlEK1hNw+CECEdnWNtEDbWbjWdEg0imu1mGE=

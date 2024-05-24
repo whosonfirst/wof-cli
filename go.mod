@@ -10,7 +10,7 @@ require (
 	github.com/sfomuseum/go-flags v0.10.0
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3
 	github.com/tidwall/sjson v1.2.5
-	github.com/whosonfirst/go-whosonfirst-export/v2 v2.7.2
+	github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.0
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
 	github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1
 	github.com/whosonfirst/go-whosonfirst-spatial v0.9.0
