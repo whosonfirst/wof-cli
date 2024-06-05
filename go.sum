@@ -244,8 +244,8 @@ github.com/prometheus/common v0.45.0 h1:2BGz0eBc2hdMDLnO/8n0jeB3oPrt2D08CekT0lne
 github.com/prometheus/common v0.45.0/go.mod h1:YJmSTw9BoKxJplESWWxlbyttQR4uaEcGyv9MZjVOJsY=
 github.com/prometheus/procfs v0.12.0 h1:jluTpSng7V9hY0O2R9DzzJHYb2xULk9VTR1V1R/k6Bo=
 github.com/prometheus/procfs v0.12.0/go.mod h1:pcuDEFsWDnvcgNzo4EEweacyhjeA9Zk3cnaOZAZEfOo=
-github.com/protomaps/go-pmtiles v1.19.1 h1:jGSJc1/rn7ENhgSp90iDuuOqtPgRcVtjgPYxba1XAF8=
-github.com/protomaps/go-pmtiles v1.19.1/go.mod h1:15LmZ1Q0XWcIT62bjLqakUaXFHPY1+9H7jnklB/szLo=
+github.com/protomaps/go-pmtiles v1.19.2 h1:7ycun335mhjnOVQLqatpwQf/Hxl00kqiLYPSYfr7du4=
+github.com/protomaps/go-pmtiles v1.19.2/go.mod h1:15LmZ1Q0XWcIT62bjLqakUaXFHPY1+9H7jnklB/szLo=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
 github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
@@ -305,8 +305,8 @@ github.com/whosonfirst/go-sanitize v0.1.0 h1:ygSqCnakwdzH/m8UEa15zXGDsoo5/JJeRkg
 github.com/whosonfirst/go-sanitize v0.1.0/go.mod h1:p/emgbafMM0p5iVAz2XWwecYPl06Tw4Jos9rhTKIrt8=
 github.com/whosonfirst/go-whosonfirst-crawl v0.2.2 h1:7nwpNV/BFoPR0R7KMMy1iiYAer7wlHJBUOiL+NLzIFs=
 github.com/whosonfirst/go-whosonfirst-crawl v0.2.2/go.mod h1:2GZkaK9jaOisWRnBQGWzmb7H55TUFl9y9F30lrk2hwk=
-github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.0 h1:4EXeyMevpM9Dv8fiLCFuZYFa93JqZse4oFd6Ok/ezjc=
-github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.0/go.mod h1:EHkzZ8dH6RpWvmpvJD1Q9M712J7j0Crc1Z8TxTUAxck=
+github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.1 h1:338iHMTuUb0GXteXE3YKnBYirCJxN6f2cZ4D/y8XiwE=
+github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.1/go.mod h1:EHkzZ8dH6RpWvmpvJD1Q9M712J7j0Crc1Z8TxTUAxck=
 github.com/whosonfirst/go-whosonfirst-feature v0.0.27 h1:8RoiadvQEo8RFq8HFezq/Mwm/7UXR+dNJpE9oP8kvfQ=
 github.com/whosonfirst/go-whosonfirst-feature v0.0.27/go.mod h1:vAtQysyMODE/ynMxSrHJ2eCBJRNFj9xUszrURnOy9Xc=
 github.com/whosonfirst/go-whosonfirst-flags v0.5.1 h1:kRzXK7WZlEK1hNw+CECEdnWNtEDbWbjWdEg0imu1mGE=
@@ -329,8 +329,8 @@ github.com/whosonfirst/go-whosonfirst-sources v0.1.0 h1:JuKLa6KWke22jBfJ1pM9WQHo
 github.com/whosonfirst/go-whosonfirst-sources v0.1.0/go.mod h1:EUMHyGzUmqPPxlMmOp+28BFeoBdxxE0HCKRd67lkqGM=
 github.com/whosonfirst/go-whosonfirst-spatial v0.9.0 h1:uDIqg36IKvGF1XIIQnhQX/8w21dcWH3P1WPjKlzt+bk=
 github.com/whosonfirst/go-whosonfirst-spatial v0.9.0/go.mod h1:ZZDfswfjQliuqqNCrpLHW2LVwR7S7QaVMtFiTdvEQH0=
-github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.2.0 h1:f1Hu9SF1Ttu5y7b+BtE7G+KDjLNszqKk8gaRpV3f5fE=
-github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.2.0/go.mod h1:Xjvs1IZUWL3HbMRItp42ihdKRRurUEIVof8gdhiYF0U=
+github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.2.1 h1:uz3/wDkvTktihImGbiC4tksDE4YLwglZ2RDiXyf0E3g=
+github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.2.1/go.mod h1:a4QkSirC8yewCQl+PbE0ctOo36+5VnVq6UD99DyWEK0=
 github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.8.0 h1:God+dkZ4m4451vyNuK83mWeWAEc0wxZ6/qD+E/VYklk=
 github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.8.0/go.mod h1:1tEsj1JPcEcNB8lZ9k2GRxdIMoEPeJVVE9WYgtmyD2s=
 github.com/whosonfirst/go-whosonfirst-spr/v2 v2.3.7 h1:1j4IMuVua4/NhqKm2ke16h2V5Z2XiLoOdXbjDrfZb0E=

@@ -10,11 +10,11 @@ require (
 	github.com/sfomuseum/go-flags v0.10.0
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3
 	github.com/tidwall/sjson v1.2.5
-	github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.0
+	github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.1
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
 	github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1
 	github.com/whosonfirst/go-whosonfirst-spatial v0.9.0
-	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.2.0
+	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.2.1
 	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.8.0
 	github.com/whosonfirst/go-whosonfirst-uri v1.3.0
 	github.com/whosonfirst/go-whosonfirst-validate v0.3.6
@@ -96,7 +96,7 @@ require (
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.45.0 // indirect
 	github.com/prometheus/procfs v0.12.0 // indirect
-	github.com/protomaps/go-pmtiles v1.19.1 // indirect
+	github.com/protomaps/go-pmtiles v1.19.2 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/schollz/progressbar/v3 v3.13.1 // indirect
