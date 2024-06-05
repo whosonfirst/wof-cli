@@ -9,6 +9,8 @@ cloud.google.com/go/firestore v1.15.0 h1:/k8ppuWOtNuDHt2tsRV42yI21uaGnKDEQnRFeBp
 cloud.google.com/go/firestore v1.15.0/go.mod h1:GWOxFXcv8GZUtYpWHw/w6IuYNux/BtmeVTMmjrm4yhk=
 cloud.google.com/go/iam v1.1.6 h1:bEa06k05IO4f4uJonbB5iAgKTPpABy1ayxaIZV/GHVc=
 cloud.google.com/go/iam v1.1.6/go.mod h1:O0zxdPeGBoFdWW3HWmBxJsk0pfvNM/p/qa82rWOGTwI=
+cloud.google.com/go/kms v1.15.7 h1:7caV9K3yIxvlQPAcaFffhlT7d1qpxjB1wHBtjWa13SM=
+cloud.google.com/go/kms v1.15.7/go.mod h1:ub54lbsa6tDkUwnu4W7Yt1aAIFLnspgh0kPGToDukeI=
 cloud.google.com/go/longrunning v0.5.5 h1:GOE6pZFdSrTb4KAiKnXsJBtlE6mEyaW44oKyMILWnOg=
 cloud.google.com/go/longrunning v0.5.5/go.mod h1:WV2LAxD8/rg5Z1cNW6FJ/ZpX4E4VnDnoTk0yawPBB7s=
 cloud.google.com/go/storage v1.39.1 h1:MvraqHKhogCOTXTlct/9C3K3+Uy2jBmFYb3/Sp6dVtY=
@@ -18,6 +20,8 @@ github.com/RoaringBitmap/roaring v1.5.0 h1:V0VCSiHjroItEYCM3guC8T83ehi5QMt3oM9Ee
 github.com/RoaringBitmap/roaring v1.5.0/go.mod h1:plvDsJQpxOC5bw8LRteu/MLWHsHez/3y6cubLI4/1yE=
 github.com/aaronland/go-artisanal-integers v0.9.1 h1:VnTR0sTbgCKlFS3dDv3MEJ5KZn9K7llzAlTyJW3W07A=
 github.com/aaronland/go-artisanal-integers v0.9.1/go.mod h1:/KpdlAI8n4re3/aSkz5koLU+UxXDwPpP7Nxzmg89UMA=
+github.com/aaronland/go-aws-auth v1.3.1 h1:HpG1E6TqNqB9Pz5W2t1OrJR02yU8oMj5UYEeAGimu9w=
+github.com/aaronland/go-aws-auth v1.3.1/go.mod h1:cuSCDeLTDeS8MDRKZbWUnLPad/EmIpGzhD1R5vD/1JI=
 github.com/aaronland/go-aws-dynamodb v0.0.5 h1:E0tJhlr3o5fBFk3svIyzT92auYj6usl+XCwJkvwOxwA=
 github.com/aaronland/go-aws-dynamodb v0.0.5/go.mod h1:5nmPIpi+u1NOTEt2G/MoiYAO+yCWAs0hWijgchRomWM=
 github.com/aaronland/go-aws-session v0.2.1 h1:sNCuxR1w2ng8fxHsl08AFcAWvZqmN4hmnBbBRNRORd0=
@@ -77,6 +81,10 @@ github.com/aws/aws-sdk-go-v2/internal/ini v1.8.0 h1:hT8rVHwugYE2lEfdFE0QWVo81lF7
 github.com/aws/aws-sdk-go-v2/internal/ini v1.8.0/go.mod h1:8tu/lYfQfFe6IGnaOdrpVgEL2IrrDOf6/m9RQum4NkY=
 github.com/aws/aws-sdk-go-v2/internal/v4a v1.3.3 h1:mDnFOE2sVkyphMWtTH+stv0eW3k0OTx94K63xpxHty4=
 github.com/aws/aws-sdk-go-v2/internal/v4a v1.3.3/go.mod h1:V8MuRVcCRt5h1S+Fwu8KbC7l/gBGo3yBAyUbJM2IJOk=
+github.com/aws/aws-sdk-go-v2/service/cognitoidentity v1.21.7 h1:C3Jw6ibkuaIU/D9GH8wdIQfD7jDGjIDv29lVc901HrY=
+github.com/aws/aws-sdk-go-v2/service/cognitoidentity v1.21.7/go.mod h1:0hFpqZlg7/f4L1ZZ0k5ky6+cks6wiwUXzIi/tG4xbMk=
+github.com/aws/aws-sdk-go-v2/service/iam v1.28.7 h1:FKPRDYZOO0Eur19vWUL1B40Op0j89KQj3kARjrszMK8=
+github.com/aws/aws-sdk-go-v2/service/iam v1.28.7/go.mod h1:YzMYyQ7S4twfYzLjwP24G1RAxypozVZeNaG1r2jxRms=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.11.1 h1:EyBZibRTVAs6ECHZOw5/wlylS9OcTzwyjeQMudmREjE=
 github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.11.1/go.mod h1:JKpmtYhhPs7D97NL/ltqz7yCkERFW5dOlHyVl66ZYF8=
 github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.3.5 h1:mbWNpfRUTT6bnacmvOTKXZjR/HycibdWzNpfbrbLDIs=
@@ -87,6 +95,8 @@ github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.17.3 h1:4t+QEX7BsXz98W
 github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.17.3/go.mod h1:oFcjjUq5Hm09N9rpxTdeMeLeQcxS7mIkBkL8qUKng+A=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.51.4 h1:lW5xUzOPGAMY7HPuNF4FdyBwRc3UJ/e8KsapbesVeNU=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.51.4/go.mod h1:MGTaf3x/+z7ZGugCGvepnx2DS6+caCYYqKhzVoLNYPk=
+github.com/aws/aws-sdk-go-v2/service/ssm v1.49.2 h1:JcvYXGYiu7ME17irbW6kvWno2LG5i29Ci0UZyWX0IOs=
+github.com/aws/aws-sdk-go-v2/service/ssm v1.49.2/go.mod h1:loBAHYxz7JyucJvq4xuW9vunu8iCzjNYfSrQg2QEczA=
 github.com/aws/aws-sdk-go-v2/service/sso v1.20.2 h1:XOPfar83RIRPEzfihnp+U6udOveKZJvPQ76SKWrLRHc=
 github.com/aws/aws-sdk-go-v2/service/sso v1.20.2/go.mod h1:Vv9Xyk1KMHXrR3vNQe8W5LMFdTjSeWk0gBZBzvf3Qa0=
 github.com/aws/aws-sdk-go-v2/service/ssooidc v1.23.2 h1:pi0Skl6mNl2w8qWZXcdOyg197Zsf4G97U7Sso9JXGZE=
@@ -123,8 +133,12 @@ github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1m
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
 github.com/felixge/httpsnoop v1.0.4 h1:NFTV2Zj1bL4mc9sqWACXbQFVBBg2W3GPvqp8/ESS2Wg=
 github.com/felixge/httpsnoop v1.0.4/go.mod h1:m8KPJKqk1gH5J9DgRY2ASl2lWCfGKXixSwevea8zH2U=
+github.com/fsnotify/fsnotify v1.7.0 h1:8JEhPFa5W2WU7YfeZzPNqzMP6Lwt7L2715Ggo0nosvA=
+github.com/fsnotify/fsnotify v1.7.0/go.mod h1:40Bi/Hjc2AVfZrqy+aj+yEI+/bRxZnMJyTJwOpGvigM=
 github.com/g8rswimmer/error-chain v1.0.0 h1:WnwnunlvqtGPHVHmBfbmUyAgrtag8Y6nNpwLWmtSYOQ=
 github.com/g8rswimmer/error-chain v1.0.0/go.mod h1:XPJ/brUsL7yzc5VRlIxtf9GvoUqnOKVI9fg2MB5DWx8=
+github.com/go-ini/ini v1.67.0 h1:z6ZrTEZqSWOTyH2FlglNbNgARyHG8oLW9gMELqKr06A=
+github.com/go-ini/ini v1.67.0/go.mod h1:ByCAeIL28uOIIG0E3PJtZPDL8WnHpFKFOtgjp+3Ies8=
 github.com/go-logr/logr v1.4.1 h1:pKouT5E8xu9zeFC39JXRDukb6JFQPXM5p5I91188VAQ=
 github.com/go-logr/logr v1.4.1/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=
 github.com/go-logr/stdr v1.2.2 h1:hSWxHoqTgW2S2qGc0LTAI563KZ5YKYRhT3MFKZMbjag=
@@ -225,6 +239,7 @@ github.com/ncruces/go-strftime v0.1.9 h1:bY0MQC28UADQmHmaF5dgpLmImcShSi2kHU9XLdh
 github.com/ncruces/go-strftime v0.1.9/go.mod h1:Fwc5htZGVVkseilnfgOVb9mKy6w1naJmn9CehxcKcls=
 github.com/patrickmn/go-cache v2.1.0+incompatible h1:HRMgzkcYKYpi3C8ajMPV8OFXaaRUnok+kx1WdO15EQc=
 github.com/patrickmn/go-cache v2.1.0+incompatible/go.mod h1:3Qf8kWWT7OJRJbdiICTKqZju1ZixQ/KpMGzzAfe6+WQ=
+github.com/paulmach/orb v0.7.1/go.mod h1:FWRlTgl88VI1RBx/MkrwWDRhQ96ctqMCh8boXhmqB/A=
 github.com/paulmach/orb v0.11.1 h1:3koVegMC4X/WeiXYz9iswopaTwMem53NzTJuTF20JzU=
 github.com/paulmach/orb v0.11.1/go.mod h1:5mULz1xQfs3bmQm63QEJA6lNGujuRafwA5S/EnuLaLU=
 github.com/paulmach/protoscan v0.2.1 h1:rM0FpcTjUMvPUNk2BhPJrreDKetq43ChnL+x1sRg8O8=
@@ -261,6 +276,12 @@ github.com/sfomuseum/go-flags v0.10.0 h1:1OC1ACxpWMsl3XQ9OeNVMQj7Zi2CzufP3Rym3mP
 github.com/sfomuseum/go-flags v0.10.0/go.mod h1:VXOnnX1/yxQpX2yiwHaBV6aCmhtszQOL5bL1/nNo3co=
 github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3 h1:uPsamhCeCL3dAxsS5e4pgi8D72Rp7rlbxcCOcGqNY4o=
 github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3/go.mod h1:Pw8nOlnamUnUyNUUzBUaKljmH2K9Nrx7+0ZPSClf/AM=
+github.com/sfomuseum/go-timings v1.2.1 h1:AthtFBMBYN+kUflQUp9FFBZVHsR9KB/GkMvO1DuEYEE=
+github.com/sfomuseum/go-timings v1.2.1/go.mod h1:jZrCwV4uoY5s4sOZWZLn6xQ2LhsMy2ZvdB3tzLPO76c=
+github.com/sfomuseum/iso8601duration v1.1.0 h1:kMYzbamrZp9dRxi5iFuhjl5CzHXK6s6Bzz/c75wsq8Q=
+github.com/sfomuseum/iso8601duration v1.1.0/go.mod h1:6EenGWM7y8uVquMPEZwoR+ihpIMJluw7iYiHhDTuOAk=
+github.com/sfomuseum/runtimevar v1.2.0 h1:8q06GcN4gEbRcktbe63U6boSymaZJ7rUqCcggwGkFhw=
+github.com/sfomuseum/runtimevar v1.2.0/go.mod h1:JIJ5bC1BmErAX/sIoc2b+cLcrcyKUg4ZiLcIPLLBsfU=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.4.0/go.mod h1:YvHI0jy2hoMjB+UWwv71VJQ9isScKT/TqJzVSSt89Yw=
 github.com/stretchr/objx v0.5.0/go.mod h1:Yh+to48EsGEfYuaHDzXPcE3xhTkx73EhmCGUpEOglKo=
@@ -319,6 +340,8 @@ github.com/whosonfirst/go-whosonfirst-id v1.2.2 h1:pyfwE26+W+A9qg11WlzBBsviBr7Nh
 github.com/whosonfirst/go-whosonfirst-id v1.2.2/go.mod h1:R8MSXRw7dXWf2gcmyx1shzGVcn7RbTim6uctTp6658I=
 github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.1 h1:GKm+MmZ878vFr8K/Bk9RLXKPt+va9TUqP3/JCnmynVI=
 github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.1/go.mod h1:kDIvHxJTo6XgFKmLHliGLxlqeeHhxuYtdeVZBAcP68g=
+github.com/whosonfirst/go-whosonfirst-iterwriter v0.1.2 h1:mC3Fmok0uAf7I9lWZtj8am5jwRHyIwunRn74IRbYio4=
+github.com/whosonfirst/go-whosonfirst-iterwriter v0.1.2/go.mod h1:et3QqeKCAswO9KI+BIytLQSQr1UVH+ZH971J++BXUwM=
 github.com/whosonfirst/go-whosonfirst-names v0.1.0 h1:uXop/DwQqH60uDBZvHCPg1yRSQLScbm6VZyqcaED2KE=
 github.com/whosonfirst/go-whosonfirst-names v0.1.0/go.mod h1:0z86/nedM9T/5C8cAdbCMfRuBrkc33oEQ6vdJ6WybSg=
 github.com/whosonfirst/go-whosonfirst-placetypes v0.7.2 h1:o781pAQUuSg1irAATgvG0uUSLtvJl9tOY1HW85aePtM=
@@ -345,6 +368,11 @@ github.com/whosonfirst/go-whosonfirst-uri v1.3.0 h1:LYOVLqP9rWQxauYVkdw65j5LZxEi
 github.com/whosonfirst/go-whosonfirst-uri v1.3.0/go.mod h1:CuVygTCUpMG945MMvqHyqxvc/L5YkDaMrrVpRFr7ZxY=
 github.com/whosonfirst/go-whosonfirst-validate v0.3.6 h1:VG5mxf72IfBk/tkvzteZFWnYpW4duZ5HAHBYfAJ0xSE=
 github.com/whosonfirst/go-whosonfirst-validate v0.3.6/go.mod h1:TTN6r/nkZVW62RmLpgRb0/EGWqFBdfyY2cLvGNOkKUM=
+github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.0-20220916180959-42588e308a3e h1:FMjhKz9LHZDDZOCrNvof2o7CduM7mSQg3AKSXkJowmg=
+github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.0-20220916180959-42588e308a3e/go.mod h1:Ee7DXBL23kO62yG/yzkLaO9OOqOGTcHLnxRIN2BB4Tg=
+github.com/whosonfirst/go-writer-jsonl/v3 v3.0.1 h1:ECVwoNFX0XIVLXPCa/fDeOw0Cf7dvS6IlULofNYk+Qs=
+github.com/whosonfirst/go-writer-jsonl/v3 v3.0.1/go.mod h1:zPIzNWCiiGt0UoNFVbt+jOCS2lLOf3oH/sb08e8UUnA=
+github.com/whosonfirst/go-writer/v3 v3.0.0/go.mod h1:TmYoKR7RvrzJaj3eOgMhgXHFE+R1yuO/4smxKHFhv14=
 github.com/whosonfirst/go-writer/v3 v3.1.1 h1:YFG/LUzqr8tNNV/rqqvACrMT2jaoXMEecjVusRE06jI=
 github.com/whosonfirst/go-writer/v3 v3.1.1/go.mod h1:vK1dX0is3i0rw890qSsRXqsUkWlmZX5qiedwf1vSbkE=
 github.com/whosonfirst/walk v0.0.2 h1:fA0xskpnorC8OTvA1IKVOwQ12joCW6R5k2+/qd9lS7k=
