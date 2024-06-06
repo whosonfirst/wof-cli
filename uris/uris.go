@@ -3,11 +3,14 @@ package uris
 import (
 	"context"
 	"fmt"
+	"io"
 	_ "os"
 	"path/filepath"
 	"regexp"
 	"strconv"
+	"strings"
 
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
 	"github.com/whosonfirst/go-whosonfirst-uri"
 )
 
@@ -43,6 +46,23 @@ func ExpandURIsWithCallback(ctx context.Context, cb ExpandURICallbackFunc, uris 
 	}
 
 	u := uris[0]
+
+	if strings.HasPrefix(u, "repo://") {
+
+		u = strings.Replace(u, "repo://", "", 1)
+
+		iter_cb := func(ctx context.Context, path string, r io.ReadSeeker, args ...interface{}) error {
+			return cb(ctx, path)
+		}
+
+		iter, err := iterator.NewIterator(ctx, "repo://", iter_cb)
+
+		if err != nil {
+			return err
+		}
+
+		return iter.IterateURIs(ctx, u)
+	}
 
 	if re_wofid.MatchString(u) {
 

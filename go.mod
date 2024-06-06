@@ -15,7 +15,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
 	github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1
 	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.1
-	github.com/whosonfirst/go-whosonfirst-iterwriter v0.1.3
+	github.com/whosonfirst/go-whosonfirst-iterwriter v0.1.4
 	github.com/whosonfirst/go-whosonfirst-spatial v0.9.0
 	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.2.1
 	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.8.0

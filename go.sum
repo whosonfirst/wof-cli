@@ -340,8 +340,8 @@ github.com/whosonfirst/go-whosonfirst-id v1.2.2 h1:pyfwE26+W+A9qg11WlzBBsviBr7Nh
 github.com/whosonfirst/go-whosonfirst-id v1.2.2/go.mod h1:R8MSXRw7dXWf2gcmyx1shzGVcn7RbTim6uctTp6658I=
 github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.1 h1:GKm+MmZ878vFr8K/Bk9RLXKPt+va9TUqP3/JCnmynVI=
 github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.1/go.mod h1:kDIvHxJTo6XgFKmLHliGLxlqeeHhxuYtdeVZBAcP68g=
-github.com/whosonfirst/go-whosonfirst-iterwriter v0.1.3 h1:NKF8iw1a0zoeHSSb8bMmHVCbHVAGSdRTqoldbeYm0Mk=
-github.com/whosonfirst/go-whosonfirst-iterwriter v0.1.3/go.mod h1:BJjlrhBWEqZm4lwBuXDhVEpBlZpDvcoLCRonmIt6q0c=
+github.com/whosonfirst/go-whosonfirst-iterwriter v0.1.4 h1:djiF8dcJSNXsIxEzNdQqTP/MGE/bsJ6pNttYM0qmQwo=
+github.com/whosonfirst/go-whosonfirst-iterwriter v0.1.4/go.mod h1:BJjlrhBWEqZm4lwBuXDhVEpBlZpDvcoLCRonmIt6q0c=
 github.com/whosonfirst/go-whosonfirst-names v0.1.0 h1:uXop/DwQqH60uDBZvHCPg1yRSQLScbm6VZyqcaED2KE=
 github.com/whosonfirst/go-whosonfirst-names v0.1.0/go.mod h1:0z86/nedM9T/5C8cAdbCMfRuBrkc33oEQ6vdJ6WybSg=
 github.com/whosonfirst/go-whosonfirst-placetypes v0.7.2 h1:o781pAQUuSg1irAATgvG0uUSLtvJl9tOY1HW85aePtM=

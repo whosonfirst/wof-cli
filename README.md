@@ -240,7 +240,12 @@ The default behaviour for the `wof` command is to assume that all the URIs it is
 
 That being said all the tool also "expand" each path using the [uris.ExpandURIsWithCallback](uris/uris.go) method which allows for more sophisticated behaviour in the future.
 
-Currently there is only one supported "expansion": Treating bare numbers as Who's On First IDs, resolving them to their relative path and looking for that file in a parent "data" directory inside the current working directory. Basically it's a shortcut for resolving a Who's On First record to its GeoJSON representation inside a `whosonfirst-data` repository.
+### Expansion
+
+Currently there is only two supported "expansion":
+
+1. Treating bare numbers as Who's On First IDs, resolving them to their relative path and looking for that file in a parent "data" directory inside the current working directory. Basically it's a shortcut for resolving a Who's On First record to its GeoJSON representation inside a `whosonfirst-data` repository.
+2. URIs prefixed with `repo://` will be treated as a [whosonfirst/go-whosonfirst-iterate/v2 "repo" emitter URI](https://github.com/whosonfirst/go-whosonfirst-iterate?tab=readme-ov-file#repo) and all the files in that repository will be processed.
 
 Eventually there may be other "expansions" most notably support for the Go `./...` syntax to process all the Who's On First records in the current working directory.
 

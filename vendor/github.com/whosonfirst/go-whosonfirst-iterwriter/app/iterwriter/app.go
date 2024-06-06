@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log/slog"
 	"os"
 	"strings"
@@ -22,6 +23,7 @@ type RunOptions struct {
 	IteratorURI   string
 	IteratorPaths []string
 	MonitorURI    string
+	MonitorWriter io.Writer
 }
 
 func Run(ctx context.Context, logger *slog.Logger) error {
@@ -66,6 +68,7 @@ func DefaultOptionsFromFlagSet(fs *flag.FlagSet, parsed bool) (*RunOptions, erro
 		IteratorURI:   iterator_uri,
 		IteratorPaths: iterator_paths,
 		MonitorURI:    monitor_uri,
+		MonitorWriter: os.Stderr,
 	}
 
 	return opts, nil
@@ -121,7 +124,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions, logger *slog.Logger) 
 		return fmt.Errorf("Failed to create monitor, %w", err)
 	}
 
-	monitor.Start(ctx, os.Stdout)
+	monitor.Start(ctx, opts.MonitorWriter)
 	defer monitor.Stop(ctx)
 
 	iter_cb := opts.CallbackFunc(mw, monitor)
