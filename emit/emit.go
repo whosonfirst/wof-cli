@@ -115,19 +115,34 @@ func sprIterwriterCallback(wr writer.Writer, monitor timings.Monitor) emitter.Em
 		body, err := io.ReadAll(r)
 
 		if err != nil {
-			return fmt.Errorf("Failed to read body", "error", err)
+			return fmt.Errorf("Failed to read body for %s, %w", path, err)
 		}
 
-		spr_rsp, err := wof_spr.WhosOnFirstSPR(body)
+		var spr_rsp wof_spr.StandardPlacesResult
 
-		if err != nil {
-			return fmt.Errorf("Failed to derive SPR", "error", err)
+		if uri_args.IsAlternate {
+
+			rsp, err := wof_spr.WhosOnFirstAltSPR(body)
+
+			if err != nil {
+				return fmt.Errorf("Failed to derive (alt) SPR for %s, %w", path, err)
+			}
+
+			spr_rsp = rsp
+		} else {
+			rsp, err := wof_spr.WhosOnFirstSPR(body)
+
+			if err != nil {
+				return fmt.Errorf("Failed to derive SPR for %s, %w", path, err)
+			}
+
+			spr_rsp = rsp
 		}
 
 		enc_spr, err := json.Marshal(spr_rsp)
 
 		if err != nil {
-			return fmt.Errorf("Failed to marshal SPR", "error", err)
+			return fmt.Errorf("Failed to marshal SPR for %s, %w", path, err)
 		}
 
 		spr_r := bytes.NewReader(enc_spr)
@@ -136,7 +151,7 @@ func sprIterwriterCallback(wr writer.Writer, monitor timings.Monitor) emitter.Em
 
 		if err != nil {
 
-			slog.Error("Failed to write record", "error", err)
+			slog.Error("Failed to write record %s (%s), %w", rel_path, path, err)
 		}
 
 		go monitor.Signal(ctx)
@@ -180,10 +195,28 @@ func sprGeoJSONIterwriterCallback(wr writer.Writer, monitor timings.Monitor) emi
 			return fmt.Errorf("Failed to read body", "error", err)
 		}
 
-		spr_rsp, err := wof_spr.WhosOnFirstSPR(body)
+		var spr_rsp wof_spr.StandardPlacesResult
 
-		if err != nil {
-			return fmt.Errorf("Failed to derive SPR", "error", err)
+		if uri_args.IsAlternate {
+
+			rsp, err := wof_spr.WhosOnFirstAltSPR(body)
+
+			if err != nil {
+				return fmt.Errorf("Failed to derive (alt) SPR for %s, %w", path, err)
+			}
+
+			spr_rsp = rsp
+		} else {
+
+			rsp, err := wof_spr.WhosOnFirstSPR(body)
+
+			if err != nil {
+				// logger.Warn("Failed to derive SPR", "error", err)
+				// return nil
+				return fmt.Errorf("WTF Failed to derive SPR for %s, %w", path, err)
+			}
+
+			spr_rsp = rsp
 		}
 
 		body, err = sjson.SetBytes(body, "properties", spr_rsp)
