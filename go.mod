@@ -3,6 +3,7 @@ module github.com/whosonfirst/wof
 go 1.22.3
 
 require (
+	github.com/aaronland/go-json-query v0.1.4
 	github.com/aaronland/go-roster v1.0.0
 	github.com/natefinch/atomic v1.0.1
 	github.com/paulmach/orb v0.11.1
@@ -34,7 +35,6 @@ require (
 	github.com/aaronland/go-aws-dynamodb v0.0.5 // indirect
 	github.com/aaronland/go-aws-session v0.2.1 // indirect
 	github.com/aaronland/go-brooklynintegers-api v1.2.7 // indirect
-	github.com/aaronland/go-json-query v0.1.4 // indirect
 	github.com/aaronland/go-log/v2 v2.0.0 // indirect
 	github.com/aaronland/go-pagination v0.2.0 // indirect
 	github.com/aaronland/go-pagination-sql v0.2.0 // indirect

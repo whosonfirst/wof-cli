@@ -25,6 +25,8 @@ type ExpandURICallbackFunc func(context.Context, string) error
 //   - If a URI is a bare number (Who's On First ID) it is resolved to its relative path. That path is then prepended
 //     with a root "data" folder. Basically it's a short-hand for resolving a specific WOF ID to it's path inside a
 //     WOF repo.
+//   - If a URI starts with 'repo://' it is assumed to be a whosonfirst/go-whosonfirst-iterate/v2 URI and will be used
+//     to create an interator to which every file it encounters will be processed with 'cb'
 func ExpandURIsWithCallback(ctx context.Context, cb ExpandURICallbackFunc, uris ...string) error {
 
 	if len(uris) == 0 {
