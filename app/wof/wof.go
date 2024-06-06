@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/whosonfirst/wof"
-	_ "github.com/whosonfirst/wof/emit"	
+	_ "github.com/whosonfirst/wof/emit"
 	_ "github.com/whosonfirst/wof/export"
 	_ "github.com/whosonfirst/wof/format"
 	_ "github.com/whosonfirst/wof/open"

@@ -19,7 +19,9 @@ import (
 type RunOptions struct {
 	CallbackFunc  iterwriter.IterwriterCallbackFunc
 	Writer        writer.Writer
+	IteratorURI   string
 	IteratorPaths []string
+	MonitorURI    string
 }
 
 func Run(ctx context.Context, logger *slog.Logger) error {
@@ -61,7 +63,9 @@ func DefaultOptionsFromFlagSet(fs *flag.FlagSet, parsed bool) (*RunOptions, erro
 
 	opts := &RunOptions{
 		CallbackFunc:  cb_func,
+		IteratorURI:   iterator_uri,
 		IteratorPaths: iterator_paths,
+		MonitorURI:    monitor_uri,
 	}
 
 	return opts, nil
@@ -111,7 +115,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions, logger *slog.Logger) 
 		mw = _mw
 	}
 
-	monitor, err := timings.NewMonitor(ctx, monitor_uri)
+	monitor, err := timings.NewMonitor(ctx, opts.MonitorURI)
 
 	if err != nil {
 		return fmt.Errorf("Failed to create monitor, %w", err)
@@ -122,7 +126,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions, logger *slog.Logger) 
 
 	iter_cb := opts.CallbackFunc(mw, monitor)
 
-	err = iterwriter.IterateWithWriterAndCallback(ctx, mw, iter_cb, monitor, iterator_uri, opts.IteratorPaths...)
+	err = iterwriter.IterateWithWriterAndCallback(ctx, mw, iter_cb, monitor, opts.IteratorURI, opts.IteratorPaths...)
 
 	if err != nil {
 		return fmt.Errorf("Failed to iterate with writer, %w", err)

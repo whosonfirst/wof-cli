@@ -29,6 +29,31 @@ Valid commands are:
 
 _Important: The inputs and outputs for the `wof` tool have not been finalized yet, notably about how files are read and written if updated. You should expect change in the short-term._
 
+#### wof emit
+
+```
+$> ./bin/wof emit -h
+Emit one or more Who's On First records.
+Usage:
+	 ./bin/wof emit [options] path(N) path(N)
+  -as-spr
+    	Emit Who's On First records formatted as Standard Place Response (SPR) records.
+  -as-spr-geojson
+    	Emit Who's On First records as GeoJSON records where the 'properties' element is replaced by a Standard Place Response (SPR) representation of the record.
+  -iterator-uri string
+    	A valid whosonfirst/go-whosonfirst-iterate/v2/emitter URI. (default "repo://")
+  -writer-uri string
+    	A valid whosonfirst/go-writer.Writer URI. (default "jsonl://?writer=stdout://")
+```
+
+For example:
+
+```
+$> ./bin/wof emit -as-spr -writer-uri 'jsonl://?writer=stdout://' /usr/local/data/sfomuseum-data-maps/ 
+{"edtf:cessation":"1985~","edtf:inception":"1985~","mz:is_ceased":1,"mz:is_current":0,"mz:is_deprecated":-1,"mz:is_superseded":0,"mz:is_superseding":0,"mz:latitude":37.616459,"mz:longitude":-122.386272,"mz:max_latitude":37.63100646804649,"mz:max_longitude":-122.37094362769881,"mz:min_latitude":37.60096637420677,"mz:min_longitude":-122.40407820844655,"mz:uri":"https://data.whosonfirst.org/136/039/131/3/1360391313.geojson","wof:belongsto":[],"wof:country":"US","wof:id":1360391313,"wof:lastmodified":1716594274,"wof:name":"SFO (1985)","wof:parent_id":-4,"wof:path":"136/039/131/3/1360391313.geojson","wof:placetype":"custom","wof:repo":"sfomuseum-data-maps","wof:superseded_by":[],"wof:supersedes":[]}
+...and so on
+```
+
 #### wof export
 
 ```
