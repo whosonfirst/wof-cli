@@ -55,6 +55,16 @@ $> ./bin/wof emit -as-spr -writer-uri 'jsonl://?writer=stdout://' /usr/local/dat
 ...and so on
 ```
 
+Or:
+
+```
+$> ./bin/wof emit -as-spr -as-spr-geojson \
+	-writer-uri 'featurecollection://?writer=stdout://' \
+	/usr/local/data/sfomuseum-data-flights-2024-05 \
+	
+| ogr2ogr -f parquet flights2.parquet /vsistdin/
+```
+
 #### wof export
 
 ```

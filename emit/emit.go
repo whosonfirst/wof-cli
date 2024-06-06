@@ -16,6 +16,7 @@ import (
 	"io"
 	"log/slog"
 	_ "os"
+	"strconv"
 
 	"github.com/sfomuseum/go-timings"
 	"github.com/tidwall/sjson"
@@ -54,6 +55,8 @@ func (c *EmitCommand) Run(ctx context.Context, args []string) error {
 	if err != nil {
 		return err
 	}
+
+	defer wr.Close(ctx)
 
 	cb_func := iterwriter.DefaultIterwriterCallback
 
@@ -211,15 +214,27 @@ func sprGeoJSONIterwriterCallback(wr writer.Writer, monitor timings.Monitor) emi
 			rsp, err := wof_spr.WhosOnFirstSPR(body)
 
 			if err != nil {
-				// logger.Warn("Failed to derive SPR", "error", err)
-				// return nil
-				return fmt.Errorf("WTF Failed to derive SPR for %s, %w", path, err)
+				logger.Warn("Failed to derive SPR", "error", err)
+				return nil
+				// return fmt.Errorf("WTF Failed to derive SPR for %s, %w", path, err)
 			}
 
 			spr_rsp = rsp
 		}
 
 		body, err = sjson.SetBytes(body, "properties", spr_rsp)
+
+		if err != nil {
+			return err
+		}
+
+		wof_id, err := strconv.ParseInt(spr_rsp.Id(), 10, 64)
+
+		if err != nil {
+			return err
+		}
+
+		body, err = sjson.SetBytes(body, "properties.wof:id", wof_id)
 
 		if err != nil {
 			return err
