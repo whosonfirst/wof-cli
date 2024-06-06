@@ -1,15 +1,11 @@
 # wof-cli
 
-Experimental 'wof' command-line tool for common Who's On First operations.
-
-## Documentation
-
-Documentation is incomplete at this time.
+Command-line tool for common Who's On First operations.
 
 ## Tools
 
 ```
-> make cli
+$> make cli
 go build -mod vendor -ldflags="-s -w" -o bin/wof cmd/wof/main.go
 ```
 
@@ -273,4 +269,5 @@ Eventually there may be other "expansions" most notably support for the Go `./..
 * https://github.com/whosonfirst/go-whosonfirst-spatial
 * https://github.com/whosonfirst/go-whosonfirst-spatial-pmtiles
 * https://github.com/whosonfirst/go-whosonfirst-spatial-sqlite
+* https://github.com/whosonfirst/go-whosonfirst-iterate
 * https://github.com/sfomuseum/go-sfomuseum-mapshaper
