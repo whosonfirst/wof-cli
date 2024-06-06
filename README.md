@@ -19,6 +19,7 @@ go build -mod vendor -ldflags="-s -w" -o bin/wof cmd/wof/main.go
 $> ./bin/wof -h
 Usage: wof [CMD] [OPTIONS]
 Valid commands are:
+* emit
 * export
 * fmt
 * open
