@@ -3,7 +3,7 @@ module github.com/whosonfirst/wof
 go 1.22.3
 
 require (
-	github.com/aaronland/go-json-query v0.1.4
+	github.com/aaronland/go-json-query v0.1.5
 	github.com/aaronland/go-roster v1.0.0
 	github.com/natefinch/atomic v1.0.1
 	github.com/paulmach/orb v0.11.1
@@ -11,6 +11,7 @@ require (
 	github.com/sfomuseum/go-flags v0.10.0
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3
 	github.com/sfomuseum/go-timings v1.2.1
+	github.com/tidwall/gjson v1.17.1
 	github.com/tidwall/sjson v1.2.5
 	github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.1
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
@@ -23,7 +24,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-spr/v2 v2.3.7
 	github.com/whosonfirst/go-whosonfirst-uri v1.3.0
 	github.com/whosonfirst/go-whosonfirst-validate v0.3.6
-	github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.0-20220916180959-42588e308a3e
+	github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.2
 	github.com/whosonfirst/go-writer-jsonl/v3 v3.0.1
 	github.com/whosonfirst/go-writer/v3 v3.1.1
 )
@@ -118,7 +119,6 @@ require (
 	github.com/sfomuseum/runtimevar v1.2.0 // indirect
 	github.com/tidwall/geoindex v1.4.4 // indirect
 	github.com/tidwall/geojson v1.4.3 // indirect
-	github.com/tidwall/gjson v1.17.1 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/tidwall/rtree v1.3.1 // indirect
