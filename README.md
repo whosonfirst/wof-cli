@@ -41,7 +41,7 @@ Usage:
   -include-alt-geoms
     	Emit alternate geometry records. (default true)
   -iterator-uri string
-    	A valid whosonfirst/go-whosonfirst-iterate/v2/emitter URI. (default "repo://")
+    	A valid whosonfirst/go-whosonfirst-iterate/v2/emitter URI. If URI is "-" then this flag will be assigned a value of "file://" whose input will be the expanded URIs derived from additional arguments. (default "repo://")
   -query value
     	One or more {PATH}={REGEXP} parameters for filtering records.
   -query-mode string
@@ -75,6 +75,17 @@ $> ./bin/wof emit -as-spr -as-spr-geojson \
 	/usr/local/data/sfomuseum-data-flights-2024-05 \
 	
 | ogr2ogr -f parquet flights2.parquet /vsistdin/
+```
+
+Or, iterating over a custom list of files:
+
+```
+$> wof emit -iterator-uri - -writer-uri 'featurecollection://?writer=stdout://' 1914563993 1914564157 1914564489 1914564345 | json_pp | grep 'wof:name'
+2024/07/09 13:57:07 INFO time to index paths (4) 797.084µs
+            "wof:name" : "Terminal 2",
+            "wof:name" : "Terminal 1",
+            "wof:name" : "International Terminal",
+            "wof:name" : "Terminal 3",
 ```
 
 #### wof export
