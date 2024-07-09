@@ -10,6 +10,7 @@ gpq: error: failed to create schema after reading 1 features
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 
 	"github.com/aaronland/go-json-query"
@@ -18,6 +19,7 @@ import (
 	_ "github.com/whosonfirst/go-writer-jsonl/v3"
 	"github.com/whosonfirst/go-writer/v3"
 	"github.com/whosonfirst/wof"
+	"github.com/whosonfirst/wof/uris"
 )
 
 type EmitCommand struct {
@@ -47,6 +49,27 @@ func (c *EmitCommand) Run(ctx context.Context, args []string) error {
 
 	defer wr.Close(ctx)
 
+	iter_uris := fs.Args()
+
+	if iterator_uri == "-" {
+
+		uris_expanded := make([]string, 0)
+
+		uris_cb := func(ctx context.Context, uri string) error {
+			uris_expanded = append(uris_expanded, uri)
+			return nil
+		}
+
+		err := uris.ExpandURIsWithCallback(ctx, uris_cb, iter_uris...)
+
+		if err != nil {
+			return fmt.Errorf("Failed to expand URIs, %w", err)
+		}
+
+		iter_uris = uris_expanded
+		iterator_uri = "file://"
+	}
+
 	iterwr_opts := &iterwriterCallbackOptions{
 		AsSPR:           as_spr,
 		AsSPRGeoJSON:    as_spr_geojson,
@@ -66,12 +89,10 @@ func (c *EmitCommand) Run(ctx context.Context, args []string) error {
 
 	iterwr_cb := iterwriterCallbackFunc(iterwr_opts)
 
-	uris := fs.Args()
-
 	opts := &app.RunOptions{
 		Writer:        wr,
 		IteratorURI:   iterator_uri,
-		IteratorPaths: uris,
+		IteratorPaths: iter_uris,
 		CallbackFunc:  iterwr_cb,
 		MonitorURI:    "counter://PT60S",
 	}
