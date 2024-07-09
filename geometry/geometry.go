@@ -4,10 +4,9 @@ import (
 	"context"
 	"fmt"
 	"io"
-	_ "log/slog"
+	"log/slog"
 	"os"
 
-	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/geojson"
 	"github.com/tidwall/gjson"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
@@ -37,7 +36,7 @@ func (c *GeometryCommand) Run(ctx context.Context, args []string) error {
 	fs.Parse(args)
 
 	var exporter export.Exporter
-	var source_geom orb.Geometry
+	var source_geom *geojson.Geometry
 	var geom_cb func(context.Context, string, []byte) error
 
 	switch action {
@@ -71,10 +70,11 @@ func (c *GeometryCommand) Run(ctx context.Context, args []string) error {
 			}
 
 			if !has_changes {
+				slog.Info("No difference between geometries, not updating")
 				return nil
 			}
 
-			new_body, err = exporter.Export(ctx, body)
+			new_body, err = exporter.Export(ctx, new_body)
 
 			if err != nil {
 				return fmt.Errorf("Failed to export body for '%s', %w", uri, err)
@@ -139,7 +139,7 @@ func (c *GeometryCommand) Run(ctx context.Context, args []string) error {
 	return nil
 }
 
-func (c *GeometryCommand) deriveSourceGeometry(ctx context.Context, source string, format string) (orb.Geometry, error) {
+func (c *GeometryCommand) deriveSourceGeometry(ctx context.Context, source string, format string) (*geojson.Geometry, error) {
 
 	// To do: Support alternate sources (STDIN, etc) and formats (WKB, etc)
 
@@ -163,5 +163,8 @@ func (c *GeometryCommand) deriveSourceGeometry(ctx context.Context, source strin
 		return nil, fmt.Errorf("Failed to unmarshal source feature, %w", err)
 	}
 
-	return source_f.Geometry, nil
+	source_geom := source_f.Geometry
+	geojson_geom := geojson.NewGeometry(source_geom)
+
+	return geojson_geom, nil
 }
