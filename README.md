@@ -22,6 +22,7 @@ Valid commands are:
 * open
 * pip
 * show
+* uri
 * validate
 ```
 
@@ -255,6 +256,27 @@ This should automatically open a new window in your default browser like this:
 ![](docs/images/wof-show-montreal.png)
 
 As of this writing there is minimal styling and little to no interactivity. That may (or may not) change. Right now this tool is principally just to be able to look at one or more Who's On First features on a map.
+
+#### wof uri
+
+```
+$> ./bin/wof uri -h
+Print the nested URI for one or more Who's On First IDs.
+Usage:
+	 ./bin/wof path(N) path(N)
+  -prefix string
+    	An optional prefix to append to the final URI.
+```
+
+For example:
+
+```
+$> ./bin/wof uri 1914650585
+191/465/058/5/1914650585.geojson
+
+$> cat `wof uri -prefix data 1914650737` | jq '.properties["wof:name"]'
+"1H Student Art North"
+```
 
 #### wof validate
 

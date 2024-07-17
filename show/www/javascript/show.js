@@ -66,7 +66,7 @@ window.addEventListener("load", function load(event){
 		style: poly_style,
 		pointToLayer: pt_handler,		
 	    };
-	    
+
 	    var geojson_layer = L.geoJSON(f);
 	    geojson_layer.addTo(map);
 
