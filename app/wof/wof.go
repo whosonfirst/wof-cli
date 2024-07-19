@@ -12,6 +12,7 @@ import (
 	_ "github.com/whosonfirst/wof/geometry"
 	_ "github.com/whosonfirst/wof/open"
 	_ "github.com/whosonfirst/wof/pip"
+	_ "github.com/whosonfirst/wof/property"
 	_ "github.com/whosonfirst/wof/show"
 	_ "github.com/whosonfirst/wof/uri"
 	_ "github.com/whosonfirst/wof/validate"

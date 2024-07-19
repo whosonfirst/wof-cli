@@ -21,6 +21,7 @@ Valid commands are:
 * geometry
 * open
 * pip
+* property
 * show
 * uri
 * validate
@@ -232,6 +233,35 @@ There are a few things to note:
 * The `-placetype` flag is a convenience to facilitate point-in-polygon operations without having to first update an input record.
 * By default the `pip` command neither "formats" or "exports" results. Although there is an `-export` flag to enable both it is your responsibility to ensure that input documents have all the necessary properties (for example "wof:name").
 * The `pip` command does _NOT_ yet implement the logic of the [py-mapzen-whosonfirst-hierarchy](https://github.com/whosonfirst/py-mapzen-whosonfirst-hierarchy/blob/master/mapzen/whosonfirst/hierarchy/__init__.py) library. There is an [open issue](https://github.com/whosonfirst/go-whosonfirst-spatial/issues/40) for this.
+
+#### wof property
+
+Print one or more properties for one or more Who's On First IDs.
+
+```
+$> wof property -h
+Print one or more properties for one or more Who's On First IDs.
+Usage:
+	 wof path(N) path(N)
+  -path value
+    	One or more valid tidwall/gjson paths to extract from each document
+```
+
+For example:
+
+```
+$> wof property -path properties.wof:name 1796903597 1796889561 1796889543 1796889557 1796903629 1796889563 1796935715 1796935615
+AirTrain Gargage G / BART Red Line
+AirTrain Long-Term Parking Blue Line (Outbound)
+AirTrain Garage G / BART Blue Line
+AirTrain Westfield Road Station (Inbound)
+Grand Hyatt Hotel Reception
+Rental Car Center
+International Terminal Main Hall Departures Door 2
+San Francisco International Airport BART Station Platform
+```
+
+_Eventually, this command will add functionality to export results for multiple IDs with multiple properties as CSV data._
 
 #### wof show
 
