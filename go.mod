@@ -14,8 +14,10 @@ require (
 	github.com/tidwall/gjson v1.17.1
 	github.com/tidwall/sjson v1.2.5
 	github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.1
+	github.com/whosonfirst/go-whosonfirst-feature v0.0.27
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
 	github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1
+	github.com/whosonfirst/go-whosonfirst-id v1.2.2
 	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.1
 	github.com/whosonfirst/go-whosonfirst-iterwriter v0.1.4
 	github.com/whosonfirst/go-whosonfirst-spatial v0.9.0
@@ -127,9 +129,7 @@ require (
 	github.com/whosonfirst/go-rfc-5646 v0.1.0 // indirect
 	github.com/whosonfirst/go-sanitize v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-crawl v0.2.2 // indirect
-	github.com/whosonfirst/go-whosonfirst-feature v0.0.27 // indirect
 	github.com/whosonfirst/go-whosonfirst-flags v0.5.1 // indirect
-	github.com/whosonfirst/go-whosonfirst-id v1.2.2 // indirect
 	github.com/whosonfirst/go-whosonfirst-names v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-placetypes v0.7.2 // indirect
 	github.com/whosonfirst/go-whosonfirst-reader v1.0.2 // indirect
