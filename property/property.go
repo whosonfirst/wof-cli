@@ -5,11 +5,11 @@ import (
 	"fmt"
 	_ "log/slog"
 
+	"github.com/sfomuseum/go-csvdict"
 	"github.com/tidwall/gjson"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
-	"github.com/sfomuseum/go-csvdict"
 	"os"
 )
 
@@ -36,7 +36,7 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 	fs_uris := fs.Args()
 
 	var csv_wr *csvdict.Writer
-	
+
 	cb := func(ctx context.Context, cb_uri string) error {
 
 		body, err := reader.BytesFromURI(ctx, cb_uri)
@@ -79,15 +79,15 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 			}
 
 			csv_wr.Flush()
-			
+
 		default:
-		
+
 			for _, path := range paths {
 				rsp := gjson.GetBytes(body, path)
 				fmt.Println(rsp.String())
 			}
 		}
-		
+
 		return nil
 	}
 
