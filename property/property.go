@@ -9,6 +9,8 @@ import (
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
+	"github.com/sfomuseum/go-csvdict"
+	"os"
 )
 
 type PropertyCommand struct {
@@ -33,6 +35,8 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 
 	fs_uris := fs.Args()
 
+	var csv_wr *csvdict.Writer
+	
 	cb := func(ctx context.Context, cb_uri string) error {
 
 		body, err := reader.BytesFromURI(ctx, cb_uri)
@@ -41,11 +45,49 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 			return fmt.Errorf("Failed to open %s for reading, %w", cb_uri, err)
 		}
 
-		for _, path := range paths {
-			rsp := gjson.GetBytes(body, path)
-			fmt.Println(rsp.String())
-		}
+		switch format {
+		case "csv":
 
+			out := make(map[string]string)
+
+			for _, path := range paths {
+				rsp := gjson.GetBytes(body, path)
+				out[path] = rsp.String()
+			}
+
+			if csv_wr == nil {
+
+				wr, err := csvdict.NewWriter(os.Stdout, paths)
+
+				if err != nil {
+					return fmt.Errorf("Failed to create new CSV writer, %w", err)
+				}
+
+				err = wr.WriteHeader()
+
+				if err != nil {
+					return fmt.Errorf("Failed to write CSV header, %w", err)
+				}
+
+				csv_wr = wr
+			}
+
+			err = csv_wr.WriteRow(out)
+
+			if err != nil {
+				return fmt.Errorf("Failed to write CSV row for %s, %w", cb_uri, err)
+			}
+
+			csv_wr.Flush()
+			
+		default:
+		
+			for _, path := range paths {
+				rsp := gjson.GetBytes(body, path)
+				fmt.Println(rsp.String())
+			}
+		}
+		
 		return nil
 	}
 

@@ -239,10 +239,12 @@ There are a few things to note:
 Print one or more properties for one or more Who's On First IDs.
 
 ```
-$> wof property -h
+$> ./bin/wof property -h
 Print one or more properties for one or more Who's On First IDs.
 Usage:
-	 wof path(N) path(N)
+	 ./bin/wof path(N) path(N)
+  -format string
+    	Valid options are: csv. If empty then properties will printed as a new-line separated list.
   -path value
     	One or more valid tidwall/gjson paths to extract from each document
 ```
@@ -261,7 +263,20 @@ International Terminal Main Hall Departures Door 2
 San Francisco International Airport BART Station Platform
 ```
 
-_Eventually, this command will add functionality to export results for multiple IDs with multiple properties as CSV data._
+It is also possible to emit properties for records as CSV data by passing the `-format csv` flag. For example:
+
+```
+$> wof property -format csv -path properties.wof:name -path properties.wof:parent_id 1796903597 1796889561 1796889543 1796889557 1796903629 1796889563 1796935715 1796935615
+properties.wof:name,properties.wof:parent_id
+AirTrain Gargage G / BART Red Line,1477855991
+AirTrain Long-Term Parking Blue Line (Outbound),102527513
+AirTrain Garage G / BART Blue Line,1477855991
+AirTrain Westfield Road Station (Inbound),102527513
+Grand Hyatt Hotel Reception,1477856005
+Rental Car Center,1477863277
+International Terminal Main Hall Departures Door 2,1745882445
+San Francisco International Airport BART Station Platform,102527513
+```
 
 #### wof show
 
