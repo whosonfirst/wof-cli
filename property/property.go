@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	_ "log/slog"
+	"strings"
 
 	"github.com/sfomuseum/go-csvdict"
 	"github.com/tidwall/gjson"
@@ -37,6 +38,15 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 
 	var csv_wr *csvdict.Writer
 
+	if prefix != "" {
+
+		prefix = strings.TrimRight(prefix, ".")
+
+		for idx, p := range paths {
+			paths[idx] = fmt.Sprintf("%s.%s", prefix, p)
+		}
+	}
+
 	cb := func(ctx context.Context, cb_uri string) error {
 
 		body, err := reader.BytesFromURI(ctx, cb_uri)
@@ -48,7 +58,9 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 		switch format {
 		case "csv":
 
-			out := make(map[string]string)
+			out := map[string]string{
+				"uri": cb_uri,
+			}
 
 			for _, path := range paths {
 				rsp := gjson.GetBytes(body, path)
@@ -57,7 +69,13 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 
 			if csv_wr == nil {
 
-				wr, err := csvdict.NewWriter(os.Stdout, paths)
+				fieldnames := make([]string, 0)
+
+				for k, _ := range out {
+					fieldnames = append(fieldnames, k)
+				}
+
+				wr, err := csvdict.NewWriter(os.Stdout, fieldnames)
 
 				if err != nil {
 					return fmt.Errorf("Failed to create new CSV writer, %w", err)
