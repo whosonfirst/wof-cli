@@ -3,7 +3,7 @@ package supersede
 import (
 	"context"
 	"fmt"
-	"log/slog"
+	_ "log/slog"
 	"slices"
 	"time"
 
@@ -148,9 +148,6 @@ func (c *SupersedeCommand) Run(ctx context.Context, args []string) error {
 			if err != nil {
 				return fmt.Errorf("Failed to assign new properties to new record derived from %s, %w", cb_uri, err)
 			}
-
-			// write stuff TBD...
-			slog.Debug(string(new_body))
 
 			_, err = wof_writer.WriteBytes(ctx, superseding_writer, new_body)
 

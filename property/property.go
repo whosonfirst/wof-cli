@@ -40,7 +40,7 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 		if err != nil {
 			return fmt.Errorf("Failed to open %s for reading, %w", cb_uri, err)
 		}
-
+		
 		for _, path := range paths {
 			rsp := gjson.GetBytes(body, path)
 			fmt.Println(rsp.String())
