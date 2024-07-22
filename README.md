@@ -369,6 +369,8 @@ $> wof supersede \
 	1796889561 
 ```
 
+It's a bit cumbersome but the decision was taken, given the potential for many unrelated moving parts, to be explicit rather than clever.
+
 #### wof uri
 
 ```
