@@ -50,6 +50,8 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 	switch action {
 	case "remove":
 		return c.removeProperties(ctx, fs_uris, paths)
+	case "replace":
+		return c.removeProperties(ctx, fs_uris, paths)
 	default:
 		return c.listProperties(ctx, fs_uris, paths)
 	}
@@ -142,6 +144,65 @@ func (c *PropertyCommand) removeProperties(ctx context.Context, fs_uris []string
 		}
 
 		new_body, err := export.RemoveProperties(ctx, body, paths)
+
+		if err != nil {
+			return fmt.Errorf("Failed to remove properties from %s, %w", cb_uri, err)
+		}
+
+		new_body, err = ex.Export(ctx, new_body)
+
+		if err != nil {
+			return fmt.Errorf("Failed to export %s, %w", cb_uri, err)
+		}
+
+		err = writer.Write(ctx, cb_uri, new_body)
+
+		if err != nil {
+			return fmt.Errorf("Failed to write changes to %s, %w", cb_uri, err)
+		}
+
+		return nil
+	}
+
+	return uris.ExpandURIsWithCallback(ctx, cb, fs_uris...)
+}
+
+func (c *PropertyCommand) replaceProperties(ctx context.Context, fs_uris []string, paths []string) error {
+
+	ex, err := export.NewExporter(ctx, "whosonfirst://")
+
+	if err != nil {
+		return fmt.Errorf("Failed to create new exporter, %w", err)
+	}
+
+	cb := func(ctx context.Context, cb_uri string) error {
+
+		body, err := reader.BytesFromURI(ctx, cb_uri)
+
+		if err != nil {
+			return fmt.Errorf("Failed to read %s, %w", cb_uri, err)
+		}
+
+		updates := make(map[string]interface{})
+
+		for _, p := range paths {
+
+			p_rsp := gjson.GetBytes(body, p)
+
+			if !p_rsp.Exists() {
+				continue
+			}
+
+			// TBD...
+		}
+
+		_, new_body, err := export.AssignPropertiesIfChanged(ctx, body, updates)
+
+		if err != nil {
+			return fmt.Errorf("Failed to remove properties from %s, %w", cb_uri, err)
+		}
+
+		new_body, err := export.RemoveProperties(ctx, new_body, paths)
 
 		if err != nil {
 			return fmt.Errorf("Failed to remove properties from %s, %w", cb_uri, err)
