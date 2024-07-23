@@ -353,6 +353,8 @@ $> wof supersede \
 	1796889561 1796889543 1796889557 1796903629 1796889563 1796935715 1796935615
 ```
 
+_Important: As of this writing this tool does NOT supersede alternate geometries associated with the WOF records being superseded._
+
 ##### "reader" and "writer" URIs
 
 The `wof` tool has its own internal logic for [deriving paths for reading and writing input documents](https://github.com/whosonfirst/wof-cli?tab=readme-ov-file#paths-and-uris).
