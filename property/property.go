@@ -8,9 +8,11 @@ import (
 
 	"github.com/sfomuseum/go-csvdict"
 	"github.com/tidwall/gjson"
+	"github.com/whosonfirst/go-whosonfirst-export/v2"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
+	"github.com/whosonfirst/wof/writer"
 	"os"
 )
 
@@ -36,8 +38,6 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 
 	fs_uris := fs.Args()
 
-	var csv_wr *csvdict.Writer
-
 	if prefix != "" {
 
 		prefix = strings.TrimRight(prefix, ".")
@@ -46,6 +46,19 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 			paths[idx] = fmt.Sprintf("%s.%s", prefix, p)
 		}
 	}
+
+	switch action {
+	case "remove":
+		return c.removeProperties(ctx, fs_uris, paths)
+	default:
+		return c.listProperties(ctx, fs_uris, paths)
+	}
+
+}
+
+func (c *PropertyCommand) listProperties(ctx context.Context, fs_uris []string, paths []string) error {
+
+	var csv_wr *csvdict.Writer
 
 	cb := func(ctx context.Context, cb_uri string) error {
 
@@ -104,6 +117,46 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 				rsp := gjson.GetBytes(body, path)
 				fmt.Println(rsp.String())
 			}
+		}
+
+		return nil
+	}
+
+	return uris.ExpandURIsWithCallback(ctx, cb, fs_uris...)
+}
+
+func (c *PropertyCommand) removeProperties(ctx context.Context, fs_uris []string, paths []string) error {
+
+	ex, err := export.NewExporter(ctx, "whosonfirst://")
+
+	if err != nil {
+		return fmt.Errorf("Failed to create new exporter, %w", err)
+	}
+
+	cb := func(ctx context.Context, cb_uri string) error {
+
+		body, err := reader.BytesFromURI(ctx, cb_uri)
+
+		if err != nil {
+			return fmt.Errorf("Failed to read %s, %w", cb_uri, err)
+		}
+
+		new_body, err := export.RemoveProperties(ctx, body, paths)
+
+		if err != nil {
+			return fmt.Errorf("Failed to remove properties from %s, %w", cb_uri, err)
+		}
+
+		new_body, err = ex.Export(ctx, new_body)
+
+		if err != nil {
+			return fmt.Errorf("Failed to export %s, %w", cb_uri, err)
+		}
+
+		err = writer.Write(ctx, cb_uri, new_body)
+
+		if err != nil {
+			return fmt.Errorf("Failed to write changes to %s, %w", cb_uri, err)
 		}
 
 		return nil
