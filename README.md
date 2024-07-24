@@ -102,6 +102,8 @@ Usage:
     	Boolean flag signaling that updated records should be written to STDOUT. If false input files will be overwritten. (default true)
 ```
 
+_Note: Exporting alternate geometry files is not supported yet._
+
 #### wof fmt
 
 ```
