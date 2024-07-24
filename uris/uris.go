@@ -4,18 +4,15 @@ import (
 	"context"
 	"fmt"
 	"io"
-	_ "os"
 	"path/filepath"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator"
 	"github.com/whosonfirst/go-whosonfirst-uri"
 )
 
-// To do : alt files...
-var re_wofid = regexp.MustCompile(`^\d+$`)
+var re_wofid = regexp.MustCompile(`^\d+(?:\-alt\-.*)?$`)
 
 // ExpandURICallbackFunc is a callback function to invoked for each path (URI) resolved by ExpandURIsWithCallback
 type ExpandURICallbackFunc func(context.Context, string) error
@@ -68,13 +65,13 @@ func ExpandURIsWithCallback(ctx context.Context, cb ExpandURICallbackFunc, uris 
 
 	if re_wofid.MatchString(u) {
 
-		id, err := strconv.ParseInt(u, 10, 64)
+		id, uri_args, err := uri.ParseURI(u)
 
 		if err != nil {
 			return fmt.Errorf("Failed to parse URI '%s' in to ID, %w", u, err)
 		}
 
-		rel_path, err := uri.Id2RelPath(id)
+		rel_path, err := uri.Id2RelPath(id, uri_args)
 
 		if err != nil {
 			return fmt.Errorf("Failed to derive relative path for ID %d (from URI '%s'), %w", id, u, err)
