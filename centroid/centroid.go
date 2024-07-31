@@ -4,7 +4,10 @@ import (
 	"context"
 	"fmt"
 	_ "log/slog"
+	"os"
+	"strconv"
 
+	"github.com/sfomuseum/go-csvdict"
 	"github.com/whosonfirst/go-whosonfirst-feature/properties"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
@@ -32,6 +35,8 @@ func (c *CentroidCommand) Run(ctx context.Context, args []string) error {
 
 	fs_uris := fs.Args()
 
+	var csv_wr *csvdict.Writer
+
 	cb := func(ctx context.Context, cb_uri string) error {
 
 		body, err := reader.BytesFromURI(ctx, cb_uri)
@@ -46,7 +51,44 @@ func (c *CentroidCommand) Run(ctx context.Context, args []string) error {
 			return fmt.Errorf("Failed to derive centroid for %s, %w", cb_uri, err)
 		}
 
-		fmt.Printf("%s,%f,%f\n", src, c.X(), c.Y())
+		out := map[string]string{
+			"uri":       cb_uri,
+			"source":    src,
+			"latitude":  strconv.FormatFloat(c.Y(), 'g', -1, 64),
+			"longitude": strconv.FormatFloat(c.X(), 'g', -1, 64),
+		}
+
+		if csv_wr == nil {
+
+			fieldnames := make([]string, 0)
+
+			for k, _ := range out {
+				fieldnames = append(fieldnames, k)
+			}
+
+			wr, err := csvdict.NewWriter(os.Stdout, fieldnames)
+
+			if err != nil {
+				return fmt.Errorf("Failed to create new CSV writer, %w", err)
+			}
+
+			err = wr.WriteHeader()
+
+			if err != nil {
+				return fmt.Errorf("Failed to write CSV header, %w", err)
+			}
+
+			csv_wr = wr
+		}
+
+		err = csv_wr.WriteRow(out)
+
+		if err != nil {
+			return fmt.Errorf("Failed to write CSV row for %s, %w", cb_uri, err)
+		}
+
+		csv_wr.Flush()
+
 		return nil
 	}
 
