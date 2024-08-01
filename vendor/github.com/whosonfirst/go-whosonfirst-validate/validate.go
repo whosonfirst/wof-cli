@@ -7,7 +7,11 @@ import (
 	"github.com/tidwall/geojson"
 )
 
+// To do: Replace Options{ ValidateFoo, ValidateBar } with Options{ Validators []Validator }
+// where Validator is an interface whose signature is something like Validate(context.Context, []byte) error
+
 type Options struct {
+	ValidateId        bool
 	ValidateName      bool
 	ValidatePlacetype bool
 	ValidateRepo      bool
@@ -19,6 +23,7 @@ type Options struct {
 func DefaultValidateOptions() *Options {
 
 	return &Options{
+		ValidateId:        true,
 		ValidateName:      true,
 		ValidatePlacetype: true,
 		ValidateRepo:      true,
@@ -59,6 +64,15 @@ func Validate(body []byte) error {
 }
 
 func ValidateWithOptions(body []byte, options *Options) error {
+
+	if options.ValidateId {
+
+		err := ValidateId(body)
+
+		if err != nil {
+			return fmt.Errorf("Failed to validate ID, %w", err)
+		}
+	}
 
 	if options.ValidateName {
 
