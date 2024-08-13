@@ -4,25 +4,19 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log/slog"
-	"net"
-	"net/http"
-	"os"
-	"os/signal"
-	"time"
 
 	"github.com/paulmach/orb/geojson"
-	"github.com/pkg/browser"
-	"github.com/whosonfirst/go-whosonfirst-format-wasm/static/javascript"
-	"github.com/whosonfirst/go-whosonfirst-format-wasm/static/wasm"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
-	"github.com/whosonfirst/wof/show/www"
 	"github.com/whosonfirst/wof/uris"
+	sfom_show "github.com/sfomuseum/go-geojson-show/app/show"
 )
 
 type RunOptions struct {
 	URIs []string
+	MapProvider string
+	MapTileURI  string
+	ProtomapsTheme string
 	Port int
 }
 
@@ -48,19 +42,11 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 
 	uris := fs.Args()
 
-	if port == 0 {
-
-		listener, err := net.Listen("tcp", "localhost:0")
-
-		if err != nil {
-			return fmt.Errorf("Failed to determine next available port, %w", err)
-		}
-
-		port = listener.Addr().(*net.TCPAddr).Port
-	}
-
 	opts := &RunOptions{
 		URIs: uris,
+		MapProvider: map_provider,
+		MapTileURI: map_tile_uri,
+		ProtomapsTheme: protomaps_theme,
 		Port: port,
 	}
 
@@ -108,103 +94,13 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
 
-	data_handler := dataHandler(fc)
-
-	http_fs := http.FS(www.FS)
-	fs_handler := http.FileServer(http_fs)
-
-	wasm_fs := http.FS(wasm.FS)
-	wasm_handler := http.FileServer(wasm_fs)
-
-	javascript_fs := http.FS(javascript.FS)
-	javascript_handler := http.FileServer(javascript_fs)
-
-	mux := http.NewServeMux()
-	mux.Handle("/features.geojson", data_handler)
-
-	mux.Handle("/javascript/wasm/", http.StripPrefix("/javascript/wasm/", javascript_handler))
-	mux.Handle("/wasm/", http.StripPrefix("/wasm/", wasm_handler))
-
-	mux.Handle("/", fs_handler)
-
-	addr := fmt.Sprintf("localhost:%d", opts.Port)
-	url := fmt.Sprintf("http://%s", addr)
-
-	http_server := http.Server{
-		Addr: addr,
+	run_opts := &sfom_show.RunOptions{
+		MapProvider: opts.MapProvider,
+		MapTileURI: opts.MapTileURI,
+		ProtomapsTheme: opts.ProtomapsTheme,
+		Port: opts.Port,		
+		Features: fc.Features,		
 	}
 
-	http_server.Handler = mux
-
-	done_ch := make(chan bool)
-	err_ch := make(chan error)
-
-	go func() {
-
-		sigint := make(chan os.Signal, 1)
-		signal.Notify(sigint, os.Interrupt)
-		<-sigint
-
-		slog.Info("Shutting server down")
-		err := http_server.Shutdown(ctx)
-
-		if err != nil {
-			slog.Error("HTTP server shutdown error", "error", err)
-		}
-
-		close(done_ch)
-	}()
-
-	go func() {
-
-		err := http_server.ListenAndServe()
-
-		if err != nil {
-			err_ch <- fmt.Errorf("Failed to start server, %w", err)
-		}
-	}()
-
-	server_ready := false
-
-	ticker := time.NewTicker(100 * time.Millisecond)
-	defer ticker.Stop()
-
-	for {
-		select {
-		case err := <-err_ch:
-			return err
-		case <-ticker.C:
-
-			rsp, err := http.Head(url)
-
-			if err != nil {
-				slog.Warn("HEAD request failed", "url", url, "error", err)
-			} else {
-
-				defer rsp.Body.Close()
-
-				if rsp.StatusCode != 200 {
-					slog.Warn("HEAD request did not return expected status code", "url", url, "code", rsp.StatusCode)
-				} else {
-					slog.Debug("HEAD request succeeded", "url", url)
-					server_ready = true
-				}
-			}
-		}
-
-		if server_ready {
-			break
-		}
-	}
-
-	err = browser.OpenURL(url)
-
-	if err != nil {
-		return fmt.Errorf("Failed to open '%s', %w", url, err)
-	}
-
-	fmt.Printf("Records are viewable at %s\n", url)
-
-	<-done_ch
-	return nil
+	return sfom_show.RunWithOptions(ctx, run_opts)
 }
