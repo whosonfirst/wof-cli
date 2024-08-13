@@ -1,15 +1,15 @@
 module github.com/whosonfirst/wof
 
-go 1.22.3
+go 1.22.4
 
 require (
 	github.com/aaronland/go-json-query v0.1.5
 	github.com/aaronland/go-roster v1.0.0
 	github.com/natefinch/atomic v1.0.1
 	github.com/paulmach/orb v0.11.1
-	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 	github.com/sfomuseum/go-csvdict v1.0.0
 	github.com/sfomuseum/go-flags v0.10.0
+	github.com/sfomuseum/go-geojson-show v0.0.1
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3
 	github.com/sfomuseum/go-timings v1.2.1
 	github.com/tidwall/gjson v1.17.3
@@ -18,7 +18,6 @@ require (
 	github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.2
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.28
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
-	github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1
 	github.com/whosonfirst/go-whosonfirst-id v1.2.4
 	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.1
 	github.com/whosonfirst/go-whosonfirst-iterwriter v0.2.0
@@ -42,6 +41,9 @@ require (
 	github.com/aaronland/go-aws-dynamodb v0.0.5 // indirect
 	github.com/aaronland/go-aws-session v0.2.1 // indirect
 	github.com/aaronland/go-brooklynintegers-api v1.2.7 // indirect
+	github.com/aaronland/go-http-leaflet v0.5.0 // indirect
+	github.com/aaronland/go-http-rewrite v1.1.0 // indirect
+	github.com/aaronland/go-http-static v0.0.3 // indirect
 	github.com/aaronland/go-pagination v0.2.0 // indirect
 	github.com/aaronland/go-pagination-sql v0.2.0 // indirect
 	github.com/aaronland/go-pool/v2 v2.0.0 // indirect
@@ -108,6 +110,7 @@ require (
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/paulmach/protoscan v0.2.1 // indirect
+	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_golang v1.19.1 // indirect
 	github.com/prometheus/client_model v0.5.0 // indirect
@@ -118,8 +121,12 @@ require (
 	github.com/rivo/uniseg v0.4.3 // indirect
 	github.com/schollz/progressbar/v3 v3.13.1 // indirect
 	github.com/sfomuseum/go-edtf v1.2.1 // indirect
+	github.com/sfomuseum/go-http-protomaps v0.3.0 // indirect
+	github.com/sfomuseum/go-http-rollup v0.0.3 // indirect
 	github.com/sfomuseum/iso8601duration v1.1.0 // indirect
 	github.com/sfomuseum/runtimevar v1.2.0 // indirect
+	github.com/tdewolff/minify/v2 v2.20.32 // indirect
+	github.com/tdewolff/parse/v2 v2.7.14 // indirect
 	github.com/tidwall/geoindex v1.4.4 // indirect
 	github.com/tidwall/geojson v1.4.5 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
@@ -130,6 +137,7 @@ require (
 	github.com/whosonfirst/go-sanitize v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-crawl v0.2.2 // indirect
 	github.com/whosonfirst/go-whosonfirst-flags v0.5.2 // indirect
+	github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1 // indirect
 	github.com/whosonfirst/go-whosonfirst-names v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-placetypes v0.7.3 // indirect
 	github.com/whosonfirst/go-whosonfirst-sources v0.1.0 // indirect
