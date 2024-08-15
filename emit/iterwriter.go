@@ -1,6 +1,7 @@
 package emit
 
 import (
+	"bufio"
 	"bytes"
 	"context"
 	"encoding/json"
@@ -8,28 +9,34 @@ import (
 	"io"
 	"log/slog"
 	"strconv"
+	"strings"
 
 	"github.com/aaronland/go-json-query"
+	"github.com/sfomuseum/go-csvdict"
 	"github.com/sfomuseum/go-timings"
+	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter"
 	"github.com/whosonfirst/go-whosonfirst-iterwriter"
 	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
+	wof_spr_util "github.com/whosonfirst/go-whosonfirst-spr/v2/util"
 	"github.com/whosonfirst/go-whosonfirst-uri"
 	"github.com/whosonfirst/go-writer/v3"
 )
 
 type iterwriterCallbackOptions struct {
-	AsSPR           bool
-	AsSPRGeoJSON    bool
-	Forgiving       bool
-	QuerySet        *query.QuerySet
-	IncludeAltGeoms bool
+	Format              string
+	Forgiving           bool
+	QuerySet            *query.QuerySet
+	IncludeAltGeoms     bool
+	CSVAppendProperties map[string]string
 }
 
 func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.IterwriterCallbackFunc {
 
 	return func(wr writer.Writer, monitor timings.Monitor) emitter.EmitterCallbackFunc {
+
+		csv_header := false
 
 		iter_cb := func(ctx context.Context, path string, r io.ReadSeeker, args ...interface{}) error {
 
@@ -93,7 +100,8 @@ func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.Iterwrit
 
 			body_r := r
 
-			if opts.AsSPR {
+			switch opts.Format {
+			case "csv", "geojson", "spr":
 
 				body, err := io.ReadAll(r)
 
@@ -132,7 +140,63 @@ func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.Iterwrit
 					spr_rsp = rsp
 				}
 
-				if opts.AsSPRGeoJSON {
+				switch format {
+				case "csv":
+
+					spr_row, err := wof_spr_util.SPRToMap(spr_rsp)
+
+					if err != nil {
+
+						logger.Error("Failed to derive SPR map", "error", err)
+
+						if !opts.Forgiving {
+							return fmt.Errorf("Failed to derive SPR map for %s, %w", path, err)
+						}
+					}
+
+					spr_row["mz:uri"] = strings.Replace(spr_row["mz:uri"], "https://data.whosonfirst.org/", "", 1)
+
+					for col_name, path := range opts.CSVAppendProperties {
+						rsp := gjson.GetBytes(body, path)
+						spr_row[col_name] = rsp.String()
+					}
+
+					var buf bytes.Buffer
+					wr := bufio.NewWriter(&buf)
+
+					fieldnames := make([]string, 0)
+
+					for k, _ := range spr_row {
+						fieldnames = append(fieldnames, k)
+					}
+
+					csv_wr, err := csvdict.NewWriter(wr, fieldnames)
+
+					if err != nil {
+						return fmt.Errorf("Failed to create CSV writer for %s, %w", path, err)
+					}
+
+					if !csv_header {
+
+						err := csv_wr.WriteHeader()
+
+						if err != nil {
+							return fmt.Errorf("Failed to write CSV header for %s, %w", path, err)
+						}
+
+						csv_header = true
+					}
+
+					err = csv_wr.WriteRow(spr_row)
+
+					if err != nil {
+						return fmt.Errorf("Failed to write CSV row for %s, %w", path, err)
+					}
+
+					wr.Flush()
+					body_r = bytes.NewReader(buf.Bytes())
+
+				case "geojson":
 
 					body, err = sjson.SetBytes(body, "properties", spr_rsp)
 
@@ -157,7 +221,7 @@ func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.Iterwrit
 
 					body_r = bytes.NewReader(body)
 
-				} else {
+				default:
 
 					enc_spr, err := json.Marshal(spr_rsp)
 
@@ -168,13 +232,15 @@ func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.Iterwrit
 
 					body_r = bytes.NewReader(enc_spr)
 				}
+			default:
+				//
 			}
 
 			_, err = wr.Write(ctx, rel_path, body_r)
 
 			if err != nil {
 
-				logger.Error("Failed to write record %s (%s), %w", rel_path, path, err)
+				logger.Error("Failed to write record %s (%s), %w", rel_path, path, "error", err)
 
 				if !opts.Forgiving {
 					return fmt.Errorf("Failed to write record for %s, %w", rel_path, err)

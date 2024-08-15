@@ -587,6 +587,7 @@ github.com/whosonfirst/go-whosonfirst-spatial-sqlite/wkttoorb
 # github.com/whosonfirst/go-whosonfirst-spr/v2 v2.3.7
 ## explicit; go 1.18
 github.com/whosonfirst/go-whosonfirst-spr/v2
+github.com/whosonfirst/go-whosonfirst-spr/v2/util
 # github.com/whosonfirst/go-whosonfirst-sql v0.0.3
 ## explicit; go 1.21.3
 github.com/whosonfirst/go-whosonfirst-sql/tables

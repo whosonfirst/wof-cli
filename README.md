@@ -51,10 +51,10 @@ uri,source,latitude,longitude
 #### wof emit
 
 ```
-$> ./bin/wof emit -h
+> wof emit -h
 Emit one or more Who's On First records.
 Usage:
-	 ./bin/wof emit [options] path(N) path(N)
+	 wof emit [options] path(N) path(N)
   -as-spr
     	Emit Who's On First records formatted as Standard Place Response (SPR) records.
   -as-spr-geojson
@@ -70,6 +70,30 @@ Usage:
   -writer-uri string
     	A valid whosonfirst/go-writer.Writer URI. (default "jsonl://?writer=stdout://")
 ```
+
+##### Example (CSV)
+
+For example, emitting records as CSV results with additional custom properties:
+
+```
+$> ./bin/wof emit \
+	-format csv \
+	-csv-append-property sfomuseum_description=properties.sfomuseum:description \
+	-writer-uri stdout:// \
+	-query 'properties.millsfield:subcategory_id=1511213363' \
+	/usr/local/data/sfomuseum-data-collection
+
+wof:repo,mz:is_deprecated,edtf:inception,mz:max_latitude,mz:is_ceased,mz:is_superseding,wof:lastmodified,mz:longitude,mz:max_longitude,wof:placetype,wof:country,mz:is_current,wof:belongsto,mz:latitude,mz:min_longitude,wof:superseded_by,mz:min_latitude,edtf:cessation,wof:parent_id,wof:path,mz:is_superseded,wof:name,wof:id,mz:uri,wof:supersedes,sfomuseum_description
+sfomuseum-data-collection,-1,1948,37.61661101879963,1,0,1716579582,-122.38615540108617,-122.38583385944366,custom,XY,1,"102527513,1159162825,102191575,85633793,102087579,85922583,85688637,1159160869",37.61635747477365,-122.38647222518921,,37.6161053594541,1948,1159162825,184/675/460/1/1846754601.geojson,0,postcard: Pigeon Key,1846754601,184/675/460/1/1846754601.geojson,,"Color postcard with photographic image depicting houses on island with bridge; postmarked June 7, 1948 in Fort Lauderdale, Fla.; text on front: “Kodachrome by C.H. Ruth / Overseas Highway, Above Pigeon Key, Between Key West and Miami, Fla.”"
+Black and white postcard with photographic image depicting profile view of Sikorsky XPBS-1 on water; text on front: “Sikorsky flying dreadnaught [sic] for U/S/ Navy with Hamilton Constant Speed Propellers”.,custom,184/675/460/3/1846754603.geojson,XY,37.6161053594541,1,1716579582,1159162825,0,1930-12,184/675/460/3/1846754603.geojson,"102527513,1159162825,102191575,85633793,102087579,85922583,85688637,1159160869",-1,,37.61661101879963,1930-09,,1,-122.38615540108617,-122.38647222518921,sfomuseum-data-collection,0,postcard: Sikorsky XPBS-1,-122.38583385944366,1846754603,37.61635747477365
+XY,1930~,"Black and white postcard with photographic image depicting aerial view of Havana Harbor with Pan American Airways Fokker F-10 in flight; text on front: “Tri-motor airliner, Pan American Airways, over El Morro, Havana”.",1716579582,-122.38583385944366,1,0,184/675/460/5/1846754605.geojson,0,37.61661101879963,-122.38647222518921,37.61635747477365,"102527513,1159162825,102191575,85633793,102087579,85922583,85688637,1159160869",-122.38615540108617,"postcard: Pan American Airways, Fokker F.10, Havana",custom,1159162825,sfomuseum-data-collection,1930~,,37.6161053594541,,1846754605,184/675/460/5/1846754605.geojson,1,-1
+-122.38583385944366,,37.61661101879963,193X,0,"102527513,1159162825,102191575,85633793,102087579,85922583,85688637,1159160869",0,184/675/460/7/1846754607.geojson,1159162825,193X,sfomuseum-data-collection,"Black and white postcard with photographic image depicting low-angle front three-quarter view of Pan American Airways Sikorsky S-42 in flight against clouds; text on front: “A ‘Clipper Ship’ of the Air”; text on reverse: “America’s Largest Airliners - Giant 4-engined 32 and 44 passenger, 19-ton Flying Boats - Ply the Pan American Airways Routes between the U.S., the West Indies and South America”.","postcard: Pan American Airways, Sikorsky S-42",custom,37.61635747477365,,1,184/675/460/7/1846754607.geojson,-122.38647222518921,-1,1716579582,1846754607,-122.38615540108617,1,XY,37.6161053594541
+... and so on
+```
+
+The default set of CSV row map to the properties of a Standard Places Result (SPR).
+
+##### Example (SPR)
 
 For example, emitting records as SPR results:
 
@@ -87,6 +111,8 @@ $> ./bin/wof emit -as-spr -query 'properties.wof:name=SFO \(2023\)' /usr/local/d
 
 {"edtf:cessation":"","edtf:inception":"2023-07~","mz:is_ceased":-1,"mz:is_current":-1,"mz:is_deprecated":-1,"mz:is_superseded":0,"mz:is_superseding":0,"mz:latitude":37.621284127293116,"mz:longitude":-122.38285759138246,"mz:max_latitude":37.642285759714994,"mz:max_longitude":-122.34578162574567,"mz:min_latitude":37.60153229886917,"mz:min_longitude":-122.40810153962025,"mz:uri":"https://data.whosonfirst.org/188/030/951/9/1880309519.geojson","wof:belongsto":[102527513,102191575,85633793,102087579,85922583,554784711,85688637,102085387],"wof:country":"US","wof:id":1880309519,"wof:lastmodified":1716594274,"wof:name":"SFO (2023)","wof:parent_id":-1,"wof:path":"188/030/951/9/1880309519.geojson","wof:placetype":"custom","wof:repo":"sfomuseum-data-maps","wof:superseded_by":[],"wof:supersedes":[]}
 ```
+
+##### Example (FeatureCollection)
 
 Or emitting records as FeatureCollection of GeoJSON-formatted SPR results (where the original geometry is preserved by the properties hash is replaced by that record's SPR) and piping the result to `ogr2ogr`:
 

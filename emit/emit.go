@@ -70,11 +70,34 @@ func (c *EmitCommand) Run(ctx context.Context, args []string) error {
 		iterator_uri = "file://"
 	}
 
+	if format == "" {
+
+		if as_spr {
+			slog.Warn("-as-spr flag is deprecated. Please use -format spr instead.")
+			format = "spr"
+		}
+
+		if as_spr_geojson {
+			slog.Warn("-as-spr-geojson flag is deprecated. Please use -format geojson instead.")
+			format = "geojson"
+		}
+	}
+
 	iterwr_opts := &iterwriterCallbackOptions{
-		AsSPR:           as_spr,
-		AsSPRGeoJSON:    as_spr_geojson,
 		Forgiving:       forgiving,
 		IncludeAltGeoms: include_alt_geoms,
+		Format:          format,
+	}
+
+	if format == "csv" {
+
+		append_properties_map := make(map[string]string)
+
+		for _, kv := range csv_append_properties {
+			append_properties_map[kv.Key()] = kv.Value().(string)
+		}
+
+		iterwr_opts.CSVAppendProperties = append_properties_map
 	}
 
 	if len(queries) > 0 {
