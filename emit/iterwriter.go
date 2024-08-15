@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -170,6 +171,8 @@ func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.Iterwrit
 						fieldnames = append(fieldnames, k)
 					}
 
+					sort.Strings(fieldnames)
+
 					csv_wr, err := csvdict.NewWriter(wr, fieldnames)
 
 					if err != nil {
@@ -194,6 +197,8 @@ func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.Iterwrit
 					}
 
 					wr.Flush()
+					csv_wr.Flush()
+
 					body_r = bytes.NewReader(buf.Bytes())
 
 				case "geojson":
