@@ -70,11 +70,23 @@ func (c *EmitCommand) Run(ctx context.Context, args []string) error {
 		iterator_uri = "file://"
 	}
 
+	if format == "" {
+
+		if as_spr {
+			slog.Warn("-as-spr flag is deprecated. Please use -format spr instead.")
+			format = "spr"
+		}
+
+		if as_spr_geojson {
+			slog.Warn("-as-spr-geojson flag is deprecated. Please use -format geojson instead.")
+			format = "geojson"
+		}
+	}
+
 	iterwr_opts := &iterwriterCallbackOptions{
-		AsSPR:           as_spr,
-		AsSPRGeoJSON:    as_spr_geojson,
 		Forgiving:       forgiving,
 		IncludeAltGeoms: include_alt_geoms,
+		Format:          format,
 	}
 
 	if len(queries) > 0 {

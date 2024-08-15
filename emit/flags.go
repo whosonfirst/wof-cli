@@ -19,6 +19,8 @@ var include_alt_geoms bool
 var as_spr bool
 var as_spr_geojson bool
 
+var format string
+
 var queries query.QueryFlags
 var query_mode string
 
@@ -29,8 +31,12 @@ func DefaultFlagSet() *flag.FlagSet {
 	fs.StringVar(&writer_uri, "writer-uri", "jsonl://?writer=stdout://", "A valid whosonfirst/go-writer.Writer URI.")
 	fs.StringVar(&iterator_uri, "iterator-uri", "repo://", "A valid whosonfirst/go-whosonfirst-iterate/v2/emitter URI. If URI is \"-\" then this flag will be assigned a value of \"file://\" whose input will be the expanded URIs derived from additional arguments.")
 
-	fs.BoolVar(&as_spr, "as-spr", false, "Emit Who's On First records formatted as Standard Place Response (SPR) records.")
-	fs.BoolVar(&as_spr_geojson, "as-spr-geojson", false, "Emit Who's On First records as GeoJSON records where the 'properties' element is replaced by a Standard Place Response (SPR) representation of the record.")
+	fs.BoolVar(&as_spr, "as-spr", false, "Emit Who's On First records formatted as Standard Place Response (SPR) records. This flag is DEPRECATED. Please use '-format spr' instead.")
+	fs.BoolVar(&as_spr_geojson, "as-spr-geojson", false, "Emit Who's On First records as GeoJSON records where the 'properties' element is replaced by a Standard Place Response (SPR) representation of the record. This flag is DEPRECATED. Please use '-format geojson' instead.")
+
+	fs.StringVar(&format, "format", "", "Valid options are: csv, geojson, spr.")
+
+	fs.BoolVar(&forgiving, "forgiving", false, "...")
 
 	fs.BoolVar(&include_alt_geoms, "include-alt-geoms", true, "Emit alternate geometry records.")
 

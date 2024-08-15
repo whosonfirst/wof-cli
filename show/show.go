@@ -6,18 +6,18 @@ import (
 	"io"
 
 	"github.com/paulmach/orb/geojson"
+	sfom_show "github.com/sfomuseum/go-geojson-show/app/show"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
-	sfom_show "github.com/sfomuseum/go-geojson-show/app/show"
 )
 
 type RunOptions struct {
-	URIs []string
-	MapProvider string
-	MapTileURI  string
+	URIs           []string
+	MapProvider    string
+	MapTileURI     string
 	ProtomapsTheme string
-	Port int
+	Port           int
 }
 
 type ShowCommand struct {
@@ -43,11 +43,11 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 	uris := fs.Args()
 
 	opts := &RunOptions{
-		URIs: uris,
-		MapProvider: map_provider,
-		MapTileURI: map_tile_uri,
+		URIs:           uris,
+		MapProvider:    map_provider,
+		MapTileURI:     map_tile_uri,
 		ProtomapsTheme: protomaps_theme,
-		Port: port,
+		Port:           port,
 	}
 
 	return RunWithOptions(ctx, opts)
@@ -95,11 +95,11 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	}
 
 	run_opts := &sfom_show.RunOptions{
-		MapProvider: opts.MapProvider,
-		MapTileURI: opts.MapTileURI,
+		MapProvider:    opts.MapProvider,
+		MapTileURI:     opts.MapTileURI,
 		ProtomapsTheme: opts.ProtomapsTheme,
-		Port: opts.Port,		
-		Features: fc.Features,		
+		Port:           opts.Port,
+		Features:       fc.Features,
 	}
 
 	return sfom_show.RunWithOptions(ctx, run_opts)
