@@ -89,6 +89,17 @@ func (c *EmitCommand) Run(ctx context.Context, args []string) error {
 		Format:          format,
 	}
 
+	if format == "csv" {
+
+		append_properties_map := make(map[string]string)
+
+		for _, kv := range csv_append_properties {
+			append_properties_map[kv.Key()] = kv.Value().(string)
+		}
+
+		iterwr_opts.CSVAppendProperties = append_properties_map
+	}
+
 	if len(queries) > 0 {
 
 		qs := &query.QuerySet{

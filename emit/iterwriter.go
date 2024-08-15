@@ -14,6 +14,7 @@ import (
 	"github.com/aaronland/go-json-query"
 	"github.com/sfomuseum/go-csvdict"
 	"github.com/sfomuseum/go-timings"
+	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter"
 	"github.com/whosonfirst/go-whosonfirst-iterwriter"
@@ -24,10 +25,11 @@ import (
 )
 
 type iterwriterCallbackOptions struct {
-	Format          string
-	Forgiving       bool
-	QuerySet        *query.QuerySet
-	IncludeAltGeoms bool
+	Format              string
+	Forgiving           bool
+	QuerySet            *query.QuerySet
+	IncludeAltGeoms     bool
+	CSVAppendProperties map[string]string
 }
 
 func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.IterwriterCallbackFunc {
@@ -153,6 +155,11 @@ func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.Iterwrit
 					}
 
 					spr_row["mz:uri"] = strings.Replace(spr_row["mz:uri"], "https://data.whosonfirst.org/", "", 1)
+
+					for col_name, path := range opts.CSVAppendProperties {
+						rsp := gjson.GetBytes(body, path)
+						spr_row[col_name] = rsp.String()
+					}
 
 					var buf bytes.Buffer
 					wr := bufio.NewWriter(&buf)
