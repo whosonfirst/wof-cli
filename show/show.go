@@ -42,7 +42,7 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 
 	fs_uris := fs.Args()
 
-	run_opts, err := sfom_show.RunOptionsFromFlagSet(fs)
+	run_opts, err := sfom_show.RunOptionsFromFlagSet(ctx, fs)
 
 	if err != nil {
 		return fmt.Errorf("Failed to derive run options, %w", err)
@@ -51,9 +51,10 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 	// Ensure custom label properties
 
 	label_props := []string{
-		"wof:name",
 		"wof:id",
+		"wof:name",
 		"wof:placetype",
+		"mz:is_current",
 		"src:geom",
 	}
 

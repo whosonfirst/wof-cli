@@ -280,8 +280,8 @@ github.com/sfomuseum/go-edtf v1.2.1/go.mod h1:1rP0EJZ/84j3HO80vGcnG2T9MFBDAFyTNt
 github.com/sfomuseum/go-flags v0.8.3/go.mod h1:VXOnnX1/yxQpX2yiwHaBV6aCmhtszQOL5bL1/nNo3co=
 github.com/sfomuseum/go-flags v0.10.0 h1:1OC1ACxpWMsl3XQ9OeNVMQj7Zi2CzufP3Rym3mPI8HU=
 github.com/sfomuseum/go-flags v0.10.0/go.mod h1:VXOnnX1/yxQpX2yiwHaBV6aCmhtszQOL5bL1/nNo3co=
-github.com/sfomuseum/go-geojson-show v0.0.6 h1:CJXXuADVwnlRabG88QDZWXE9F3xOclsZEyq2HBA3mzg=
-github.com/sfomuseum/go-geojson-show v0.0.6/go.mod h1:pCARtr8AYaHJfxBmJIKfOVuiPQyPxtes/s/KCSgDd4Q=
+github.com/sfomuseum/go-geojson-show v0.0.7 h1:KRfxbU3OtRw1MtwA8pWMOkRCBvIjOGDS2Le/Q2b2hrE=
+github.com/sfomuseum/go-geojson-show v0.0.7/go.mod h1:4yMNVVj8TccDOtFStUbNc12DcD2uz6o/x1ElcADjvTA=
 github.com/sfomuseum/go-http-protomaps v0.3.0 h1:e89s6wsDHyCXDgB6hFARMjsdrgn/lG4BRybRJuXTktY=
 github.com/sfomuseum/go-http-protomaps v0.3.0/go.mod h1:K/PDDhy0c3xcPK2Bot7+oIz2l8QQLZys9SqAblhHT6I=
 github.com/sfomuseum/go-http-rollup v0.0.3 h1:N3CnjZluhzRhqPpdM+GTuzCnjM0V5xtPX+LeCgZWhTA=

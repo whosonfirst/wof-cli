@@ -9,7 +9,7 @@ require (
 	github.com/paulmach/orb v0.11.1
 	github.com/sfomuseum/go-csvdict v1.0.0
 	github.com/sfomuseum/go-flags v0.10.0
-	github.com/sfomuseum/go-geojson-show v0.0.6
+	github.com/sfomuseum/go-geojson-show v0.0.7
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3
 	github.com/sfomuseum/go-timings v1.3.0
 	github.com/tidwall/gjson v1.17.3
