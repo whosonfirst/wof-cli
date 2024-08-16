@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"slices"
 
 	"github.com/paulmach/orb/geojson"
 	sfom_show "github.com/sfomuseum/go-geojson-show"
@@ -48,15 +49,23 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 		return fmt.Errorf("Failed to derive run options, %w", err)
 	}
 
-	default_props := []string{
+	label_props := []string{
 		"wof:name",
 		"wof:id",
 		"wof:placetype",
+		"src:geom",
 	}
 
-	for _, prop := range default_props {
-		run_opts.LabelProperties = append(run_opts.LabelProperties, prop)
+	for _, prop := range run_opts.LabelProperties {
+
+		if !slices.Contains(label_props, prop) {
+			label_props = append(label_props, prop)
+		}
 	}
+
+	run_opts.LabelProperties = label_props
+
+	// Add styles here...
 
 	fc := geojson.NewFeatureCollection()
 
