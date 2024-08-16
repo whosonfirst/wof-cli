@@ -2,6 +2,7 @@ package show
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
 	"io"
 	"slices"
@@ -13,13 +14,11 @@ import (
 	"github.com/whosonfirst/wof/uris"
 )
 
-type RunOptions struct {
-	URIs           []string
-	MapProvider    string
-	MapTileURI     string
-	ProtomapsTheme string
-	Port           int
-}
+//go:embed style.json
+var style_json string
+
+//go:embed point_style.json
+var point_style_json string
 
 type ShowCommand struct {
 	wof.Command
@@ -49,6 +48,8 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 		return fmt.Errorf("Failed to derive run options, %w", err)
 	}
 
+	// Ensure custom label properties
+
 	label_props := []string{
 		"wof:name",
 		"wof:id",
@@ -65,7 +66,31 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 
 	run_opts.LabelProperties = label_props
 
-	// Add styles here...
+	// Ensure custom styles
+
+	if run_opts.Style == nil {
+
+		style, err := sfom_show.UnmarshalStyle(style_json)
+
+		if err != nil {
+			return fmt.Errorf("Failed to unmarshal style, %w", err)
+		}
+
+		run_opts.Style = style
+	}
+
+	if run_opts.PointStyle == nil {
+
+		point_style, err := sfom_show.UnmarshalStyle(point_style_json)
+
+		if err != nil {
+			return fmt.Errorf("Failed to unmarshal point style, %w", err)
+		}
+
+		run_opts.PointStyle = point_style
+	}
+
+	// Derive features to show
 
 	fc := geojson.NewFeatureCollection()
 
@@ -104,6 +129,8 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 	}
 
 	run_opts.Features = fc.Features
+
+	// Show the map
 
 	return sfom_show.RunWithOptions(ctx, run_opts)
 }
