@@ -1,11 +1,10 @@
-package s3blob
+package s3
 
 import (
 	"context"
 	"fmt"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	aws_s3 "github.com/aws/aws-sdk-go-v2/service/s3"
 	"gocloud.dev/blob"
 )
 
@@ -107,18 +106,24 @@ func SetWriterOptionsWithContext(ctx context.Context, ctx_key interface{}, opt_k
 			return nil, fmt.Errorf("Invalid type for '%s' value", opt_key)
 		}
 
-		acl := opt_value.(string)
+		str_acl := opt_value.(string)
+
+		acl, err := StringACLToObjectCannedACL(str_acl)
+
+		if err != nil {
+			return nil, fmt.Errorf("Failed to derive canned ACL from string, %w", err)
+		}
 
 		before := func(asFunc func(interface{}) bool) error {
 
-			req := &s3manager.UploadInput{}
+			req := &aws_s3.PutObjectInput{}
 			ok := asFunc(&req)
 
 			if !ok {
 				return fmt.Errorf("invalid s3 type")
 			}
 
-			req.ACL = aws.String(acl)
+			req.ACL = acl
 			return nil
 		}
 
