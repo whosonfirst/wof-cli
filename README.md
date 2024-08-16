@@ -114,7 +114,7 @@ $> ./bin/wof emit -as-spr -query 'properties.wof:name=SFO \(2023\)' /usr/local/d
 
 ##### Example (FeatureCollection)
 
-Or emitting records as FeatureCollection of GeoJSON-formatted SPR results (where the original geometry is preserved by the properties hash is replaced by that record's SPR) and piping the result to `ogr2ogr`:
+Or emitting records as FeatureCollection of GeoJSON-formatted SPR results (where the original geometry is preserved but the properties hash is replaced by that record's SPR) and piping the result to `ogr2ogr`:
 
 ```
 $> ./bin/wof emit -as-spr -as-spr-geojson \
