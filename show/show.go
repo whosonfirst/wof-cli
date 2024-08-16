@@ -6,7 +6,7 @@ import (
 	"io"
 
 	"github.com/paulmach/orb/geojson"
-	sfom_show "github.com/sfomuseum/go-geojson-show/app/show"
+	sfom_show "github.com/sfomuseum/go-geojson-show"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
@@ -37,26 +37,26 @@ func NewShowCommand(ctx context.Context, cmd string) (wof.Command, error) {
 
 func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 
-	fs := DefaultFlagSet()
+	fs := sfom_show.DefaultFlagSet()
 	fs.Parse(args)
 
-	uris := fs.Args()
+	fs_uris := fs.Args()
 
-	opts := &RunOptions{
-		URIs:           uris,
-		MapProvider:    map_provider,
-		MapTileURI:     map_tile_uri,
-		ProtomapsTheme: protomaps_theme,
-		Port:           port,
+	run_opts, err := sfom_show.RunOptionsFromFlagSet(fs)
+
+	if err != nil {
+		return fmt.Errorf("Failed to derive run options, %w", err)
 	}
 
-	return RunWithOptions(ctx, opts)
-}
+	default_props := []string{
+		"wof:name",
+		"wof:id",
+		"wof:placetype",
+	}
 
-func RunWithOptions(ctx context.Context, opts *RunOptions) error {
-
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
+	for _, prop := range default_props {
+		run_opts.LabelProperties = append(run_opts.LabelProperties, prop)
+	}
 
 	fc := geojson.NewFeatureCollection()
 
@@ -88,19 +88,13 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return nil
 	}
 
-	err := uris.ExpandURIsWithCallback(ctx, cb, opts.URIs...)
+	err = uris.ExpandURIsWithCallback(ctx, cb, fs_uris...)
 
 	if err != nil {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
 
-	run_opts := &sfom_show.RunOptions{
-		MapProvider:    opts.MapProvider,
-		MapTileURI:     opts.MapTileURI,
-		ProtomapsTheme: opts.ProtomapsTheme,
-		Port:           opts.Port,
-		Features:       fc.Features,
-	}
+	run_opts.Features = fc.Features
 
 	return sfom_show.RunWithOptions(ctx, run_opts)
 }

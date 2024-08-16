@@ -2,10 +2,10 @@ package show
 
 import (
 	"context"
-	"embed"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"log/slog"
 	"net"
@@ -18,38 +18,15 @@ import (
 
 	"github.com/paulmach/orb/geojson"
 	"github.com/pkg/browser"
+	"github.com/sfomuseum/go-geojson-show/static/www"
 	"github.com/sfomuseum/go-http-protomaps"
+	"github.com/tidwall/gjson"
 	wasm_js "github.com/whosonfirst/go-whosonfirst-format-wasm/static/javascript"
 	"github.com/whosonfirst/go-whosonfirst-format-wasm/static/wasm"
 )
 
 const leaflet_osm_tile_url = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
 const protomaps_api_tile_url string = "https://api.protomaps.com/tiles/v3/{z}/{x}/{y}.mvt?key={key}"
-
-//go:embed *.html
-var html_FS embed.FS
-
-//go:embed css/*.css
-var css_FS embed.FS
-
-//go:embed javascript/*.js javascript/*.map
-var js_FS embed.FS
-
-// mapConfig defines common configuration details for maps.
-type mapConfig struct {
-	// A valid map provider label.
-	Provider string `json:"provider"`
-	// A valid Leaflet tile layer URI.
-	TileURL string `json:"tile_url"`
-	// Optional Protomaps configuration details
-	Protomaps *protomapsConfig `json:"protomaps,omitempty"`
-}
-
-// protomapsConfig defines configuration details for maps using Protomaps.
-type protomapsConfig struct {
-	// A valid Protomaps theme label
-	Theme string `json:"theme"`
-}
 
 func Run(ctx context.Context) error {
 	fs := DefaultFlagSet()
@@ -64,6 +41,86 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 		return err
 	}
 
+	fs_uris := fs.Args()
+
+	features := make([]*geojson.Feature, 0)
+
+	append_features := func(r io.Reader) error {
+
+		body, err := io.ReadAll(r)
+
+		if err != nil {
+			return fmt.Errorf("Failed to read body, %w", err)
+		}
+
+		type_rsp := gjson.GetBytes(body, "type")
+
+		switch type_rsp.String() {
+		case "Feature":
+
+			f, err := geojson.UnmarshalFeature(body)
+
+			if err != nil {
+				return fmt.Errorf("Failed to unmarshal Feature, %w", err)
+			}
+
+			features = append(features, f)
+
+		case "FeatureCollection":
+
+			other_fc, err := geojson.UnmarshalFeatureCollection(body)
+
+			if err != nil {
+				return fmt.Errorf("Failed to unmarshal record as FeatureCollection, %w", err)
+			}
+
+			for _, f := range other_fc.Features {
+				features = append(features, f)
+			}
+
+		default:
+			return fmt.Errorf("Invalid type, %s", type_rsp.String())
+		}
+
+		return nil
+	}
+
+	stdin := false
+
+	if len(fs_uris) == 1 && fs_uris[0] == "-" {
+		stdin = true
+	}
+
+	if stdin {
+
+		err := append_features(os.Stdin)
+
+		if err != nil {
+			return fmt.Errorf("Failed to append features, %v", err)
+		}
+
+	} else {
+
+		for _, path := range fs_uris {
+
+			r, err := os.Open(path)
+
+			if err != nil {
+				return fmt.Errorf("Failed to open %s for reading, %v", path, err)
+			}
+
+			defer r.Close()
+
+			err = append_features(r)
+
+			if err != nil {
+				return fmt.Errorf("Failed to append features, %v", err)
+			}
+		}
+	}
+
+	opts.Features = features
+
 	return RunWithOptions(ctx, opts)
 }
 
@@ -71,13 +128,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	mux := http.NewServeMux()
 
-	html_fs := http.FS(html_FS)
-	js_fs := http.FS(js_FS)
-	css_fs := http.FS(css_FS)
-
-	mux.Handle("/css/", http.FileServer(css_fs))
-	mux.Handle("/javascript/", http.FileServer(js_fs))
-	mux.Handle("/", http.FileServer(html_fs))
+	www_fs := http.FS(www.FS)
+	mux.Handle("/", http.FileServer(www_fs))
 
 	wasm_fs := http.FS(wasm.FS)
 	wasm_handler := http.FileServer(wasm_fs)
@@ -97,8 +149,11 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	//
 
 	map_cfg := &mapConfig{
-		Provider: opts.MapProvider,
-		TileURL:  opts.MapTileURI,
+		Provider:        opts.MapProvider,
+		TileURL:         opts.MapTileURI,
+		Style:           opts.Style,
+		PointStyle:      opts.PointStyle,
+		LabelProperties: opts.LabelProperties,
 	}
 
 	if map_provider == "protomaps" {
