@@ -317,8 +317,8 @@ github.com/sfomuseum/go-http-rollup v0.0.3 h1:N3CnjZluhzRhqPpdM+GTuzCnjM0V5xtPX+
 github.com/sfomuseum/go-http-rollup v0.0.3/go.mod h1:oJTnBzj3afHHYtHSuG2yDD459ctZHwy3zlKtbJl/BTQ=
 github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3 h1:uPsamhCeCL3dAxsS5e4pgi8D72Rp7rlbxcCOcGqNY4o=
 github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3/go.mod h1:Pw8nOlnamUnUyNUUzBUaKljmH2K9Nrx7+0ZPSClf/AM=
-github.com/sfomuseum/go-timings v1.3.0 h1:dAn5CLqp7GF0JoeDGgg9WlQL7Veq2w16n3wMffrbcBE=
-github.com/sfomuseum/go-timings v1.3.0/go.mod h1:jZrCwV4uoY5s4sOZWZLn6xQ2LhsMy2ZvdB3tzLPO76c=
+github.com/sfomuseum/go-timings v1.4.0 h1:48TyPhrSlTVbFKI2psZiPD11GA0zXnrPJAyLmtBBmPg=
+github.com/sfomuseum/go-timings v1.4.0/go.mod h1:FcDhHe439Uy6i+WpLHrTJirtv37sf6/TxBhAngUQP7M=
 github.com/sfomuseum/iso8601duration v1.1.0 h1:kMYzbamrZp9dRxi5iFuhjl5CzHXK6s6Bzz/c75wsq8Q=
 github.com/sfomuseum/iso8601duration v1.1.0/go.mod h1:6EenGWM7y8uVquMPEZwoR+ihpIMJluw7iYiHhDTuOAk=
 github.com/sfomuseum/runtimevar v1.2.0 h1:8q06GcN4gEbRcktbe63U6boSymaZJ7rUqCcggwGkFhw=
