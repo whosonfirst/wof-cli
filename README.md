@@ -118,7 +118,7 @@ processed 546529 records in 20m0.002204708s (started 2024-08-16 17:38:11.279896 
 
 And then loading the resultant database in [DuckDB](https://duckdb.org/):
 
-````
+```
 $> duckdb
 v1.0.0 1f98600c2c
 Enter ".help" for usage hints.
