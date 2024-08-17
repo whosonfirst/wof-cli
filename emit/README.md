@@ -131,7 +131,10 @@ Please consult the [whosonfirst/go-writer-geoparquet](https://github.com/whosonf
 For example, emitting records as SPR results:
 
 ```
-$> ./bin/wof emit -as-spr -writer-uri 'jsonl://?writer=stdout://' /usr/local/data/sfomuseum-data-maps/ 
+$> ./bin/wof emit \
+	-format spr \
+	-writer-uri 'jsonl://?writer=stdout://' \
+	/usr/local/data/sfomuseum-data-maps/ 
 
 {"edtf:cessation":"1985~","edtf:inception":"1985~","mz:is_ceased":1,"mz:is_current":0,"mz:is_deprecated":-1,"mz:is_superseded":0,"mz:is_superseding":0,"mz:latitude":37.616459,"mz:longitude":-122.386272,"mz:max_latitude":37.63100646804649,"mz:max_longitude":-122.37094362769881,"mz:min_latitude":37.60096637420677,"mz:min_longitude":-122.40407820844655,"mz:uri":"https://data.whosonfirst.org/136/039/131/3/1360391313.geojson","wof:belongsto":[],"wof:country":"US","wof:id":1360391313,"wof:lastmodified":1716594274,"wof:name":"SFO (1985)","wof:parent_id":-4,"wof:path":"136/039/131/3/1360391313.geojson","wof:placetype":"custom","wof:repo":"sfomuseum-data-maps","wof:superseded_by":[],"wof:supersedes":[]}
 ...and so on
@@ -140,7 +143,10 @@ $> ./bin/wof emit -as-spr -writer-uri 'jsonl://?writer=stdout://' /usr/local/dat
 Or with query filtering:
 
 ```
-$> ./bin/wof emit -as-spr -query 'properties.wof:name=SFO \(2023\)' /usr/local/data/sfomuseum-data-maps/
+$> ./bin/wof emit \
+	-format spr \
+	-query 'properties.wof:name=SFO \(2023\)' \
+	/usr/local/data/sfomuseum-data-maps/
 
 {"edtf:cessation":"","edtf:inception":"2023-07~","mz:is_ceased":-1,"mz:is_current":-1,"mz:is_deprecated":-1,"mz:is_superseded":0,"mz:is_superseding":0,"mz:latitude":37.621284127293116,"mz:longitude":-122.38285759138246,"mz:max_latitude":37.642285759714994,"mz:max_longitude":-122.34578162574567,"mz:min_latitude":37.60153229886917,"mz:min_longitude":-122.40810153962025,"mz:uri":"https://data.whosonfirst.org/188/030/951/9/1880309519.geojson","wof:belongsto":[102527513,102191575,85633793,102087579,85922583,554784711,85688637,102085387],"wof:country":"US","wof:id":1880309519,"wof:lastmodified":1716594274,"wof:name":"SFO (2023)","wof:parent_id":-1,"wof:path":"188/030/951/9/1880309519.geojson","wof:placetype":"custom","wof:repo":"sfomuseum-data-maps","wof:superseded_by":[],"wof:supersedes":[]}
 ```
@@ -150,7 +156,8 @@ $> ./bin/wof emit -as-spr -query 'properties.wof:name=SFO \(2023\)' /usr/local/d
 Or emitting records as FeatureCollection of GeoJSON-formatted SPR results (where the original geometry is preserved but the properties hash is replaced by that record's SPR) and piping the result to `ogr2ogr`:
 
 ```
-$> ./bin/wof emit -as-spr -as-spr-geojson \
+$> ./bin/wof emit \
+	-format spr-geojson \
 	-writer-uri 'featurecollection://?writer=stdout://' \
 	/usr/local/data/sfomuseum-data-flights-2024-05 \
 	
@@ -160,7 +167,13 @@ $> ./bin/wof emit -as-spr -as-spr-geojson \
 Or, iterating over a custom list of files:
 
 ```
-$> wof emit -iterator-uri - -writer-uri 'featurecollection://?writer=stdout://' 1914563993 1914564157 1914564489 1914564345 | json_pp | grep 'wof:name'
+$> wof emit \
+	-iterator-uri - \
+	-writer-uri 'featurecollection://?writer=stdout://' \
+	1914563993 1914564157 1914564489 1914564345 \
+	| json_pp \
+	| grep 'wof:name'
+	
 2024/07/09 13:57:07 INFO time to index paths (4) 797.084µs
             "wof:name" : "Terminal 2",
             "wof:name" : "Terminal 1",
