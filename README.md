@@ -7,6 +7,7 @@ Command-line tool for common Who's On First operations.
 ```
 $> make cli
 go build -mod vendor -ldflags="-s -w" -o bin/wof cmd/wof/main.go
+```
 
 Features and functionality are enable through the use of (Go language) [build tags](#). By default all build tags are enabled. Please consult the [Build tags](#) section below for detailed descriptions.
 
