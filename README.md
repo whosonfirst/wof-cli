@@ -2,12 +2,23 @@
 
 Command-line tool for common Who's On First operations.
 
-## Tools
+## Install
 
 ```
 $> make cli
-go build -mod vendor -ldflags="-s -w" -o bin/wof cmd/wof/main.go
+go build \
+		-mod vendor \
+		-ldflags="-s -w" \
+		-tags centroid,emit,emit_git_iterator,emit_org_iterator,emit_geoparquet_writer,export,format,geometry,pip,pip_pmtiles,pip_sqlite,property,show,supersede,uri,validate \
+		-o bin/wof \
+		cmd/wof/main.go
 ```
+
+### Build tags
+
+Features and functionality are enable through the use of (Go language) [build tags](#). By default all build tags are enabled. Please consult the [Build tags](#) section below for detailed descriptions.
+
+## Tools
 
 ### wof
 
@@ -548,6 +559,10 @@ Currently there is only two supported "expansions":
 2. URIs prefixed with `repo://` will be treated as a [whosonfirst/go-whosonfirst-iterate/v2 "repo" emitter URI](https://github.com/whosonfirst/go-whosonfirst-iterate?tab=readme-ov-file#repo) and all the files in that repository will be processed.
 
 Eventually there may be other "expansions" most notably support for the Go `./...` syntax to process all the Who's On First records in the current working directory.
+
+## Advanced
+
+### Build tags
 
 ## See also
 

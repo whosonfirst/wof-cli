@@ -2,7 +2,7 @@ GOMOD=$(shell test -f "go.work" && echo "readonly" || echo "vendor")
 LDFLAGS=-s -w
 
 # Experimental: Feature-based build tags to allow people to build trimmed-down binaries if they want to
-TAGS=centroid,emit,emit_geoparquet,export,format,geometry,pip,pip_pmtiles,pip_sqlite,property,show,supersede,uri,validate
+TAGS=centroid,emit,emit_git_iterator,emit_org_iterator,emit_geoparquet_writer,export,format,geometry,pip,pip_pmtiles,pip_sqlite,property,show,supersede,uri,validate
 
 cli:
 	go build \

@@ -1,4 +1,4 @@
-//go:build emit_geoparquet
+//go:build emit_geoparquet_writer
 
 package emit
 
