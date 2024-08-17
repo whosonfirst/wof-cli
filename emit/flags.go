@@ -9,8 +9,8 @@ import (
 	"github.com/aaronland/go-json-query"
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-flags/multi"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter"
 	"github.com/whosonfirst/go-writer/v3"
-	"github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter"	
 )
 
 var writer_uri string
@@ -32,13 +32,13 @@ var csv_append_properties multi.KeyValueString
 func DefaultFlagSet() *flag.FlagSet {
 
 	writer_schemes := strings.Join(writer.Schemes(), ", ")
-	iter_schemes := strings.Join(emitter.Schemes(), ", ")	
-	
+	iter_schemes := strings.Join(emitter.Schemes(), ", ")
+
 	fs := flagset.NewFlagSet("emit")
 
-	fs.StringVar(&writer_uri, "writer-uri", "jsonl://?writer=stdout://", "A valid whosonfirst/go-writer.Writer URI. Available options are: " + writer_schemes)
-	
-	fs.StringVar(&iterator_uri, "iterator-uri", "repo://", "A valid whosonfirst/go-whosonfirst-iterate/v2/emitter URI. If URI is \"-\" then this flag will be assigned a value of \"file://\" whose input will be the expanded URIs derived from additional arguments. Available options are: " + iter_schemes)
+	fs.StringVar(&writer_uri, "writer-uri", "jsonl://?writer=stdout://", "A valid whosonfirst/go-writer.Writer URI. Available options are: "+writer_schemes)
+
+	fs.StringVar(&iterator_uri, "iterator-uri", "repo://", "A valid whosonfirst/go-whosonfirst-iterate/v2/emitter URI. If URI is \"-\" then this flag will be assigned a value of \"file://\" whose input will be the expanded URIs derived from additional arguments. Available options are: "+iter_schemes)
 
 	fs.BoolVar(&as_spr, "as-spr", false, "Emit Who's On First records formatted as Standard Place Response (SPR) records. This flag is DEPRECATED. Please use '-format spr' instead.")
 	fs.BoolVar(&as_spr_geojson, "as-spr-geojson", false, "Emit Who's On First records as GeoJSON records where the 'properties' element is replaced by a Standard Place Response (SPR) representation of the record. This flag is DEPRECATED. Please use '-format geojson' instead.")

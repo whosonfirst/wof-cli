@@ -1,23 +1,14 @@
 package emit
 
-/*
-
-> ./bin/wof emit -writer-uri 'jsonl://?writer=stdout://' /usr/local/data/sfomuseum-data-whosonfirst/ | /usr/local/sfomuseum/gpq/bin/gpq convert --from geojson --to geoparquet
-2024/06/05 16:07:47 INFO time to index paths (1) 9.355815916s
-gpq: error: failed to create schema after reading 1 features
-
-*/
-
 import (
 	"context"
 	"fmt"
 	"log/slog"
 	"os"
-	
+
 	_ "github.com/whosonfirst/go-writer-featurecollection/v3"
 	_ "github.com/whosonfirst/go-writer-jsonl/v3"
-	_ "github.com/whosonfirst/go-writer-geoparquet/v3"	
-	
+
 	"github.com/aaronland/go-json-query"
 	app "github.com/whosonfirst/go-whosonfirst-iterwriter/app/iterwriter"
 	"github.com/whosonfirst/go-writer/v3"
