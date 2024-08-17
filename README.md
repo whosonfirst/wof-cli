@@ -267,6 +267,8 @@ Eventually there may be other "expansions" most notably support for the Go `./..
 
 ### Build tags
 
+Features and functionality are enable through the use of (Go language) build tags. By default the proverbial "kitchen sink" (meaning all features and functionality) is enabled but you can compile your own more limited copy of the `wof` through the use of `no_{FEATURE}` build tags.
+
 For example to build the `wof` command line tool without suport for the [whosonfirst/go-writer-geoparquet](https://github.com/whosonfirst/go-writer-geoparquet) package (which would shave about 20MB off the size of the final binary) you would do this:
 
 ```
