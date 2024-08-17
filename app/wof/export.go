@@ -1,4 +1,4 @@
-//go:build export
+//go:build !no_export
 
 package wof
 

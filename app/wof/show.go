@@ -1,4 +1,4 @@
-//go:build show
+//go:build !no_show
 
 package wof
 

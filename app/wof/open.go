@@ -1,4 +1,4 @@
-//go:build open
+//go:build !no_open
 
 package wof
 

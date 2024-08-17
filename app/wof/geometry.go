@@ -1,4 +1,4 @@
-//go:build geometry
+//go:build !no_geometry
 
 package wof
 

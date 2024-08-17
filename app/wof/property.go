@@ -1,4 +1,4 @@
-//go:build property
+//go:build !no_property
 
 package wof
 

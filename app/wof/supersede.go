@@ -1,4 +1,4 @@
-//go:build supersede
+//go:build !no_supersede
 
 package wof
 

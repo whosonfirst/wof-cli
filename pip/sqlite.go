@@ -1,4 +1,4 @@
-//go:build pip_sqlite
+//go:build !no_spatial_sqlite
 
 package pip
 

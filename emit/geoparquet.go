@@ -1,4 +1,4 @@
-//go:build emit_geoparquet_writer
+//go:build !no_writer_geoparquet
 
 package emit
 

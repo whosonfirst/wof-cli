@@ -1,4 +1,4 @@
-//go:build format
+//go:build !no_format
 
 package wof
 

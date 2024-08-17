@@ -1,4 +1,4 @@
-//go:build pip
+//go:build !no_pip
 
 package wof
 

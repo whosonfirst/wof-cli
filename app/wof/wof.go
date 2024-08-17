@@ -28,6 +28,10 @@ func Run(ctx context.Context) error {
 
 	cmd := os.Args[1]
 
+	if cmd == "-h" {
+		usage()
+	}
+
 	c, err := wof.NewCommand(ctx, cmd)
 
 	if err != nil {

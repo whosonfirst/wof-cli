@@ -1,4 +1,4 @@
-//go:build emit_git_iterator
+//go:build !no_iterator_git
 
 package emit
 

@@ -1,4 +1,4 @@
-//go:build validate
+//go:build no_validate
 
 package wof
 

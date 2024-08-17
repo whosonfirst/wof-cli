@@ -1,4 +1,4 @@
-//go:build pip_pmtiles
+//go:build !no_spatial_pmtiles
 
 package pip
 
@@ -7,5 +7,4 @@ package pip
 
 import (
 	_ "github.com/whosonfirst/go-whosonfirst-spatial-pmtiles"
-	_ "github.com/whosonfirst/go-whosonfirst-spatial-sqlite"
 )

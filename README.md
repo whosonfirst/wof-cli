@@ -2,23 +2,13 @@
 
 Command-line tool for common Who's On First operations.
 
-## Install
+## Tools
 
 ```
 $> make cli
-go build \
-		-mod vendor \
-		-ldflags="-s -w" \
-		-tags centroid,emit,emit_git_iterator,emit_org_iterator,emit_geoparquet_writer,export,format,geometry,pip,pip_pmtiles,pip_sqlite,property,show,supersede,uri,validate \
-		-o bin/wof \
-		cmd/wof/main.go
-```
-
-### Build tags
+go build -mod vendor -ldflags="-s -w" -o bin/wof cmd/wof/main.go
 
 Features and functionality are enable through the use of (Go language) [build tags](#). By default all build tags are enabled. Please consult the [Build tags](#) section below for detailed descriptions.
-
-## Tools
 
 ### wof
 
@@ -563,6 +553,92 @@ Eventually there may be other "expansions" most notably support for the Go `./..
 ## Advanced
 
 ### Build tags
+
+For example to build the `wof` command line tool without suport for the [whosonfirst/go-writer-geoparquet](https://github.com/whosonfirst/go-writer-geoparquet) package (which would shave about 20MB off the size of the final binary) you would do this:
+
+```
+$> go build -mod vendor -ldflags="-s -w" -tags no_writer_geoparquet -o bin/wof cmd/wof/main.go
+```
+
+#### Available build tags
+
+##### no_centroid
+
+Disable the `wof centroid` command.
+
+##### no_emit
+
+Disable the `wof emit` command.
+
+##### no_export
+
+Disable the `wof export` command.
+
+##### no_format
+
+Disable the `wof format` command.
+
+##### no_geometry
+
+Disable the `wof geometry` command.
+
+##### no_iterator_git
+
+Disable import of the [whosonfirst/go-whosonfirst-iterate-git/v2](https://github.com/whosonfirst/go-whosonfirst-iterate-git) package.
+
+This affects the `wof emit` command.
+
+##### no_iterator_org
+
+Disable import of the [whosonfirst/go-whosonfirst-iterate-organization/v2](https://github.com/whosonfirst/go-whosonfirst-iterate-organization) package.
+
+This affects the `wof emit` command.
+
+##### no_open
+
+Disable the `wof open` command.
+
+##### no_pip
+
+Disable the `wof pip` command.
+
+##### no_property
+
+Disable the `wof property` command.
+
+##### no_show
+
+Disable the `wof show` command.
+
+##### no_spatial_pmtiles
+
+Disable import of the [whosonfirst/go-whosonfirst-spatial-pmtiles](https://github.com/whosonfirst/go-whosonfirst-spatial-pmtiles) package.
+
+This affects the `wof pip` command.
+
+##### no_spatial_sqlite
+
+Disable import of the [whosonfirst/go-whosonfirst-spatial-sqlite](https://github.com/whosonfirst/go-whosonfirst-spatial-sqlite) package.
+
+This affects the `wof pip` command.
+
+##### no_supersede
+
+Disable the `wof supersede` command.
+
+##### no_uri
+
+Disable the `wof uri` command.
+
+##### no_validate
+
+Disable the `wof validate` command.
+
+##### no_writer_geoparquet
+
+Disable import of the [whosonfirst/go-writer-geoparquet](https://github.com/whosonfirst/go-writer-geoparquet) package.
+
+This affects the `wof emit` command.
 
 ## See also
 

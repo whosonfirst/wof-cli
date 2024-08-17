@@ -1,4 +1,4 @@
-//go:build centroid
+//go:build !no_centroid
 
 package wof
 

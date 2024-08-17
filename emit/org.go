@@ -1,4 +1,4 @@
-//go:build emit_org_iterator
+//go:build !no_iterateor_org
 
 package emit
 

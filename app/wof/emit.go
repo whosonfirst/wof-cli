@@ -1,4 +1,4 @@
-//go:build emit
+//go:build !no_emit
 
 package wof
 

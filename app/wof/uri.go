@@ -1,4 +1,4 @@
-//go:build uri
+//go:build !no_uri
 
 package wof
 
