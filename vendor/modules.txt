@@ -650,8 +650,8 @@ github.com/whosonfirst/go-whosonfirst-format-wasm/static/wasm
 # github.com/whosonfirst/go-whosonfirst-id v1.2.4
 ## explicit; go 1.22
 github.com/whosonfirst/go-whosonfirst-id
-# github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.1
-## explicit; go 1.18
+# github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.5.0
+## explicit; go 1.22
 github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter
 github.com/whosonfirst/go-whosonfirst-iterate/v2/filters
 github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator
@@ -714,7 +714,7 @@ github.com/whosonfirst/go-whosonfirst-writer/v3
 # github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.2
 ## explicit; go 1.18
 github.com/whosonfirst/go-writer-featurecollection/v3
-# github.com/whosonfirst/go-writer-geoparquet/v3 v3.0.0-20240816235951-b1dfda9b8552
+# github.com/whosonfirst/go-writer-geoparquet/v3 v3.0.0
 ## explicit; go 1.22.1
 github.com/whosonfirst/go-writer-geoparquet/v3
 # github.com/whosonfirst/go-writer-jsonl/v3 v3.0.1

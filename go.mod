@@ -19,7 +19,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.28
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
 	github.com/whosonfirst/go-whosonfirst-id v1.2.4
-	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.1
+	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.5.0
 	github.com/whosonfirst/go-whosonfirst-iterwriter v0.2.0
 	github.com/whosonfirst/go-whosonfirst-reader v1.0.2
 	github.com/whosonfirst/go-whosonfirst-spatial v0.10.1
@@ -30,7 +30,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-validate v0.4.0
 	github.com/whosonfirst/go-whosonfirst-writer/v3 v3.1.4
 	github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.2
-	github.com/whosonfirst/go-writer-geoparquet/v3 v3.0.0-20240816235951-b1dfda9b8552
+	github.com/whosonfirst/go-writer-geoparquet/v3 v3.0.0
 	github.com/whosonfirst/go-writer-jsonl/v3 v3.0.1
 	github.com/whosonfirst/go-writer/v3 v3.1.1
 )
