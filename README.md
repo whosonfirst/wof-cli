@@ -42,7 +42,7 @@ Usage:
 	 ./bin/wof emit [options] path(N) path(N)
 ```
 
-Examples can be found in [centroid/README.md](centroid/README.md)
+Examples can be found in [centroid/README.md](centroid/README.md#examples)
 
 #### wof emit
 
@@ -99,21 +99,7 @@ Usage:
     	Boolean flag signaling that updated records should be written to STDOUT. If false input files will be overwritten. (default true)
 ```
 
-For example:
-
-```
-$> ./bin/wof fmt ~/Desktop/test.geojson
-{
-  "id": 6102,
-  "type": "Feature",
-  "properties": {
-    "ACCESS_": "PUBLIC",
-    "USAGE": "STAIR"
-  },
-  "bbox": null,
-  "geometry": {"coordinates":[[[-122.39515729496134,37.62304022215619,40],[-122.39511251529856,37.62305107289922,40],[-122.39508811697748,37.623056984354164,40],[-122.39509251970546,37.62306848116357,40],[-122.39510034575342,37.62308891418595,40],[-122.39516943471905,37.62307271147819,40],[-122.39515729496134,37.62304022215619,40]]],"type":"Polygon"}
-}
-```
+Examples can be found in [format/README.md](format/README.md#examples)
 
 #### wof geometry
 
@@ -132,18 +118,7 @@ Usage:
     	Boolean flag signaling that updated records should be written to STDOUT. If false input files will be overwritten.
 ```
 
-For example:
-
-```
-$> wof geometry -action update -source /usr/local/data/t1.geojson /usr/local/data/sfomuseum-data-architecture/data/191/456/434/5/1914564345.geojson
-```
-
-Or:
-
-```
-$> wof geometry 1914564345
-{"coordinates":[[[[-122.385635,37.611836],[-122.385693,37.611861],[-122.385712,37.611868],[-122.385789,37.611901],[-122.385836,37.61192],[-122.385915,37.611954],[-122.385906,37.611969],[-122.385902,37.611974],[-122.385902,37.611974],[-122.385867,37.612026],[-122.385867,37.612026],[-122.385853,37.612048],[-122.385846,37.612046],[-122.385754,37.612007],[-122.385572,37.61193],[-122.385446,37.61212] ... and so on
-```
+Examples can be found in [geometry/README.md](geometry/README.md#examples)
 
 #### wof open
 
@@ -175,51 +150,7 @@ Usage:
     	Boolean flag signaling that updated records should be written to STDOUT. (default true)
 ```
 
-For example, imagine a shell script like this (in order to account for boring URL-escaping issues):
-
-```
-#!/bin/sh
-
-TILES_URI=file:///usr/local/data
-TILES_DATABASE=architecture
-TILES_ZOOM=12
-TILES_LAYER=architecture
-
-ENC_TILES_URI=`urlescape ${TILES_URI}`
-
-./bin/wof pip \
-    -spatial-database-uri "pmtiles://?tiles=${ENC_TILES_URI}&database=${TILES_DATABASE}&zoom=${TILES_ZOOM}&layer=${TILES_LAYER}&enable-cache=true" \
-    -mapshaper-client-uri http://localhost:8080 \
-    -placetype venue \
-    test.geojson 
-	 
-
-```
-
-Running this command would yield something like this:
-
-```
-2024/05/20 15:34:27 INFO fetching architecture 0-16384
-2024/05/20 15:34:27 INFO fetched architecture 0-16384
-2024/05/20 15:34:27 INFO fetching architecture 127-89
-2024/05/20 15:34:27 INFO fetched architecture 127-89
-2024/05/20 15:34:27 INFO Time to create database path=/architecture/12/655/1585.mvt "spatial database uri"="sqlite://?dsn=modernc://mem" "count features"=628 time=183.835708ms
-{
-  "id": 6102,
-  "type": "Feature",
-  "properties": {
-    "USAGE": "STAIR"
-  ,"wof:placetype":"venue","wof:parent_id":102527513,"wof:country":"US","wof:hierarchy":[{"campus_id":102527513,"continent_id":102191575,"country_id":85633793,"county_id":102087579,"locality_id":85922583,"postalcode_id":554784711,"region_id":85688637},{"campus_id":102527513,"continent_id":102191575,"country_id":85633793,"county_id":102085387,"region_id":85688637}]},
-  "bbox": null,
-  "geometry": {"coordinates":[[[-122.39515729496134,37.62304022215619,40],[-122.39511251529856,37.62305107289922,40],[-122.39508811697748,37.623056984354164,40],[-122.39509251970546,37.62306848116357,40],[-122.39510034575342,37.62308891418595,40],[-122.39516943471905,37.62307271147819,40],[-122.39515729496134,37.62304022215619,40]]],"type":"Polygon"}
-}
-```
-
-There are a few things to note:
-
-* The `-placetype` flag is a convenience to facilitate point-in-polygon operations without having to first update an input record.
-* By default the `pip` command neither "formats" or "exports" results. Although there is an `-export` flag to enable both it is your responsibility to ensure that input documents have all the necessary properties (for example "wof:name").
-* The `pip` command does _NOT_ yet implement the logic of the [py-mapzen-whosonfirst-hierarchy](https://github.com/whosonfirst/py-mapzen-whosonfirst-hierarchy/blob/master/mapzen/whosonfirst/hierarchy/__init__.py) library. There is an [open issue](https://github.com/whosonfirst/go-whosonfirst-spatial/issues/40) for this.
+Examples can be found in [pip/README.md](pip/README.md#examples)
 
 #### wof property
 
@@ -238,56 +169,12 @@ Usage:
     	If not empty this prefix will be appended (and separated by a ".") to each -path argument
 ```
 
-For example:
-
-```
-$> wof property -path properties.wof:name 1796903597 1796889561 1796889543 1796889557 1796903629 1796889563 1796935715 1796935615
-AirTrain Gargage G / BART Red Line
-AirTrain Long-Term Parking Blue Line (Outbound)
-AirTrain Garage G / BART Blue Line
-AirTrain Westfield Road Station (Inbound)
-Grand Hyatt Hotel Reception
-Rental Car Center
-International Terminal Main Hall Departures Door 2
-San Francisco International Airport BART Station Platform
-```
-
-It is also possible to emit properties for records as CSV data by passing the `-format csv` flag. For example:
-
-```
-$> wof property -format csv -path properties.wof:name -path properties.wof:parent_id 1796903597 1796889561 1796889543 1796889557 1796903629 1796889563 1796935715 1796935615
-uri,properties.wof:name,properties.wof:parent_id
-/usr/local/data/sfomuseum-data-wayfinding/data/179/690/359/7/1796903597.geojson,AirTrain Gargage G / BART Red Line,1477855991
-/usr/local/data/sfomuseum-data-wayfinding/data/179/688/956/1/1796889561.geojson,AirTrain Long-Term Parking Blue Line (Outbound),102527513
-/usr/local/data/sfomuseum-data-wayfinding/data/179/688/954/3/1796889543.geojson,AirTrain Garage G / BART Blue Line,1477855991
-/usr/local/data/sfomuseum-data-wayfinding/data/179/688/955/7/1796889557.geojson,AirTrain Westfield Road Station (Inbound),102527513
-/usr/local/data/sfomuseum-data-wayfinding/data/179/690/362/9/1796903629.geojson,Grand Hyatt Hotel Reception,1477856005
-/usr/local/data/sfomuseum-data-wayfinding/data/179/688/956/3/1796889563.geojson,Rental Car Center,1477863277
-/usr/local/data/sfomuseum-data-wayfinding/data/179/693/571/5/1796935715.geojson,International Terminal Main Hall Departures Door 2,1745882445
-/usr/local/data/sfomuseum-data-wayfinding/data/179/693/561/5/1796935615.geojson,San Francisco International Airport BART Station Platform,102527513
-```
-
-CSV-formatted output will automatically append a `uri` column to each row.
-
-If you know that all the `-path` flags share the same prefix you can specify it using the `-prefix` flag and save the time it will take you to include it with each `-path` flag. For example:
-
-```
-$> wof property -format csv -prefix properties -path wof:name -path wof:superseded_by 1477855991 102527513 1477855991 102527513 1477856005 1477863277 1745882445 102527513
-uri,properties.wof:name,properties.wof:superseded_by
-/usr/local/data/sfomuseum-data-architecture/data/147/785/599/1/1477855991.geojson,Garage G,[]
-/usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.geojson,San Francisco International Airport,[]
-/usr/local/data/sfomuseum-data-architecture/data/147/785/599/1/1477855991.geojson,Garage G,[]
-/usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.geojson,San Francisco International Airport,[]
-/usr/local/data/sfomuseum-data-architecture/data/147/785/600/5/1477856005.geojson,Grand Hyatt Hotel,[]
-/usr/local/data/sfomuseum-data-architecture/data/147/786/327/7/1477863277.geojson,Rental Car Center,[]
-/usr/local/data/sfomuseum-data-architecture/data/174/588/244/5/1745882445.geojson,International Terminal Arrivals,[]
-/usr/local/data/sfomuseum-data-architecture/data/102/527/513/102527513.geojson,San Francisco International Airport,[]
-```
+Examples can be found in [property/README.md](property/README.md#examples)
 
 #### wof show
 
 ```
-> ./bin/wof show -h
+$> ./bin/wof show -h
 Command-line tool for serving GeoJSON features from an on-demand web server.
 Usage:
 	 ./bin/wof path(N) path(N)
@@ -310,18 +197,7 @@ Valid options are:
 If the only path as input is "-" then data will be read from STDIN.
 ```
 
-For example:
-
-```
-$> ./bin/wof show montreal.geojson 
-Records are viewable at http://localhost:63675
-```
-
-This should automatically open a new window in your default browser like this:
-
-![](docs/images/wof-show-montreal.png)
-
-As of this writing there is minimal styling and little to no interactivity. That may (or may not) change. Right now this tool is principally just to be able to look at one or more Who's On First features on a map.
+Examples can be found in [show/README.md](show/README.md#examples)
 
 #### wof supersede
 
@@ -336,43 +212,17 @@ Usage:
     	Each record being superseded should also be marked as deprecated.
   -parent-id int
     	The parent ID to assign to the new record. (default -1)
-  -parent-reader-uri -1
+  -parent-reader-uri string
     	A valid whosonfirst/go-reader URI used to load parent records if -superseded-id is -1. Required if -parent-id is not `-1`. (default "null://")
-  -superseding-id -1
+  -superseding-id int
     	The ID to supersede each record with. If -1 then each record will be cloned and the new ID of the clone will be used as the superseding_id. (default -1)
-  -superseding-reader-uri -1
+  -superseding-reader-uri string
     	A valid whosonfirst/go-reader URI used to load records that are doing the superseding. Required if -superseding-id is not -1. (default "null://")
-  -superseding-writer-uri -1
+  -superseding-writer-uri string
     	A valid whosonfirst/go-writer URI used to update records that are doing the superseding. Required if -superseding-id is not -1. (default "null://")
 ```
 
-For example, supersede a set of records making the new records "clones" of the old records:
-
-```
-$> wof supersede \
-	-superseding-writer-uri repo:///usr/local/data/sfomuseum-data-wayfinding \
-	1796889561 1796889543 1796889557 1796903629 1796889563 1796935715 1796935615
-```
-
-_Important: As of this writing this tool does NOT supersede alternate geometries associated with the WOF records being superseded._
-
-##### "reader" and "writer" URIs
-
-The `wof` tool has its own internal logic for [deriving paths for reading and writing input documents](https://github.com/whosonfirst/wof-cli?tab=readme-ov-file#paths-and-uris).
-
-That being the case by the time a document URI is resolved at the command layer there is not necessarily enough information to write documents _related_ to the document currently being processed. Further even if that context is known it may not be appropriate. For example, if a document in the `sfomuseum-data-wayfinding` repository is being superseded and the new document is parented by a document in the `sfomuseum-data-architecture` repository (using the `-parent-id` flag) then there is nothing in the `sfomuseum-data-wayfinding` context to know where to find that record.
-
-Hence the `-parent-reader-uri`, `-superseding-reader-uri` and `-superseding-writer-uri` flags. There are expected to be valid [whosonfirst/go-reader.Reader](https://github.com/whosonfirst/go-reader) and [whosonfirst/go-writer.Writer](https://github.com/whosonfirst/go-writer) URIs. For example:
-
-```
-$> wof supersede \
-	-parent-id 102527513 \
-	-parent-reader-uri repo:///usr/local/data/sfomuseum-data-architecture \
-	-superseding-writer-uri repo:///usr/local/data/sfomuseum-data-wayfinding \	
-	1796889561 
-```
-
-It's a bit cumbersome but the decision was taken, given the potential for many unrelated moving parts, to be explicit rather than clever.
+Examples can be found in [supersede/README.md](supersede/README.md#examples)
 
 #### wof uri
 
@@ -385,15 +235,7 @@ Usage:
     	An optional prefix to append to the final URI.
 ```
 
-For example:
-
-```
-$> ./bin/wof uri 1914650585
-191/465/058/5/1914650585.geojson
-
-$> cat `wof uri -prefix data 1914650737` | jq '.properties["wof:name"]'
-"1H Student Art North"
-```
+Examples can be found in [uri/README.md](uri/README.md#examples)
 
 #### wof validate
 
@@ -404,27 +246,7 @@ Usage:
 	 ./bin/wof path(N) path(N)
 ```
 
-For example:
-
-```
-$> ./bin/wof validate test.geojson
-2024/05/20 15:19:34 Failed to run 'validate' command, Failed to validate body for 'test.geojson', Failed to validate name, Failed to derive wof:name from body, Missing wof:name property
-```
-
-Or:
-
-```
-$> curl -s https://data.whosonfirst.org/102527513 | ./bin/wof validate -
-2024/05/20 15:47:34 Failed to run 'validate' command, Failed to validate body for '-', Failed to validate EDTF, Failed to validate EDTF cessation date, Unrecognized EDTF string 'open' (Invalid or unsupported EDTF string)
-```
-
-If I download the record for SFO and manually change the `edtf:cessation` property from "open" to ".." and then run the tool again, everything validates.
-
-```
-$> ./bin/wof validate sfo.geojson
-```
-
-_Note the default behaviour for successfull validation is to do nothing. That might change? Maybe?_
+Examples can be found in [validate/README.md](validate/README.md#examples)
 
 ## Paths and URIs
 

@@ -9,6 +9,8 @@ Usage:
 	 ./bin/wof emit [options] path(N) path(N)
 ```
 
+### Examples
+
 For example:
 
 ```
