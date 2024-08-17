@@ -102,7 +102,7 @@ func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.Iterwrit
 			body_r := r
 
 			switch opts.Format {
-			case "csv", "geojson", "spr":
+			case "csv", "spr", "spr-geojson":
 
 				body, err := io.ReadAll(r)
 
@@ -201,7 +201,7 @@ func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.Iterwrit
 
 					body_r = bytes.NewReader(buf.Bytes())
 
-				case "geojson":
+				case "spr-geojson":
 
 					body, err = sjson.SetBytes(body, "properties", spr_rsp)
 
