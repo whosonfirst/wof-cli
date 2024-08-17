@@ -73,7 +73,7 @@ Usage:
     	A valid whosonfirst/go-writer.Writer URI. Available options are: cwd://, featurecollection://, fs://, geoparquet://, io://, jsonl://, null://, repo://, sqlite://, stdout:// (default "jsonl://?writer=stdout://")
 ```
 
-Examples can be found in [emit/README.md](emit/README.md)
+Examples can be found in [emit/README.md](emit/README.md#examples)
 
 #### wof export
 

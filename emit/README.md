@@ -29,7 +29,9 @@ Usage:
     	A valid whosonfirst/go-writer.Writer URI. Available options are: cwd://, featurecollection://, fs://, geoparquet://, io://, jsonl://, null://, repo://, sqlite://, stdout:// (default "jsonl://?writer=stdout://")
 ```
 
-### Example (CSV)
+### Examples
+
+#### Example (CSV)
 
 For example, emitting records as CSV results with additional custom properties:
 
@@ -51,7 +53,7 @@ XY,1930~,"Black and white postcard with photographic image depicting aerial view
 
 The default set of CSV row map to the properties of a Standard Places Result (SPR).
 
-### Example (GeoParquet)
+#### Example (GeoParquet)
 
 For example, emitting all the records marked `mz:is_current=1` from the [whosonfirst-data-venue-ca](https://github.com/whosonfirst-data/whosonfirst-data-venue-ca) repository to a GeoParquet database:
 
@@ -124,7 +126,7 @@ D SELECT "wof:id", "wof:name", "sfomuseum:placetype", "wof:placetype", "mz:is_cu
 
 Please consult the [whosonfirst/go-writer-geoparquet](https://github.com/whosonfirst/go-writer-geoparquet?tab=readme-ov-file#how-does-it-work) documentation for details on how to configure the `-writer-uri` flag.
 
-### Example (SPR)
+#### Example (SPR)
 
 For example, emitting records as SPR results:
 
@@ -143,7 +145,7 @@ $> ./bin/wof emit -as-spr -query 'properties.wof:name=SFO \(2023\)' /usr/local/d
 {"edtf:cessation":"","edtf:inception":"2023-07~","mz:is_ceased":-1,"mz:is_current":-1,"mz:is_deprecated":-1,"mz:is_superseded":0,"mz:is_superseding":0,"mz:latitude":37.621284127293116,"mz:longitude":-122.38285759138246,"mz:max_latitude":37.642285759714994,"mz:max_longitude":-122.34578162574567,"mz:min_latitude":37.60153229886917,"mz:min_longitude":-122.40810153962025,"mz:uri":"https://data.whosonfirst.org/188/030/951/9/1880309519.geojson","wof:belongsto":[102527513,102191575,85633793,102087579,85922583,554784711,85688637,102085387],"wof:country":"US","wof:id":1880309519,"wof:lastmodified":1716594274,"wof:name":"SFO (2023)","wof:parent_id":-1,"wof:path":"188/030/951/9/1880309519.geojson","wof:placetype":"custom","wof:repo":"sfomuseum-data-maps","wof:superseded_by":[],"wof:supersedes":[]}
 ```
 
-### Example (FeatureCollection)
+#### Example (FeatureCollection)
 
 Or emitting records as FeatureCollection of GeoJSON-formatted SPR results (where the original geometry is preserved but the properties hash is replaced by that record's SPR) and piping the result to `ogr2ogr`:
 
