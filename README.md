@@ -125,7 +125,7 @@ Enter ".help" for usage hints.
 Connected to a transient in-memory database.
 Use ".open FILENAME" to reopen on a persistent database.
 D LOAD spatial;
-D SELECT "wof:id", "wof:name", "wof:concordances" FROM read_parquet('/Users/asc/Desktop/venue-ca.geoparquet') LIMIT 5;
+D SELECT "wof:id", "wof:name", "wof:concordances" FROM read_parquet('/usr/local/data/venue-ca.geoparquet') LIMIT 5;
 ┌────────────┬───────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────┐
 │   wof:id   │     wof:name      │                                       wof:concordances                                       │
 │  varchar   │      varchar      │                                           varchar                                            │
