@@ -51,24 +51,30 @@ uri,source,latitude,longitude
 #### wof emit
 
 ```
-> wof emit -h
+$> ./bin/wof emit -h
 Emit one or more Who's On First records.
 Usage:
-	 wof emit [options] path(N) path(N)
+	 ./bin/wof emit [options] path(N) path(N)
   -as-spr
-    	Emit Who's On First records formatted as Standard Place Response (SPR) records.
+    	Emit Who's On First records formatted as Standard Place Response (SPR) records. This flag is DEPRECATED. Please use '-format spr' instead.
   -as-spr-geojson
-    	Emit Who's On First records as GeoJSON records where the 'properties' element is replaced by a Standard Place Response (SPR) representation of the record.
+    	Emit Who's On First records as GeoJSON records where the 'properties' element is replaced by a Standard Place Response (SPR) representation of the record. This flag is DEPRECATED. Please use '-format geojson' instead.
+  -csv-append-property value
+    	Zero or more additional properties to append to each CSV row. Properties should be in the format of {COLUMN_NAME}={PATH}. This flag is only honoured if the -format flag has a value of "csv".
+  -forgiving
+    	Do not stop processing when errors are encountered.
+  -format string
+    	Valid options are: csv, spr, spr-geojson or [none]. If none then the raw GeoJSON for each matching record will be emitted.
   -include-alt-geoms
     	Emit alternate geometry records. (default true)
   -iterator-uri string
-    	A valid whosonfirst/go-whosonfirst-iterate/v2/emitter URI. If URI is "-" then this flag will be assigned a value of "file://" whose input will be the expanded URIs derived from additional arguments. (default "repo://")
+    	A valid whosonfirst/go-whosonfirst-iterate/v2/emitter URI. If URI is "-" then this flag will be assigned a value of "file://" whose input will be the expanded URIs derived from additional arguments. Available options are: cwd://, directory://, featurecollection://, file://, filelist://, geojsonl://, null://, repo:// (default "repo://")
   -query value
     	One or more {PATH}={REGEXP} parameters for filtering records.
   -query-mode string
     	Specify how query filtering should be evaluated. Valid modes are: ALL, ANY (default "ALL")
   -writer-uri string
-    	A valid whosonfirst/go-writer.Writer URI. (default "jsonl://?writer=stdout://")
+    	A valid whosonfirst/go-writer.Writer URI. Available options are: cwd://, featurecollection://, fs://, geoparquet://, io://, jsonl://, null://, repo://, sqlite://, stdout:// (default "jsonl://?writer=stdout://")
 ```
 
 ##### Example (CSV)
@@ -92,6 +98,48 @@ XY,1930~,"Black and white postcard with photographic image depicting aerial view
 ```
 
 The default set of CSV row map to the properties of a Standard Places Result (SPR).
+
+##### Example (GeoParquet)
+
+For example, emitting all the records marked `mz:is_current=1` from the [whosonfirst-data-venue-ca](https://github.com/whosonfirst-data/whosonfirst-data-venue-ca) repository to a GeoParquet database:
+
+```
+./bin/wof emit \
+	-writer-uri 'geoparquet://?min=100&max=1000&append-property=wof:concordances' \
+	-iterator-uri 'repo://?include=properties.mz:is_current=1' \
+	/usr/local/data/whosonfirst-data-venue-ca \
+	> /usr/local/data/venue-ca.geoparquet
+
+processed 17349 records in 1m0.000336833s (started 2024-08-16 17:38:11.279896 -0700 PDT m=+0.044642876)
+... time passes
+processed 546529 records in 20m0.002204708s (started 2024-08-16 17:38:11.279896 -0700 PDT m=+0.044642876)
+2024/08/16 17:59:07 INFO time to index paths (1) 20m56.026484291s
+```
+
+And then loading the resultant database in [DuckDB](https://duckdb.org/):
+
+````
+$> duckdb
+v1.0.0 1f98600c2c
+Enter ".help" for usage hints.
+Connected to a transient in-memory database.
+Use ".open FILENAME" to reopen on a persistent database.
+D LOAD spatial;
+D SELECT "wof:id", "wof:name", "wof:concordances" FROM read_parquet('/Users/asc/Desktop/venue-ca.geoparquet') LIMIT 5;
+┌────────────┬───────────────────┬──────────────────────────────────────────────────────────────────────────────────────────────┐
+│   wof:id   │     wof:name      │                                       wof:concordances                                       │
+│  varchar   │      varchar      │                                           varchar                                            │
+├────────────┼───────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 1108798699 │ Foxy              │ {\n      "osm:node": 2687914646,\n      "ovtr:id": "08f2baa44c8f6028031206a8c92b602c"\n    } │
+│ 1108798581 │ Myriade           │                                                                                              │
+│ 1125142651 │ Liverpool House   │ {}                                                                                           │
+│ 1125142781 │ Joe Beef          │ {\n      "4sq:id": "4b84801af964a520fd3831e3"\n    }                                         │
+│ 1108808935 │ Drawn & Quarterly │ {\n      "4sq:id": "4ad4c06ff964a5205ffb20e3",\n      "osm:node": 2704382357\n    }          │
+└────────────┴───────────────────┴──────────────────────────────────────────────────────────────────────────────────────────────┘
+D
+```
+
+Please consult the [whosonfirst/go-writer-geoparquet](https://github.com/whosonfirst/go-writer-geoparquet?tab=readme-ov-file#how-does-it-work) documentation for details on how to configure the `-writer-uri` flag.
 
 ##### Example (SPR)
 

@@ -1,3 +1,6 @@
+# github.com/JohnCGriffin/overflow v0.0.0-20211019200055-46fa312c352c
+## explicit
+github.com/JohnCGriffin/overflow
 # github.com/RoaringBitmap/roaring v1.5.0
 ## explicit; go 1.14
 github.com/RoaringBitmap/roaring
@@ -73,6 +76,55 @@ github.com/aaronland/gocloud-blob/s3
 # github.com/aaronland/gocloud-docstore v0.0.5
 ## explicit; go 1.18
 github.com/aaronland/gocloud-docstore
+# github.com/andybalholm/brotli v1.1.0
+## explicit; go 1.13
+github.com/andybalholm/brotli
+github.com/andybalholm/brotli/matchfinder
+# github.com/apache/arrow/go/v16 v16.1.0
+## explicit; go 1.21
+github.com/apache/arrow/go/v16/arrow
+github.com/apache/arrow/go/v16/arrow/array
+github.com/apache/arrow/go/v16/arrow/arrio
+github.com/apache/arrow/go/v16/arrow/bitutil
+github.com/apache/arrow/go/v16/arrow/compute
+github.com/apache/arrow/go/v16/arrow/compute/exec
+github.com/apache/arrow/go/v16/arrow/compute/internal/kernels
+github.com/apache/arrow/go/v16/arrow/decimal128
+github.com/apache/arrow/go/v16/arrow/decimal256
+github.com/apache/arrow/go/v16/arrow/encoded
+github.com/apache/arrow/go/v16/arrow/endian
+github.com/apache/arrow/go/v16/arrow/flight
+github.com/apache/arrow/go/v16/arrow/flight/gen/flight
+github.com/apache/arrow/go/v16/arrow/float16
+github.com/apache/arrow/go/v16/arrow/internal
+github.com/apache/arrow/go/v16/arrow/internal/debug
+github.com/apache/arrow/go/v16/arrow/internal/dictutils
+github.com/apache/arrow/go/v16/arrow/internal/flatbuf
+github.com/apache/arrow/go/v16/arrow/ipc
+github.com/apache/arrow/go/v16/arrow/memory
+github.com/apache/arrow/go/v16/arrow/memory/internal/cgoalloc
+github.com/apache/arrow/go/v16/arrow/memory/mallocator
+github.com/apache/arrow/go/v16/arrow/scalar
+github.com/apache/arrow/go/v16/internal/bitutils
+github.com/apache/arrow/go/v16/internal/hashing
+github.com/apache/arrow/go/v16/internal/json
+github.com/apache/arrow/go/v16/internal/utils
+github.com/apache/arrow/go/v16/parquet
+github.com/apache/arrow/go/v16/parquet/compress
+github.com/apache/arrow/go/v16/parquet/file
+github.com/apache/arrow/go/v16/parquet/internal/bmi
+github.com/apache/arrow/go/v16/parquet/internal/debug
+github.com/apache/arrow/go/v16/parquet/internal/encoding
+github.com/apache/arrow/go/v16/parquet/internal/encryption
+github.com/apache/arrow/go/v16/parquet/internal/gen-go/parquet
+github.com/apache/arrow/go/v16/parquet/internal/thrift
+github.com/apache/arrow/go/v16/parquet/internal/utils
+github.com/apache/arrow/go/v16/parquet/metadata
+github.com/apache/arrow/go/v16/parquet/pqarrow
+github.com/apache/arrow/go/v16/parquet/schema
+# github.com/apache/thrift v0.19.0
+## explicit; go 1.20
+github.com/apache/thrift/lib/go/thrift
 # github.com/aws/aws-sdk-go v1.51.30
 ## explicit; go 1.19
 github.com/aws/aws-sdk-go/aws
@@ -311,12 +363,29 @@ github.com/g8rswimmer/error-chain
 # github.com/go-ini/ini v1.67.0
 ## explicit
 github.com/go-ini/ini
+# github.com/goccy/go-json v0.10.2
+## explicit; go 1.12
+github.com/goccy/go-json
+github.com/goccy/go-json/internal/decoder
+github.com/goccy/go-json/internal/encoder
+github.com/goccy/go-json/internal/encoder/vm
+github.com/goccy/go-json/internal/encoder/vm_color
+github.com/goccy/go-json/internal/encoder/vm_color_indent
+github.com/goccy/go-json/internal/encoder/vm_indent
+github.com/goccy/go-json/internal/errors
+github.com/goccy/go-json/internal/runtime
 # github.com/gogo/protobuf v1.3.2
 ## explicit; go 1.15
 github.com/gogo/protobuf/proto
 # github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da
 ## explicit
 github.com/golang/groupcache/lru
+# github.com/golang/snappy v0.0.4
+## explicit
+github.com/golang/snappy
+# github.com/google/flatbuffers v24.3.25+incompatible
+## explicit
+github.com/google/flatbuffers/go
 # github.com/google/uuid v1.6.0
 ## explicit
 github.com/google/uuid
@@ -350,12 +419,36 @@ github.com/json-iterator/go
 # github.com/jtacoma/uritemplates v1.0.0
 ## explicit
 github.com/jtacoma/uritemplates
+# github.com/klauspost/asmfmt v1.3.2
+## explicit; go 1.16
+github.com/klauspost/asmfmt
+github.com/klauspost/asmfmt/cmd/asmfmt
+# github.com/klauspost/compress v1.17.8
+## explicit; go 1.20
+github.com/klauspost/compress
+github.com/klauspost/compress/flate
+github.com/klauspost/compress/fse
+github.com/klauspost/compress/gzip
+github.com/klauspost/compress/huff0
+github.com/klauspost/compress/internal/cpuinfo
+github.com/klauspost/compress/internal/snapref
+github.com/klauspost/compress/zstd
+github.com/klauspost/compress/zstd/internal/xxhash
+# github.com/klauspost/cpuid/v2 v2.2.7
+## explicit; go 1.15
+github.com/klauspost/cpuid/v2
 # github.com/mattn/go-isatty v0.0.20
 ## explicit; go 1.15
 github.com/mattn/go-isatty
-# github.com/mattn/go-runewidth v0.0.14
+# github.com/mattn/go-runewidth v0.0.15
 ## explicit; go 1.9
 github.com/mattn/go-runewidth
+# github.com/minio/asm2plan9s v0.0.0-20200509001527-cdd76441f9d8
+## explicit
+github.com/minio/asm2plan9s
+# github.com/minio/c2goasm v0.0.0-20190812172519-36a3d3bbc4f3
+## explicit
+github.com/minio/c2goasm
 # github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db
 ## explicit
 github.com/mitchellh/colorstring
@@ -381,8 +474,10 @@ github.com/patrickmn/go-cache
 ## explicit; go 1.15
 github.com/paulmach/orb
 github.com/paulmach/orb/clip
+github.com/paulmach/orb/encoding/internal/wkbcommon
 github.com/paulmach/orb/encoding/mvt
 github.com/paulmach/orb/encoding/mvt/vectortile
+github.com/paulmach/orb/encoding/wkb
 github.com/paulmach/orb/encoding/wkt
 github.com/paulmach/orb/geojson
 github.com/paulmach/orb/internal/length
@@ -394,6 +489,13 @@ github.com/paulmach/orb/project
 # github.com/paulmach/protoscan v0.2.1
 ## explicit; go 1.15
 github.com/paulmach/protoscan
+# github.com/pierrec/lz4/v4 v4.1.21
+## explicit; go 1.14
+github.com/pierrec/lz4/v4
+github.com/pierrec/lz4/v4/internal/lz4block
+github.com/pierrec/lz4/v4/internal/lz4errors
+github.com/pierrec/lz4/v4/internal/lz4stream
+github.com/pierrec/lz4/v4/internal/xxh32
 # github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c
 ## explicit; go 1.14
 github.com/pkg/browser
@@ -548,8 +650,8 @@ github.com/whosonfirst/go-whosonfirst-format-wasm/static/wasm
 # github.com/whosonfirst/go-whosonfirst-id v1.2.4
 ## explicit; go 1.22
 github.com/whosonfirst/go-whosonfirst-id
-# github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.4.1
-## explicit; go 1.18
+# github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.5.0
+## explicit; go 1.22
 github.com/whosonfirst/go-whosonfirst-iterate/v2/emitter
 github.com/whosonfirst/go-whosonfirst-iterate/v2/filters
 github.com/whosonfirst/go-whosonfirst-iterate/v2/iterator
@@ -612,15 +714,27 @@ github.com/whosonfirst/go-whosonfirst-writer/v3
 # github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.2
 ## explicit; go 1.18
 github.com/whosonfirst/go-writer-featurecollection/v3
+# github.com/whosonfirst/go-writer-geoparquet/v3 v3.0.0
+## explicit; go 1.22.1
+github.com/whosonfirst/go-writer-geoparquet/v3
 # github.com/whosonfirst/go-writer-jsonl/v3 v3.0.1
 ## explicit; go 1.18
 github.com/whosonfirst/go-writer-jsonl/v3
 # github.com/whosonfirst/go-writer/v3 v3.1.1
 ## explicit; go 1.22.1
 github.com/whosonfirst/go-writer/v3
+# github.com/whosonfirst/gpq-fork v0.0.1
+## explicit; go 1.22
+github.com/whosonfirst/gpq-fork/not-internal/geo
+github.com/whosonfirst/gpq-fork/not-internal/geojson
+github.com/whosonfirst/gpq-fork/not-internal/geoparquet
+github.com/whosonfirst/gpq-fork/not-internal/pqutil
 # github.com/whosonfirst/walk v0.0.2
 ## explicit; go 1.18
 github.com/whosonfirst/walk
+# github.com/zeebo/xxh3 v1.0.2
+## explicit; go 1.17
+github.com/zeebo/xxh3
 # go.mongodb.org/mongo-driver v1.11.4
 ## explicit; go 1.13
 go.mongodb.org/mongo-driver/bson
@@ -675,6 +789,17 @@ gocloud.dev/runtimevar/driver
 gocloud.dev/runtimevar/filevar
 gocloud.dev/secrets
 gocloud.dev/secrets/driver
+# golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842
+## explicit; go 1.20
+golang.org/x/exp/constraints
+golang.org/x/exp/maps
+golang.org/x/exp/mmap
+golang.org/x/exp/slices
+# golang.org/x/mod v0.17.0
+## explicit; go 1.18
+golang.org/x/mod/internal/lazyregexp
+golang.org/x/mod/module
+golang.org/x/mod/semver
 # golang.org/x/net v0.26.0
 ## explicit; go 1.18
 golang.org/x/net/html
@@ -688,12 +813,13 @@ golang.org/x/net/trace
 # golang.org/x/sync v0.7.0
 ## explicit; go 1.18
 golang.org/x/sync/errgroup
-# golang.org/x/sys v0.21.0
+# golang.org/x/sys v0.23.0
 ## explicit; go 1.18
+golang.org/x/sys/cpu
 golang.org/x/sys/plan9
 golang.org/x/sys/unix
 golang.org/x/sys/windows
-# golang.org/x/term v0.21.0
+# golang.org/x/term v0.23.0
 ## explicit; go 1.18
 golang.org/x/term
 # golang.org/x/text v0.16.0
@@ -702,6 +828,30 @@ golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
+# golang.org/x/tools v0.21.1-0.20240508182429-e35e4ccd0d2d
+## explicit; go 1.19
+golang.org/x/tools/cmd/goimports
+golang.org/x/tools/cmd/stringer
+golang.org/x/tools/go/ast/astutil
+golang.org/x/tools/go/gcexportdata
+golang.org/x/tools/go/internal/packagesdriver
+golang.org/x/tools/go/packages
+golang.org/x/tools/go/types/objectpath
+golang.org/x/tools/internal/aliases
+golang.org/x/tools/internal/event
+golang.org/x/tools/internal/event/core
+golang.org/x/tools/internal/event/keys
+golang.org/x/tools/internal/event/label
+golang.org/x/tools/internal/gcimporter
+golang.org/x/tools/internal/gocommand
+golang.org/x/tools/internal/gopathwalk
+golang.org/x/tools/internal/imports
+golang.org/x/tools/internal/packagesinternal
+golang.org/x/tools/internal/pkgbits
+golang.org/x/tools/internal/stdlib
+golang.org/x/tools/internal/tokeninternal
+golang.org/x/tools/internal/typesinternal
+golang.org/x/tools/internal/versions
 # golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028
 ## explicit; go 1.18
 golang.org/x/xerrors
@@ -800,6 +950,7 @@ google.golang.org/protobuf/reflect/protoreflect
 google.golang.org/protobuf/reflect/protoregistry
 google.golang.org/protobuf/runtime/protoiface
 google.golang.org/protobuf/runtime/protoimpl
+google.golang.org/protobuf/types/descriptorpb
 google.golang.org/protobuf/types/known/anypb
 google.golang.org/protobuf/types/known/durationpb
 google.golang.org/protobuf/types/known/timestamppb
@@ -840,7 +991,7 @@ modernc.org/mathutil
 # modernc.org/memory v1.7.2
 ## explicit; go 1.18
 modernc.org/memory
-# modernc.org/sqlite v1.29.1
+# modernc.org/sqlite v1.29.5
 ## explicit; go 1.20
 modernc.org/sqlite
 modernc.org/sqlite/lib

@@ -12,11 +12,14 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-
-	"github.com/aaronland/go-json-query"
-	app "github.com/whosonfirst/go-whosonfirst-iterwriter/app/iterwriter"
+	"os"
+	
 	_ "github.com/whosonfirst/go-writer-featurecollection/v3"
 	_ "github.com/whosonfirst/go-writer-jsonl/v3"
+	_ "github.com/whosonfirst/go-writer-geoparquet/v3"	
+	
+	"github.com/aaronland/go-json-query"
+	app "github.com/whosonfirst/go-whosonfirst-iterwriter/app/iterwriter"
 	"github.com/whosonfirst/go-writer/v3"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/uris"
@@ -118,6 +121,7 @@ func (c *EmitCommand) Run(ctx context.Context, args []string) error {
 		IteratorPaths: iter_uris,
 		CallbackFunc:  iterwr_cb,
 		MonitorURI:    "counter://PT60S",
+		MonitorWriter: os.Stderr,
 	}
 
 	logger := slog.Default()
