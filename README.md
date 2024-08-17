@@ -140,6 +140,37 @@ D SELECT "wof:id", "wof:name", "wof:concordances" FROM read_parquet('/usr/local/
 D
 ```
 
+Or reading data directly from a [Who's On First -style data repository on GitHub](https://github.com/sfomuseum-data/sfomuseum-data-architecture) and writing all the records to GeoParquet file:
+
+```
+$> ./bin/wof emit \
+	-writer-uri 'geoparquet://?min=100&max=1000&append-property=sfomuseum:placetype' \
+	-iterator-uri 'git:///tmp' \
+	https://github.com/sfomuseum-data/sfomuseum-data-architecture.git \
+	> /usr/local/data/arch.geoparquet
+```
+
+And then, again, in DuckDB:
+
+```
+D SELECT "wof:id", "wof:name", "sfomuseum:placetype", "wof:placetype", "mz:is_current" FROM read_parquet('/usr/local/data/arch.geoparquet');
+┌────────────┬─────────────────────────────────────────┬─────────────────────┬───────────────┬───────────────┐
+│   wof:id   │                wof:name                 │ sfomuseum:placetype │ wof:placetype │ mz:is_current │
+│  varchar   │                 varchar                 │       varchar       │    varchar    │    varchar    │
+├────────────┼─────────────────────────────────────────┼─────────────────────┼───────────────┼───────────────┤
+│ 102527513  │ San Francisco International Airport     │ airport             │ campus        │ 1             │
+│ 1159157037 │ G-02 International North Cases          │ gallery             │ enclosure     │ 0             │
+│ 1159157039 │ A-02 International South Cases          │ gallery             │ enclosure     │ 0             │
+│ 1159157041 │ A-07 International Central Vitrine      │ gallery             │ enclosure     │ 0             │
+│ 1159157045 │ 4B International North Wall             │ gallery             │ enclosure     │ 0             │
+│ 1159157047 │ 4C International South Wall             │ gallery             │ enclosure     │ 0             │
+│ 1159157049 │ 3L Terminal 3 Connector Arrival Level   │ gallery             │ enclosure     │ 0             │
+│ 1159157051 │ 3J Photographs                          │ gallery             │ enclosure     │ 0             │
+│ 1159157053 │ 3C North Connector                      │ gallery             │ enclosure     │ 0             │
+│ 1159157055 │ 3D Terminal 3 Hub                       │ gallery             │ enclosure     │ 0             │
+... and so on
+```
+
 Please consult the [whosonfirst/go-writer-geoparquet](https://github.com/whosonfirst/go-writer-geoparquet?tab=readme-ov-file#how-does-it-work) documentation for details on how to configure the `-writer-uri` flag.
 
 ##### Example (SPR)
