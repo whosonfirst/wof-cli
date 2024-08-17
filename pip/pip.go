@@ -27,8 +27,6 @@ import (
 	"github.com/sfomuseum/go-sfomuseum-mapshaper"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-whosonfirst-export/v2"
-	_ "github.com/whosonfirst/go-whosonfirst-spatial-pmtiles"
-	_ "github.com/whosonfirst/go-whosonfirst-spatial-sqlite"
 	"github.com/whosonfirst/go-whosonfirst-spatial/database"
 	"github.com/whosonfirst/go-whosonfirst-spatial/filter"
 	"github.com/whosonfirst/go-whosonfirst-spatial/hierarchy"

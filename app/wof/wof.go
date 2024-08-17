@@ -6,18 +6,6 @@ import (
 	"os"
 
 	"github.com/whosonfirst/wof"
-	_ "github.com/whosonfirst/wof/centroid"
-	_ "github.com/whosonfirst/wof/emit"
-	_ "github.com/whosonfirst/wof/export"
-	_ "github.com/whosonfirst/wof/format"
-	_ "github.com/whosonfirst/wof/geometry"
-	_ "github.com/whosonfirst/wof/open"
-	_ "github.com/whosonfirst/wof/pip"
-	_ "github.com/whosonfirst/wof/property"
-	_ "github.com/whosonfirst/wof/show"
-	_ "github.com/whosonfirst/wof/supersede"
-	_ "github.com/whosonfirst/wof/uri"
-	_ "github.com/whosonfirst/wof/validate"
 )
 
 func usage() {
@@ -39,6 +27,10 @@ func Run(ctx context.Context) error {
 	}
 
 	cmd := os.Args[1]
+
+	if cmd == "-h" {
+		usage()
+	}
 
 	c, err := wof.NewCommand(ctx, cmd)
 
