@@ -864,7 +864,7 @@ github.com/whosonfirst/go-whosonfirst-writer/v3
 # github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.2
 ## explicit; go 1.18
 github.com/whosonfirst/go-writer-featurecollection/v3
-# github.com/whosonfirst/go-writer-geoparquet/v3 v3.0.1
+# github.com/whosonfirst/go-writer-geoparquet/v3 v3.1.0
 ## explicit; go 1.22.1
 github.com/whosonfirst/go-writer-geoparquet/v3
 # github.com/whosonfirst/go-writer-jsonl/v3 v3.0.1
