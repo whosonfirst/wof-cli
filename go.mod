@@ -32,7 +32,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-validate v0.4.0
 	github.com/whosonfirst/go-whosonfirst-writer/v3 v3.1.4
 	github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.2
-	github.com/whosonfirst/go-writer-geoparquet/v3 v3.0.0
+	github.com/whosonfirst/go-writer-geoparquet/v3 v3.0.1
 	github.com/whosonfirst/go-writer-jsonl/v3 v3.0.1
 	github.com/whosonfirst/go-writer/v3 v3.1.1
 )

@@ -483,8 +483,8 @@ github.com/whosonfirst/go-whosonfirst-writer/v3 v3.1.4 h1:4g9iPT/RmwjGWvBuzXD4hY
 github.com/whosonfirst/go-whosonfirst-writer/v3 v3.1.4/go.mod h1:u0b7VbQpzlUQnSOxrXzilJuYl4/F0H8gqw3p0m7abaw=
 github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.2 h1:dc1bZol+QPMjTY5rd+5p2YLh4lMjXIDdV3okJ+lUI6s=
 github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.2/go.mod h1:Tl37NlsjW+Abb5EghgUhs2l9uUygL7g1Pd+b+odGx+8=
-github.com/whosonfirst/go-writer-geoparquet/v3 v3.0.0 h1:9VpQgJzDgqfiYDRZhtBydnU0mK4BBtmP7ATyJZ6i46w=
-github.com/whosonfirst/go-writer-geoparquet/v3 v3.0.0/go.mod h1:wAd61jcf5cAqGMrowtNq1GAiqNCUpXxzldDbkKgKVlQ=
+github.com/whosonfirst/go-writer-geoparquet/v3 v3.0.1 h1:xX9H56ZeqfSaDAxcGRULWDu8Vvn72J4khl+yx0Ggoxo=
+github.com/whosonfirst/go-writer-geoparquet/v3 v3.0.1/go.mod h1:JDheyID2wfK9CCEW60LmRZuhWsIu4KX52ey9bgyHc2I=
 github.com/whosonfirst/go-writer-jsonl/v3 v3.0.1 h1:ECVwoNFX0XIVLXPCa/fDeOw0Cf7dvS6IlULofNYk+Qs=
 github.com/whosonfirst/go-writer-jsonl/v3 v3.0.1/go.mod h1:zPIzNWCiiGt0UoNFVbt+jOCS2lLOf3oH/sb08e8UUnA=
 github.com/whosonfirst/go-writer/v3 v3.1.1 h1:YFG/LUzqr8tNNV/rqqvACrMT2jaoXMEecjVusRE06jI=
