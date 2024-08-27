@@ -1,6 +1,6 @@
 module github.com/whosonfirst/wof
 
-go 1.22.4
+go 1.23.0
 
 require (
 	github.com/aaronland/go-json-query v0.1.5
@@ -9,16 +9,16 @@ require (
 	github.com/paulmach/orb v0.11.1
 	github.com/sfomuseum/go-csvdict v1.0.0
 	github.com/sfomuseum/go-flags v0.10.0
-	github.com/sfomuseum/go-geojson-show v0.0.7
+	github.com/sfomuseum/go-geojson-show v0.0.8
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3
 	github.com/sfomuseum/go-timings v1.4.0
 	github.com/tidwall/gjson v1.17.3
 	github.com/tidwall/sjson v1.2.5
 	github.com/whosonfirst/go-reader v1.0.2
-	github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.2
+	github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.3
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.28
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
-	github.com/whosonfirst/go-whosonfirst-id v1.2.4
+	github.com/whosonfirst/go-whosonfirst-id v1.2.5
 	github.com/whosonfirst/go-whosonfirst-iterate-git/v2 v2.1.7
 	github.com/whosonfirst/go-whosonfirst-iterate-organization/v2 v2.0.0
 	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.5.0
@@ -59,7 +59,7 @@ require (
 	github.com/aaronland/go-string v1.0.0 // indirect
 	github.com/aaronland/go-uid v0.4.0 // indirect
 	github.com/aaronland/go-uid-artisanal v0.0.4 // indirect
-	github.com/aaronland/go-uid-proxy v0.2.0 // indirect
+	github.com/aaronland/go-uid-proxy v0.3.0 // indirect
 	github.com/aaronland/go-uid-whosonfirst v0.0.5 // indirect
 	github.com/aaronland/gocloud-blob v0.2.0 // indirect
 	github.com/aaronland/gocloud-docstore v0.0.5 // indirect
@@ -154,6 +154,7 @@ require (
 	github.com/sfomuseum/go-edtf v1.2.1 // indirect
 	github.com/sfomuseum/go-http-protomaps v0.3.0 // indirect
 	github.com/sfomuseum/go-http-rollup v0.0.3 // indirect
+	github.com/sfomuseum/go-www-show v1.0.0 // indirect
 	github.com/sfomuseum/iso8601duration v1.1.0 // indirect
 	github.com/sfomuseum/runtimevar v1.2.0 // indirect
 	github.com/skeema/knownhosts v1.2.2 // indirect

@@ -65,8 +65,8 @@ github.com/aaronland/go-uid v0.4.0 h1:2qQ2yRQarrUCEU9ApvBpaC9osAcqTCCvD77rOkDp7m
 github.com/aaronland/go-uid v0.4.0/go.mod h1:HwQ09mooJ8j684z3W5lPKO6Odf557O6h3P3o1PquqXE=
 github.com/aaronland/go-uid-artisanal v0.0.4 h1:I/29nzNnj32gax6rkBLeNtnwtXLqLAIE0mOlMq6KWWY=
 github.com/aaronland/go-uid-artisanal v0.0.4/go.mod h1:fNtTeUssikRxhttmzQeR3yDLJpSchzwTVqvsOIlglks=
-github.com/aaronland/go-uid-proxy v0.2.0 h1:owPhro/6SlHkxKAIuO60oGIScs4MJjTAVwLj2zfttF4=
-github.com/aaronland/go-uid-proxy v0.2.0/go.mod h1:LFZBtJBMR7HNOv2Qvd1C2uCsOsHeL6xpXEVrqiC+6tM=
+github.com/aaronland/go-uid-proxy v0.3.0 h1:GxAgpLdtHuHW/cTyx+FhWLQxKIiDasCgLu+QTlWseZo=
+github.com/aaronland/go-uid-proxy v0.3.0/go.mod h1:LFZBtJBMR7HNOv2Qvd1C2uCsOsHeL6xpXEVrqiC+6tM=
 github.com/aaronland/go-uid-whosonfirst v0.0.5 h1:j5/vWjq/im3YPcx43R/8sJDJ4F2e7LlnQSK9/MMfsWw=
 github.com/aaronland/go-uid-whosonfirst v0.0.5/go.mod h1:Z/VSvb6IzCBnSNjDzgiuiJyptUbKSWhwexrjLEO4+24=
 github.com/aaronland/gocloud-blob v0.2.0 h1:+zuOkrAyxYzLdLL2E3nn9MFOVAJJlAjOvSU0oKSAyyk=
@@ -360,8 +360,8 @@ github.com/sfomuseum/go-edtf v1.2.1/go.mod h1:1rP0EJZ/84j3HO80vGcnG2T9MFBDAFyTNt
 github.com/sfomuseum/go-flags v0.8.3/go.mod h1:VXOnnX1/yxQpX2yiwHaBV6aCmhtszQOL5bL1/nNo3co=
 github.com/sfomuseum/go-flags v0.10.0 h1:1OC1ACxpWMsl3XQ9OeNVMQj7Zi2CzufP3Rym3mPI8HU=
 github.com/sfomuseum/go-flags v0.10.0/go.mod h1:VXOnnX1/yxQpX2yiwHaBV6aCmhtszQOL5bL1/nNo3co=
-github.com/sfomuseum/go-geojson-show v0.0.7 h1:KRfxbU3OtRw1MtwA8pWMOkRCBvIjOGDS2Le/Q2b2hrE=
-github.com/sfomuseum/go-geojson-show v0.0.7/go.mod h1:4yMNVVj8TccDOtFStUbNc12DcD2uz6o/x1ElcADjvTA=
+github.com/sfomuseum/go-geojson-show v0.0.8 h1:hmkDNHNrY8ujulXKfmC4VqDXFbjs7P7KgqemADSpCR4=
+github.com/sfomuseum/go-geojson-show v0.0.8/go.mod h1:8QMrKj+8wf7BQXIN5AWJM/Q0KOhF4CkXJiyU6y3rBWM=
 github.com/sfomuseum/go-http-protomaps v0.3.0 h1:e89s6wsDHyCXDgB6hFARMjsdrgn/lG4BRybRJuXTktY=
 github.com/sfomuseum/go-http-protomaps v0.3.0/go.mod h1:K/PDDhy0c3xcPK2Bot7+oIz2l8QQLZys9SqAblhHT6I=
 github.com/sfomuseum/go-http-rollup v0.0.3 h1:N3CnjZluhzRhqPpdM+GTuzCnjM0V5xtPX+LeCgZWhTA=
@@ -370,6 +370,8 @@ github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3 h1:uPsamhCeCL3dAxsS5e4pgi8D72
 github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3/go.mod h1:Pw8nOlnamUnUyNUUzBUaKljmH2K9Nrx7+0ZPSClf/AM=
 github.com/sfomuseum/go-timings v1.4.0 h1:48TyPhrSlTVbFKI2psZiPD11GA0zXnrPJAyLmtBBmPg=
 github.com/sfomuseum/go-timings v1.4.0/go.mod h1:FcDhHe439Uy6i+WpLHrTJirtv37sf6/TxBhAngUQP7M=
+github.com/sfomuseum/go-www-show v1.0.0 h1:Q0vRdbCz2Ulqgut85vm0kRyO7FXPbO/gay5QMuWPqk8=
+github.com/sfomuseum/go-www-show v1.0.0/go.mod h1:P2RVABhL8JumRWLHXQ6AA8epIkBSTWAZ5LlL7zO07TE=
 github.com/sfomuseum/iso8601duration v1.1.0 h1:kMYzbamrZp9dRxi5iFuhjl5CzHXK6s6Bzz/c75wsq8Q=
 github.com/sfomuseum/iso8601duration v1.1.0/go.mod h1:6EenGWM7y8uVquMPEZwoR+ihpIMJluw7iYiHhDTuOAk=
 github.com/sfomuseum/runtimevar v1.2.0 h1:8q06GcN4gEbRcktbe63U6boSymaZJ7rUqCcggwGkFhw=
@@ -431,8 +433,8 @@ github.com/whosonfirst/go-sanitize v0.1.0 h1:ygSqCnakwdzH/m8UEa15zXGDsoo5/JJeRkg
 github.com/whosonfirst/go-sanitize v0.1.0/go.mod h1:p/emgbafMM0p5iVAz2XWwecYPl06Tw4Jos9rhTKIrt8=
 github.com/whosonfirst/go-whosonfirst-crawl v0.2.2 h1:7nwpNV/BFoPR0R7KMMy1iiYAer7wlHJBUOiL+NLzIFs=
 github.com/whosonfirst/go-whosonfirst-crawl v0.2.2/go.mod h1:2GZkaK9jaOisWRnBQGWzmb7H55TUFl9y9F30lrk2hwk=
-github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.2 h1:Jg8Ed4trgPZVKiXjhnH8oFfG9LeosrdgfDRNsYG4k7s=
-github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.2/go.mod h1:7LEVZByKDtHRLtu40mNR3/q9Mp0f8Db5YEh7gk7oLaY=
+github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.3 h1:mq1OjMP2Trenb+1wJGrYdKaFzkwWWHYSjdfPjok437A=
+github.com/whosonfirst/go-whosonfirst-export/v2 v2.8.3/go.mod h1:e75gUUyEq8WhG+BVQ0wktZ6IqDLeJZlONDtXHpjxGtg=
 github.com/whosonfirst/go-whosonfirst-feature v0.0.28 h1:XCNNzjnk1i50UnqrNtrN9xNvJDwZGjsPHbb3HRPixXA=
 github.com/whosonfirst/go-whosonfirst-feature v0.0.28/go.mod h1:8kc2Ei7mCankyWQcfzLHdKAc1//B/ptY7uEFsT5I8m4=
 github.com/whosonfirst/go-whosonfirst-flags v0.5.2 h1:vSx7fcM04HiSAEF+WOKfuyJawac99skN9HJAeqBXWpI=
@@ -443,8 +445,8 @@ github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1 h1:QxcVj0ffscllCq2M2QVH
 github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1/go.mod h1:yohOsbmIzNXWs5Wg9/uJvwSSlStM3SpdNBFR5XVCY1s=
 github.com/whosonfirst/go-whosonfirst-github v0.8.1 h1:/YQQtgQiU9TaZfRupIUTWHwQQayiZ2LZSOoU/wrTTEs=
 github.com/whosonfirst/go-whosonfirst-github v0.8.1/go.mod h1:BWigeOk1YyMzEyqXOyK5DelbGg/7YRGARS6ujW8MZ9M=
-github.com/whosonfirst/go-whosonfirst-id v1.2.4 h1:KC5VGR+mweXcECFL5MGfX3GcrlbZscCa+aSoU7OAAtM=
-github.com/whosonfirst/go-whosonfirst-id v1.2.4/go.mod h1:3Tr/dxs4o8dvfcTyJrkS0wQ93Os+YjAVcWMD81BCFHE=
+github.com/whosonfirst/go-whosonfirst-id v1.2.5 h1:WEQafWDflwiHG9zA4XKvo7+k/Tjvb/yf0+6lpXqdRyk=
+github.com/whosonfirst/go-whosonfirst-id v1.2.5/go.mod h1:V0xr7Bs7Uuo+JJMRRoALlME6/R2K5CDm0BRp5NNThxc=
 github.com/whosonfirst/go-whosonfirst-iterate-git/v2 v2.1.7 h1:QZF1k0/6ynKb0n3gSxB8cvFB9Fsu1tI8FHJmJoa0Gw0=
 github.com/whosonfirst/go-whosonfirst-iterate-git/v2 v2.1.7/go.mod h1:9RMoXGphlpzh31wSEHDszy2PGd7xapT0LvkpnBz8clQ=
 github.com/whosonfirst/go-whosonfirst-iterate-organization/v2 v2.0.0 h1:ERqkffzazrDEBo0cf8HYmNwhpxNWGq4PvaBslro9oDc=
