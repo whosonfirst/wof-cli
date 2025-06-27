@@ -4,9 +4,9 @@ import (
 	"context"
 	_ "embed"
 	"fmt"
-	"io"
 	"slices"
-
+	"os"
+	
 	"github.com/paulmach/orb/geojson"
 	sfom_show "github.com/sfomuseum/go-geojson-show"
 	"github.com/whosonfirst/wof"
@@ -37,7 +37,11 @@ func NewShowCommand(ctx context.Context, cmd string) (wof.Command, error) {
 
 func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 
+	var is_featurecollection bool
+
 	fs := sfom_show.DefaultFlagSet()
+	fs.BoolVar(&is_featurecollection, "featurecollection", false, "Boolean flag indicating input data is a GeoJSON FeatureCollection.")
+
 	fs.Parse(args)
 
 	fs_uris := fs.Args()
@@ -97,29 +101,35 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 
 	cb := func(ctx context.Context, uri string) error {
 
-		r, is_stdin, err := reader.ReadCloserFromURI(ctx, uri)
+		body, err := reader.BytesFromURI(ctx, uri)
 
 		if err != nil {
 			return fmt.Errorf("Failed to open '%s' for reading, %w", uri, err)
 		}
 
-		if !is_stdin {
-			defer r.Close()
+		if is_featurecollection {
+
+			f, err := geojson.UnmarshalFeatureCollection(body)
+
+			if err != nil {
+
+			   os.WriteFile("wtf.json", body, 0644)
+
+				return fmt.Errorf("Failed to unmarshal '%s' as GeoJSON FeatureCollection, %w", uri, err)
+			}
+
+			fc = f
+		} else {
+
+			f, err := geojson.UnmarshalFeature(body)
+
+			if err != nil {
+				return fmt.Errorf("Failed to unmarshal '%s' as GeoJSON, %w", uri, err)
+			}
+
+			fc.Append(f)
 		}
 
-		body, err := io.ReadAll(r)
-
-		if err != nil {
-			return fmt.Errorf("Failed to read '%s', %w", uri, err)
-		}
-
-		f, err := geojson.UnmarshalFeature(body)
-
-		if err != nil {
-			return fmt.Errorf("Failed to unmarshal '%s' as GeoJSON, %w", uri, err)
-		}
-
-		fc.Append(f)
 		return nil
 	}
 

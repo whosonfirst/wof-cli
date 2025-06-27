@@ -10,7 +10,7 @@ import (
 	_ "github.com/whosonfirst/go-writer-jsonl/v3"
 
 	"github.com/aaronland/go-json-query"
-	app "github.com/whosonfirst/go-whosonfirst-iterwriter/app/iterwriter"
+	"github.com/whosonfirst/go-whosonfirst-iterwriter/v4/app/iterwriter"
 	"github.com/whosonfirst/go-writer/v3"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/uris"
@@ -106,7 +106,7 @@ func (c *EmitCommand) Run(ctx context.Context, args []string) error {
 
 	iterwr_cb := iterwriterCallbackFunc(iterwr_opts)
 
-	opts := &app.RunOptions{
+	opts := &iterwriter.RunOptions{
 		Writer:        wr,
 		IteratorURI:   iterator_uri,
 		IteratorPaths: iter_uris,
@@ -115,6 +115,5 @@ func (c *EmitCommand) Run(ctx context.Context, args []string) error {
 		MonitorWriter: os.Stderr,
 	}
 
-	logger := slog.Default()
-	return app.RunWithOptions(ctx, opts, logger)
+	return iterwriter.RunWithOptions(ctx, opts)
 }

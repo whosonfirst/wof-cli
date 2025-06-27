@@ -2,16 +2,17 @@ package pmtiles
 
 import (
 	"bytes"
-	"compress/gzip"
 	"container/list"
 	"context"
 	"encoding/json"
 	"errors"
+	"github.com/rs/cors"
 	"io"
 	"log"
 	"net/http"
 	"regexp"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -23,9 +24,10 @@ type cacheKey struct {
 }
 
 type request struct {
-	key       cacheKey
-	value     chan cachedValue
-	purgeEtag string
+	key         cacheKey
+	value       chan cachedValue
+	purgeEtag   string
+	compression Compression
 }
 
 type cachedValue struct {
@@ -49,13 +51,12 @@ type Server struct {
 	bucket    Bucket
 	logger    *log.Logger
 	cacheSize int
-	cors      string
 	publicURL string
 	metrics   *metrics
 }
 
 // NewServer creates a new pmtiles HTTP server.
-func NewServer(bucketURL string, prefix string, logger *log.Logger, cacheSize int, cors string, publicURL string) (*Server, error) {
+func NewServer(bucketURL string, prefix string, logger *log.Logger, cacheSize int, publicURL string) (*Server, error) {
 
 	ctx := context.Background()
 
@@ -71,11 +72,11 @@ func NewServer(bucketURL string, prefix string, logger *log.Logger, cacheSize in
 		return nil, err
 	}
 
-	return NewServerWithBucket(bucket, prefix, logger, cacheSize, cors, publicURL)
+	return NewServerWithBucket(bucket, prefix, logger, cacheSize, publicURL)
 }
 
 // NewServerWithBucket creates a new HTTP server for a gocloud Bucket.
-func NewServerWithBucket(bucket Bucket, _ string, logger *log.Logger, cacheSize int, cors string, publicURL string) (*Server, error) {
+func NewServerWithBucket(bucket Bucket, _ string, logger *log.Logger, cacheSize int, publicURL string) (*Server, error) {
 
 	reqs := make(chan request, 8)
 
@@ -84,7 +85,6 @@ func NewServerWithBucket(bucket Bucket, _ string, logger *log.Logger, cacheSize 
 		bucket:    bucket,
 		logger:    logger,
 		cacheSize: cacheSize,
-		cors:      cors,
 		publicURL: publicURL,
 		metrics:   createMetrics("", logger), // change scope string if there are multiple servers running in one process
 	}
@@ -175,7 +175,7 @@ func (server *Server) Start() {
 						}
 
 						if isRoot {
-							header, err := deserializeHeader(b[0:HeaderV3LenBytes])
+							header, err := DeserializeHeader(b[0:HeaderV3LenBytes])
 							if err != nil {
 								status = "error"
 								server.logger.Printf("parsing header failed: %v", err)
@@ -183,7 +183,7 @@ func (server *Server) Start() {
 							}
 
 							// populate the root first before header
-							rootEntries := deserializeEntries(bytes.NewBuffer(b[header.RootOffset : header.RootOffset+header.RootLength]))
+							rootEntries := DeserializeEntries(bytes.NewBuffer(b[header.RootOffset:header.RootOffset+header.RootLength]), header.InternalCompression)
 							result2 := cachedValue{directory: rootEntries, ok: true, etag: etag}
 
 							rootKey := cacheKey{name: key.name, offset: header.RootOffset, length: header.RootLength}
@@ -192,7 +192,7 @@ func (server *Server) Start() {
 							result = cachedValue{header: header, ok: true, etag: etag}
 							resps <- response{key: key, value: result, size: 127, ok: true}
 						} else {
-							directory := deserializeEntries(bytes.NewBuffer(b))
+							directory := DeserializeEntries(bytes.NewBuffer(b), req.compression)
 							result = cachedValue{directory: directory, ok: true, etag: etag}
 							resps <- response{key: key, value: result, size: 24 * len(directory), ok: true}
 						}
@@ -242,7 +242,7 @@ func (server *Server) getHeaderMetadata(ctx context.Context, name string) (bool,
 }
 
 func (server *Server) getHeaderMetadataAttempt(ctx context.Context, name, purgeEtag string) (bool, HeaderV3, []byte, string, error) {
-	rootReq := request{key: cacheKey{name: name, offset: 0, length: 0}, value: make(chan cachedValue, 1), purgeEtag: purgeEtag}
+	rootReq := request{key: cacheKey{name: name, offset: 0, length: 0}, value: make(chan cachedValue, 1), purgeEtag: purgeEtag, compression: UnknownCompression}
 	server.reqs <- rootReq
 	rootValue := <-rootReq.value
 	header := rootValue.header
@@ -264,14 +264,9 @@ func (server *Server) getHeaderMetadataAttempt(ctx context.Context, name, purgeE
 	}
 	defer r.Close()
 
-	var metadataBytes []byte
-	if header.InternalCompression == Gzip {
-		metadataReader, _ := gzip.NewReader(r)
-		defer metadataReader.Close()
-		metadataBytes, err = io.ReadAll(metadataReader)
-	} else if header.InternalCompression == NoCompression {
-		metadataBytes, err = io.ReadAll(r)
-	} else {
+	metadataBytes, err := DeserializeMetadataBytes(r, header.InternalCompression)
+
+	if err != nil {
 		status = "error"
 		return true, HeaderV3{}, nil, "", errors.New("unknown compression")
 	}
@@ -333,7 +328,7 @@ func (server *Server) getTile(ctx context.Context, httpHeaders map[string]string
 }
 
 func (server *Server) getTileAttempt(ctx context.Context, httpHeaders map[string]string, name string, z uint8, x uint32, y uint32, ext string, purgeEtag string) (int, map[string]string, []byte, string) {
-	rootReq := request{key: cacheKey{name: name, offset: 0, length: 0}, value: make(chan cachedValue, 1), purgeEtag: purgeEtag}
+	rootReq := request{key: cacheKey{name: name, offset: 0, length: 0}, value: make(chan cachedValue, 1), purgeEtag: purgeEtag, compression: UnknownCompression}
 	server.reqs <- rootReq
 
 	// https://golang.org/doc/faq#atomic_maps
@@ -375,7 +370,7 @@ func (server *Server) getTileAttempt(ctx context.Context, httpHeaders map[string
 	dirOffset, dirLen := header.RootOffset, header.RootLength
 
 	for depth := 0; depth <= 3; depth++ {
-		dirReq := request{key: cacheKey{name: name, offset: dirOffset, length: dirLen, etag: rootValue.etag}, value: make(chan cachedValue, 1)}
+		dirReq := request{key: cacheKey{name: name, offset: dirOffset, length: dirLen, etag: rootValue.etag}, value: make(chan cachedValue, 1), compression: header.InternalCompression}
 		server.reqs <- dirReq
 		dirValue := <-dirReq.value
 		if dirValue.badEtag {
@@ -418,7 +413,7 @@ func (server *Server) getTileAttempt(ctx context.Context, httpHeaders map[string
 			if headerVal, ok := headerContentType(header); ok {
 				httpHeaders["Content-Type"] = headerVal
 			}
-			if headerVal, ok := headerContentEncoding(header.TileCompression); ok {
+			if headerVal, ok := compressionToString(header.TileCompression); ok {
 				httpHeaders["Content-Encoding"] = headerVal
 			}
 			return 200, httpHeaders, b, ""
@@ -474,9 +469,6 @@ func (server *Server) get(ctx context.Context, unsanitizedPath string) (archive,
 	handler = ""
 	archive = ""
 	headers = make(map[string]string)
-	if len(server.cors) > 0 {
-		headers["Access-Control-Allow-Origin"] = server.cors
-	}
 
 	if ok, key, z, x, y, ext := parseTilePath(unsanitizedPath); ok {
 		archive, handler = key, "tile"
@@ -518,18 +510,13 @@ func (lrw *loggingResponseWriter) WriteHeader(code int) {
 // Serve an HTTP response from the archive
 func (server *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) int {
 	tracker := server.metrics.startRequest()
-	if r.Method == http.MethodOptions {
-		if len(server.cors) > 0 {
-			w.Header().Set("Access-Control-Allow-Origin", server.cors)
-		}
-		w.WriteHeader(204)
-		tracker.finish(r.Context(), "", r.Method, 204, 0, false)
-		return 204
-	} else if r.Method != http.MethodGet && r.Method != http.MethodHead {
+
+	if r.Method != http.MethodGet && r.Method != http.MethodHead {
 		w.WriteHeader(405)
 		tracker.finish(r.Context(), "", r.Method, 405, 0, false)
 		return 405
 	}
+
 	archive, handler, statusCode, headers, body := server.get(r.Context(), r.URL.Path)
 	for k, v := range headers {
 		w.Header().Set(k, v)
@@ -551,4 +538,11 @@ func (server *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) int {
 	tracker.finish(r.Context(), archive, handler, statusCode, len(body), true)
 
 	return statusCode
+}
+
+func NewCors(corsOrigins string) *cors.Cors {
+	return cors.New(cors.Options{
+		AllowedMethods: []string{http.MethodGet, http.MethodHead},
+		AllowedOrigins: strings.Split(corsOrigins, ","),
+	})
 }
