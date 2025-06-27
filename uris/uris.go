@@ -9,6 +9,7 @@ import (
 
 	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
 	"github.com/whosonfirst/go-whosonfirst-uri"
+	"github.com/whosonfirst/wof/reader"
 )
 
 var re_wofid = regexp.MustCompile(`^\d+(?:\-alt\-.*)?$`)
@@ -56,16 +57,16 @@ func ExpandURIsWithCallback(ctx context.Context, cb ExpandURICallbackFunc, uris 
 		}
 
 		for rec, err := range iter.Iterate(ctx, u) {
-		    if err != nil {
-		       	   return err
-	            }
+			if err != nil {
+				return err
+			}
 
-		    err = cb(ctx, rec.Path)
+			err = cb(ctx, rec.Path)
 
-		    if err != nil {
-		       return err
-		       }
-		       }
+			if err != nil {
+				return err
+			}
+		}
 	}
 
 	if re_wofid.MatchString(u) {
@@ -83,6 +84,10 @@ func ExpandURIsWithCallback(ctx context.Context, cb ExpandURICallbackFunc, uris 
 		}
 
 		u = filepath.Join("data", rel_path)
+	}
+
+	if u == reader.STDIN {
+		return cb(ctx, u)
 	}
 
 	abs_u, err := filepath.Abs(u)
