@@ -6,7 +6,7 @@ import (
 	_ "log/slog"
 	"strings"
 
-	"github.com/sfomuseum/go-csvdict"
+	"github.com/sfomuseum/go-csvdict/v2"
 	"github.com/tidwall/gjson"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
@@ -69,22 +69,10 @@ func (c *PropertyCommand) Run(ctx context.Context, args []string) error {
 
 			if csv_wr == nil {
 
-				fieldnames := make([]string, 0)
-
-				for k, _ := range out {
-					fieldnames = append(fieldnames, k)
-				}
-
-				wr, err := csvdict.NewWriter(os.Stdout, fieldnames)
+				wr, err := csvdict.NewWriter(os.Stdout)
 
 				if err != nil {
 					return fmt.Errorf("Failed to create new CSV writer, %w", err)
-				}
-
-				err = wr.WriteHeader()
-
-				if err != nil {
-					return fmt.Errorf("Failed to write CSV header, %w", err)
 				}
 
 				csv_wr = wr

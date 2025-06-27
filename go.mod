@@ -9,12 +9,10 @@ require (
 	github.com/aaronland/go-roster v1.0.0
 	github.com/natefinch/atomic v1.0.1
 	github.com/paulmach/orb v0.11.1
-	github.com/sfomuseum/go-csvdict v1.0.0
 	github.com/sfomuseum/go-csvdict/v2 v2.0.1
 	github.com/sfomuseum/go-flags v0.10.0
 	github.com/sfomuseum/go-geojson-show v0.0.8
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.3
-	github.com/sfomuseum/go-timings v1.4.0
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
 	github.com/whosonfirst/go-reader v1.0.2
@@ -23,7 +21,6 @@ require (
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
 	github.com/whosonfirst/go-whosonfirst-id v1.2.5
 	github.com/whosonfirst/go-whosonfirst-iterate-git/v3 v3.0.1
-	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.5.0
 	github.com/whosonfirst/go-whosonfirst-iterate/v3 v3.0.0
 	github.com/whosonfirst/go-whosonfirst-iterwriter/v4 v4.0.0
 	github.com/whosonfirst/go-whosonfirst-reader v1.0.2
@@ -158,6 +155,7 @@ require (
 	github.com/sfomuseum/go-edtf v1.2.1 // indirect
 	github.com/sfomuseum/go-http-protomaps v0.3.0 // indirect
 	github.com/sfomuseum/go-http-rollup v0.0.3 // indirect
+	github.com/sfomuseum/go-timings v1.4.0 // indirect
 	github.com/sfomuseum/go-www-show v1.0.0 // indirect
 	github.com/sfomuseum/iso8601duration v1.1.0 // indirect
 	github.com/sfomuseum/runtimevar v1.3.0 // indirect
@@ -176,6 +174,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-flags v0.5.2 // indirect
 	github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1 // indirect
 	github.com/whosonfirst/go-whosonfirst-github v0.9.1 // indirect
+	github.com/whosonfirst/go-whosonfirst-iterate/v2 v2.5.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-names v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-placetypes v0.7.3 // indirect
 	github.com/whosonfirst/go-whosonfirst-sources v0.1.0 // indirect

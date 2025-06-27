@@ -8,13 +8,11 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
-	"sort"
 	"strconv"
 	"strings"
 
 	"github.com/aaronland/go-json-query"
 	"github.com/sfomuseum/go-csvdict/v2"
-	"github.com/sfomuseum/go-timings"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
@@ -35,9 +33,7 @@ type iterwriterCallbackOptions struct {
 
 func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.IterwriterCallback {
 
-	csv_header := false
-
-	iter_cb := func(ctx context.Context, rec *iterate.Record) error {
+	iter_cb := func(ctx context.Context, rec *iterate.Record, wr writer.Writer) error {
 
 		logger := slog.Default()
 		logger = logger.With("path", rec.Path)
@@ -93,11 +89,12 @@ func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.Iterwrit
 
 			if err != nil {
 				logger.Error("Failed to rewind body", "error", err)
-				return fmt.Errorf("Failed to rewind body for %s, %w", path, err)
+				return fmt.Errorf("Failed to rewind body for %s, %w", rec.Path, err)
 			}
 		}
 
-		body_r := rec.Body
+		var body_r io.ReadSeeker
+		body_r = rec.Body
 
 		switch opts.Format {
 		case "csv", "spr", "spr-geojson":
