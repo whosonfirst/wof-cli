@@ -6,5 +6,5 @@ package emit
 // binaries if they want to
 
 import (
-	_ "github.com/whosonfirst/go-whosonfirst-iterate-git/v2"
+	_ "github.com/whosonfirst/go-whosonfirst-iterate-git/v3"
 )
