@@ -81,11 +81,37 @@ error: Failed to parse name tag for /usr/local/data/whosonfirst-data/data/112/58
 
 ## WASM
 
-Consult https://github.com/whosonfirst/go-whosonfirst-validate-wasm
+The `wof-validate` functionality is also available as a JavaScript compatible WebAssembly (WASM) binary. The binary comes precompiled with this package but if you need or want to rebuild it the simplest way to do that is to use the handy `wasmjs` Makefile target.
+
+```shell
+$> make wasmjs
+GOOS=js GOARCH=wasm \
+		go build -mod vendor -ldflags="-s -w" -tags wasmjs \
+		-o www/wasm/wof_validate.wasm \
+		cmd/wof-validate-wasm/main.go
+```
+
+To test the binary open the web application in `www/index.html` using the HTTP server of your choice. I like to use [aaronland/go-http-fileserver](https://github.com/aaronland/go-http-fileserver) but that's mostly because I wrote it. Any old web server will do. For example:
+
+```shell
+$> fileserver -root www
+2025/06/28 06:50:46 Serving www and listening for requests on http://localhost:8080
+```
+
+And then when you open your web browser to `http://localhost:8080` you'll see something like this:
+
+![](docs/images/whosonfirst-validate.png)
+
+The default document included in the example is _invalid_ so when you click the "Validate" button you should see an error like this:
+
+![](docs/images/whosonfirst-validate-error.png)
+
+If you add a `"wof:repo":"whosonfirst-data-example"` property and resubmit the document the validation will succeed.
+
+![](docs/images/whosonfirst-validate-valid.png)
 
 ## See also
 
-* https://github.com/whosonfirst/go-whosonfirst-iterate/v2
+* https://github.com/whosonfirst/go-whosonfirst-iterate
 * https://github.com/whosonfirst/go-whosonfirst-feature
 * https://github.com/whosonfirst/go-whosonfirst-names
-* https://github.com/whosonfirst/go-whosonfirst-validate-wasm

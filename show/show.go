@@ -4,9 +4,9 @@ import (
 	"context"
 	_ "embed"
 	"fmt"
-	"slices"
 	"os"
-	
+	"slices"
+
 	"github.com/paulmach/orb/geojson"
 	sfom_show "github.com/sfomuseum/go-geojson-show"
 	"github.com/whosonfirst/wof"
@@ -113,7 +113,7 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 
 			if err != nil {
 
-			   os.WriteFile("wtf.json", body, 0644)
+				os.WriteFile("wtf.json", body, 0644)
 
 				return fmt.Errorf("Failed to unmarshal '%s' as GeoJSON FeatureCollection, %w", uri, err)
 			}
