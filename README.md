@@ -359,7 +359,6 @@ This affects the `wof emit` command.
 
 * https://github.com/whosonfirst/go-whosonfirst-export
 * https://github.com/whosonfirst/go-whosonfirst-format
-* https://github.com/whosonfirst/go-whosonfirst-format-wasm
 * https://github.com/whosonfirst/go-whosonfirst-validate
 * https://github.com/whosonfirst/go-whosonfirst-spatial
 * https://github.com/whosonfirst/go-whosonfirst-spatial-pmtiles
