@@ -9,7 +9,7 @@ import (
 
 	"github.com/paulmach/orb/geojson"
 	"github.com/tidwall/gjson"
-	"github.com/whosonfirst/go-whosonfirst-export/v2"
+	"github.com/whosonfirst/go-whosonfirst-export/v3"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
@@ -74,7 +74,7 @@ func (c *GeometryCommand) Run(ctx context.Context, args []string) error {
 				return nil
 			}
 
-			new_body, err = exporter.Export(ctx, new_body)
+			_, new_body, err = exporter.Export(ctx, new_body)
 
 			if err != nil {
 				return fmt.Errorf("Failed to export body for '%s', %w", uri, err)

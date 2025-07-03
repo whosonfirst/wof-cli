@@ -26,7 +26,7 @@ import (
 
 	"github.com/sfomuseum/go-sfomuseum-mapshaper"
 	"github.com/tidwall/sjson"
-	"github.com/whosonfirst/go-whosonfirst-export/v2"
+	"github.com/whosonfirst/go-whosonfirst-export/v3"
 	"github.com/whosonfirst/go-whosonfirst-spatial/database"
 	"github.com/whosonfirst/go-whosonfirst-spatial/filter"
 	"github.com/whosonfirst/go-whosonfirst-spatial/hierarchy"
@@ -185,7 +185,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 			if opts.Export && opts.Exporter != nil {
 
-				new_body, err = opts.Exporter.Export(ctx, new_body)
+				_, new_body, err = opts.Exporter.Export(ctx, new_body)
 
 				if err != nil {
 					return fmt.Errorf("Failed to export new record for '%s' ('%s'), %w", wr_uri, uri, err)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/whosonfirst/go-whosonfirst-export/v2"
+	"github.com/whosonfirst/go-whosonfirst-export/v3"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
@@ -79,7 +79,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 			return fmt.Errorf("Failed to read '%s', %w", uri, err)
 		}
 
-		new_body, err := opts.Exporter.Export(ctx, body)
+		_, new_body, err := opts.Exporter.Export(ctx, body)
 
 		if err != nil {
 			return fmt.Errorf("Failed to export body for '%s', %w", uri, err)
