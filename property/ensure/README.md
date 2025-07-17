@@ -35,7 +35,7 @@ For example:
 ```
 $> ./bin/wof ensure-property \
 	-boolean-property properties.wfdn:is_restricted=false \
-	-iterator-uri 'repo://?include=properties.mz:is_current=1&properties.sfomuseum:post_security=-1' \
+	-iterator-uri 'repo://?include=properties.mz:is_current=1&include=properties.sfomuseum:post_security=-1' \
 	-writer-uri repo:///usr/local/data/sfomuseum-data-wayfinding/ \
 	/usr/local/data/sfomuseum-data-wayfinding/
 	

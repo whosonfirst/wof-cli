@@ -110,18 +110,13 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 			continue
 		}
 
-		has_changes, new_body, err = ex.Export(ctx, new_body)
+		_, new_body, err = ex.Export(ctx, new_body)
 
 		if err != nil {
 			logger.Error("Failed to export updated record", "error", err)
 			return err
 		}
-
-		if !has_changes {
-			logger.Debug("No changes after export, skipping")
-			continue
-		}
-
+		
 		_, err = wof_writer.WriteBytes(ctx, wr, new_body)
 
 		if err != nil {
