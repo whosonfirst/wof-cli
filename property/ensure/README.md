@@ -31,3 +31,20 @@ Valid options are:
 ### Examples
 
 For example:
+
+```
+$> ./bin/wof ensure-property \
+	-boolean-property properties.wfdn:is_restricted=false \
+	-iterator-uri 'repo://?include=properties.mz:is_current=1&properties.sfomuseum:post_security=-1' \
+	-writer-uri repo:///usr/local/data/sfomuseum-data-wayfinding/ \
+	/usr/local/data/sfomuseum-data-wayfinding/
+	
+2025/07/17 10:57:51 INFO Updated record path=191/466/628/9/1914666289.geojson
+2025/07/17 10:57:51 INFO Updated record path=191/466/629/5/1914666295.geojson
+2025/07/17 10:57:51 INFO Updated record path=191/466/629/9/1914666299.geojson
+2025/07/17 10:57:51 INFO Updated record path=191/466/630/3/1914666303.geojson
+2025/07/17 10:57:51 INFO Updated record path=191/466/630/5/1914666305.geojson
+2025/07/17 10:57:51 INFO Updated record path=191/466/631/9/1914666319.geojson
+2025/07/17 10:57:51 INFO Updated record path=191/466/637/1/1914666371.geojson
+... and so on
+```

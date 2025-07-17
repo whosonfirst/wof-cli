@@ -10,12 +10,12 @@ require (
 	github.com/natefinch/atomic v1.0.1
 	github.com/paulmach/orb v0.11.1
 	github.com/sfomuseum/go-csvdict/v2 v2.0.1
-	github.com/sfomuseum/go-flags v0.10.0
+	github.com/sfomuseum/go-flags v0.11.0
 	github.com/sfomuseum/go-geojson-show v0.0.13
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.4
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
-	github.com/whosonfirst/go-reader v1.1.0
+	github.com/whosonfirst/go-reader/v2 v2.0.0
 	github.com/whosonfirst/go-whosonfirst-export/v3 v3.0.3
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.29
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
@@ -24,7 +24,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-iterate-reader/v3 v3.0.1
 	github.com/whosonfirst/go-whosonfirst-iterate/v3 v3.1.0
 	github.com/whosonfirst/go-whosonfirst-iterwriter/v4 v4.0.0
-	github.com/whosonfirst/go-whosonfirst-reader v1.0.2
+	github.com/whosonfirst/go-whosonfirst-reader/v2 v2.0.0
 	github.com/whosonfirst/go-whosonfirst-spatial v0.18.0
 	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.10.1
 	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.15.1
@@ -198,7 +198,6 @@ require (
 	github.com/tidwall/rtree v1.3.1 // indirect
 	github.com/webview/webview_go v0.0.0-20240831120633-6173450d4dd6 // indirect
 	github.com/whosonfirst/go-ioutil v1.0.2 // indirect
-	github.com/whosonfirst/go-reader/v2 v2.0.0 // indirect
 	github.com/whosonfirst/go-rfc-5646 v0.1.0 // indirect
 	github.com/whosonfirst/go-sanitize v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-database v0.0.9 // indirect
@@ -208,7 +207,6 @@ require (
 	github.com/whosonfirst/go-whosonfirst-github v0.9.1 // indirect
 	github.com/whosonfirst/go-whosonfirst-names v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-placetypes v0.8.0 // indirect
-	github.com/whosonfirst/go-whosonfirst-reader/v2 v2.0.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-sources v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-spelunker v0.0.6 // indirect
 	github.com/whosonfirst/go-whosonfirst-sqlite-spr/v2 v2.1.0 // indirect
