@@ -1043,6 +1043,9 @@ github.com/whosonfirst/go-whosonfirst-id
 ## explicit; go 1.24.2
 github.com/whosonfirst/go-whosonfirst-iterate-git/v3
 github.com/whosonfirst/go-whosonfirst-iterate-git/v3/github
+# github.com/whosonfirst/go-whosonfirst-iterate-reader/v3 v3.0.1
+## explicit; go 1.24
+github.com/whosonfirst/go-whosonfirst-iterate-reader/v3
 # github.com/whosonfirst/go-whosonfirst-iterate/v3 v3.1.0
 ## explicit; go 1.24
 github.com/whosonfirst/go-whosonfirst-iterate/v3

@@ -509,6 +509,8 @@ github.com/whosonfirst/go-whosonfirst-id v1.3.1 h1:AecFe96MRpu/gLy8D/lyJCrNCLywg
 github.com/whosonfirst/go-whosonfirst-id v1.3.1/go.mod h1:CCW9ym7BVTEhWA7hk8zM09zPCr0VzOBd6hYTPaxmpdQ=
 github.com/whosonfirst/go-whosonfirst-iterate-git/v3 v3.0.1 h1:vwbjWguS0rGlGdhwg9YDkFcqsCVlHUeZEvn1xNPIHuU=
 github.com/whosonfirst/go-whosonfirst-iterate-git/v3 v3.0.1/go.mod h1:SlqAPXJQd5N6FKP3ROTdyWjLNERr2DrTHiZlwGaH9ws=
+github.com/whosonfirst/go-whosonfirst-iterate-reader/v3 v3.0.1 h1:XiN9pxy37kOHbn8rX5ugHGJduVHLP0Nm9cK/Id+QUg8=
+github.com/whosonfirst/go-whosonfirst-iterate-reader/v3 v3.0.1/go.mod h1:kulG2t50tIZKs6V+5eFdL+pjIt6aiTskTPDynDXQcHI=
 github.com/whosonfirst/go-whosonfirst-iterate/v3 v3.1.0 h1:NE5HkwKuHqO+clCGNP5QY2pxblg02mGFeX8lFQ0K5Ho=
 github.com/whosonfirst/go-whosonfirst-iterate/v3 v3.1.0/go.mod h1:8L1KzWtOnRue6Dvc9BI6hy4twHd6zu9XgKn8TlJ4d7g=
 github.com/whosonfirst/go-whosonfirst-iterwriter/v4 v4.0.0 h1:hxqJ1V3Z5Ht1pNxo3rPGR35m1pUQHpOrkUmRK0WSgRU=

@@ -21,6 +21,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
 	github.com/whosonfirst/go-whosonfirst-id v1.3.1
 	github.com/whosonfirst/go-whosonfirst-iterate-git/v3 v3.0.1
+	github.com/whosonfirst/go-whosonfirst-iterate-reader/v3 v3.0.1
 	github.com/whosonfirst/go-whosonfirst-iterate/v3 v3.1.0
 	github.com/whosonfirst/go-whosonfirst-iterwriter/v4 v4.0.0
 	github.com/whosonfirst/go-whosonfirst-reader v1.0.2
