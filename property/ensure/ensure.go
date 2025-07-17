@@ -39,6 +39,11 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 
 	fs_uris := fs.Args()
 
+	if verbose {
+		slog.SetLogLoggerLevel(slog.LevelDebug)
+		slog.Debug("Verbose logging enabled")
+	}
+	
 	ex, err := export.NewExporter(ctx, exporter_uri)
 
 	if err != nil {
@@ -125,7 +130,6 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 		}
 
 		logger.Info("Updated record")
-		return nil
 	}
 
 	return nil

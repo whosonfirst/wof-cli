@@ -16,7 +16,7 @@ require (
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
 	github.com/whosonfirst/go-reader v1.1.0
-	github.com/whosonfirst/go-whosonfirst-export/v3 v3.0.2
+	github.com/whosonfirst/go-whosonfirst-export/v3 v3.0.3
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.29
 	github.com/whosonfirst/go-whosonfirst-format v0.4.1
 	github.com/whosonfirst/go-whosonfirst-id v1.3.1
