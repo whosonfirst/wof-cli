@@ -13,7 +13,8 @@ import (
 	uri "github.com/whosonfirst/go-whosonfirst-uri"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v3"
 	"github.com/whosonfirst/go-writer/v3"
-	"github.com/whosonfirst/wof"	
+	"github.com/whosonfirst/wof"
+	"github.com/whosonfirst/wof/internal/update"
 )
 
 type EnsurePropertyCommand struct {
@@ -37,7 +38,7 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 	fs.Parse(args)
 
 	fs_uris := fs.Args()
-	
+
 	ex, err := export.NewExporter(ctx, exporter_uri)
 
 	if err != nil {
@@ -55,7 +56,7 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 	if err != nil {
 		return fmt.Errorf("Failed to create new iterator, %w", err)
 	}
-	
+
 	for rec, err := range iter.Iterate(ctx, fs_uris...) {
 
 		if err != nil {
@@ -85,27 +86,26 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 			return err
 		}
 
-		/*
-			opts := &exportify.UpdateFeatureOptions{
-				StringProperties:  str_properties,
-				Int64Properties:   int_properties,
-				Float64Properties: float_properties,
-			}
+		opts := &update.UpdateFeatureOptions{
+			StringProperties:  str_properties,
+			Int64Properties:   int_properties,
+			Float64Properties: float_properties,
+			BooleanProperties: bool_properties,
+		}
 
-			new_body, changed, err := exportify.UpdateFeature(ctx, body, opts)
+		has_changes, new_body, err := update.UpdateFeature(ctx, body, opts)
 
-			if err != nil {
-				return err
-			}
+		if err != nil {
+			logger.Error("Failed to update feature properties", "error", err)
+			return err
+		}
 
-			if !changed {
-				return nil
-			}
-		*/
+		if !has_changes {
+			logger.Debug("No changes, skipping")
+			continue
+		}
 
-		new_body := body // TMP
-
-		has_changes, new_body, err := ex.Export(ctx, new_body)
+		has_changes, new_body, err = ex.Export(ctx, new_body)
 
 		if err != nil {
 			logger.Error("Failed to export updated record", "error", err)
@@ -113,7 +113,7 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 		}
 
 		if !has_changes {
-			logger.Debug("No changes, skipping")
+			logger.Debug("No changes after export, skipping")
 			continue
 		}
 

@@ -14,6 +14,7 @@ var writer_uri string
 var str_properties multi.KeyValueString
 var int_properties multi.KeyValueInt64
 var float_properties multi.KeyValueFloat64
+var bool_properties multi.KeyValueBool
 
 func DefaultFlagSet() *flag.FlagSet {
 
@@ -29,5 +30,6 @@ func DefaultFlagSet() *flag.FlagSet {
 
 	fs.Var(&float_properties, "float-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
 
+	fs.Var(&bool_properties, "boolean-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a boolean value.")
 	return fs
 }
