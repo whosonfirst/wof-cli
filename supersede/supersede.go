@@ -7,11 +7,11 @@ import (
 	"slices"
 	"time"
 
-	"github.com/whosonfirst/go-reader"
+	"github.com/whosonfirst/go-reader/v2"
 	"github.com/whosonfirst/go-whosonfirst-export/v3"
 	"github.com/whosonfirst/go-whosonfirst-feature/properties"
 	wof_id "github.com/whosonfirst/go-whosonfirst-id"
-	wof_reader "github.com/whosonfirst/go-whosonfirst-reader"
+	wof_reader "github.com/whosonfirst/go-whosonfirst-reader/v2"
 	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v3"
 	"github.com/whosonfirst/go-writer/v3"
 	"github.com/whosonfirst/wof"
