@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sfomuseum/go-timings"
 	"github.com/sfomuseum/runtimevar"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
 	"github.com/whosonfirst/go-writer/v3"
@@ -77,15 +76,6 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		mw = _mw
 	}
 
-	monitor, err := timings.NewMonitor(ctx, opts.MonitorURI)
-
-	if err != nil {
-		return fmt.Errorf("Failed to create monitor, %w", err)
-	}
-
-	monitor.Start(ctx, opts.MonitorWriter)
-	defer monitor.Stop(ctx)
-
 	iter, err := iterate.NewIterator(ctx, opts.IteratorURI)
 
 	if err != nil {
@@ -98,15 +88,13 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 			return err
 		}
 
-		defer rec.Body.Close()
-
 		err = opts.CallbackFunc(ctx, rec, mw)
 
+		rec.Body.Close()
+		
 		if err != nil {
 			return err
 		}
-
-		monitor.Signal(ctx)
 	}
 
 	err = mw.Close(ctx)
