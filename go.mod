@@ -23,9 +23,9 @@ require (
 	github.com/whosonfirst/go-whosonfirst-iterate/v3 v3.2.0
 	github.com/whosonfirst/go-whosonfirst-iterwriter/v4 v4.0.3
 	github.com/whosonfirst/go-whosonfirst-reader/v2 v2.0.0
-	github.com/whosonfirst/go-whosonfirst-spatial v0.18.0
-	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.10.2
-	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.15.1
+	github.com/whosonfirst/go-whosonfirst-spatial v0.18.1
+	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.10.3
+	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.15.2
 	github.com/whosonfirst/go-whosonfirst-spr/v2 v2.3.7
 	github.com/whosonfirst/go-whosonfirst-uri v1.3.0
 	github.com/whosonfirst/go-whosonfirst-validate v0.6.1
@@ -73,7 +73,7 @@ require (
 	github.com/aaronland/go-uid-artisanal v0.0.5 // indirect
 	github.com/aaronland/go-uid-proxy v0.4.1 // indirect
 	github.com/aaronland/go-uid-whosonfirst v0.0.7 // indirect
-	github.com/aaronland/gocloud-blob v0.6.1 // indirect
+	github.com/aaronland/gocloud-blob v0.6.2 // indirect
 	github.com/aaronland/gocloud-docstore v0.0.9 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/apache/arrow/go/v16 v16.1.0 // indirect
@@ -150,7 +150,7 @@ require (
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mattn/go-sqlite3 v1.14.28 // indirect
+	github.com/mattn/go-sqlite3 v1.14.30 // indirect
 	github.com/minio/asm2plan9s v0.0.0-20200509001527-cdd76441f9d8 // indirect
 	github.com/minio/c2goasm v0.0.0-20190812172519-36a3d3bbc4f3 // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
@@ -222,7 +222,7 @@ require (
 	go.uber.org/ratelimit v0.3.1 // indirect
 	gocloud.dev v0.43.0 // indirect
 	golang.org/x/crypto v0.40.0 // indirect
-	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0 // indirect
+	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b // indirect
 	golang.org/x/mod v0.25.0 // indirect
 	golang.org/x/net v0.42.0 // indirect
 	golang.org/x/oauth2 v0.30.0 // indirect
@@ -240,9 +240,9 @@ require (
 	google.golang.org/grpc v1.73.0 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
-	modernc.org/libc v1.65.10 // indirect
+	modernc.org/libc v1.66.3 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
-	modernc.org/sqlite v1.38.0 // indirect
+	modernc.org/sqlite v1.38.2 // indirect
 	zombiezen.com/go/sqlite v1.4.2 // indirect
 )

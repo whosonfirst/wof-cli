@@ -200,8 +200,8 @@ github.com/aaronland/go-uid-proxy
 # github.com/aaronland/go-uid-whosonfirst v0.0.7
 ## explicit; go 1.22
 github.com/aaronland/go-uid-whosonfirst
-# github.com/aaronland/gocloud-blob v0.6.1
-## explicit; go 1.24
+# github.com/aaronland/gocloud-blob v0.6.2
+## explicit; go 1.24.0
 github.com/aaronland/gocloud-blob/bucket
 github.com/aaronland/gocloud-blob/s3
 # github.com/aaronland/gocloud-docstore v0.0.9
@@ -764,7 +764,7 @@ github.com/klauspost/cpuid/v2
 # github.com/mattn/go-isatty v0.0.20
 ## explicit; go 1.15
 github.com/mattn/go-isatty
-# github.com/mattn/go-sqlite3 v1.14.28
+# github.com/mattn/go-sqlite3 v1.14.30
 ## explicit; go 1.19
 github.com/mattn/go-sqlite3
 # github.com/minio/asm2plan9s v0.0.0-20200509001527-cdd76441f9d8
@@ -1055,7 +1055,7 @@ github.com/whosonfirst/go-whosonfirst-reader/v2
 ## explicit; go 1.12
 github.com/whosonfirst/go-whosonfirst-sources
 github.com/whosonfirst/go-whosonfirst-sources/sources
-# github.com/whosonfirst/go-whosonfirst-spatial v0.18.0
+# github.com/whosonfirst/go-whosonfirst-spatial v0.18.1
 ## explicit; go 1.24
 github.com/whosonfirst/go-whosonfirst-spatial
 github.com/whosonfirst/go-whosonfirst-spatial/database
@@ -1063,11 +1063,11 @@ github.com/whosonfirst/go-whosonfirst-spatial/filter
 github.com/whosonfirst/go-whosonfirst-spatial/geo
 github.com/whosonfirst/go-whosonfirst-spatial/hierarchy
 github.com/whosonfirst/go-whosonfirst-spatial/hierarchy/filter
-# github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.10.2
-## explicit; go 1.24.0
+# github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.10.3
+## explicit; go 1.24.5
 github.com/whosonfirst/go-whosonfirst-spatial-pmtiles
 github.com/whosonfirst/go-whosonfirst-spatial-pmtiles/cache
-# github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.15.1
+# github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.15.2
 ## explicit; go 1.24.0
 github.com/whosonfirst/go-whosonfirst-spatial-sqlite
 github.com/whosonfirst/go-whosonfirst-spatial-sqlite/wkttoorb
@@ -1234,7 +1234,7 @@ golang.org/x/crypto/ssh
 golang.org/x/crypto/ssh/agent
 golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
 golang.org/x/crypto/ssh/knownhosts
-# golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0
+# golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b
 ## explicit; go 1.23.0
 golang.org/x/exp/constraints
 golang.org/x/exp/maps
@@ -1552,7 +1552,7 @@ google.golang.org/protobuf/types/known/wrapperspb
 # gopkg.in/warnings.v0 v0.1.2
 ## explicit
 gopkg.in/warnings.v0
-# modernc.org/libc v1.65.10
+# modernc.org/libc v1.66.3
 ## explicit; go 1.23.0
 modernc.org/libc
 modernc.org/libc/errno
@@ -1586,7 +1586,7 @@ modernc.org/mathutil
 # modernc.org/memory v1.11.0
 ## explicit; go 1.23.0
 modernc.org/memory
-# modernc.org/sqlite v1.38.0
+# modernc.org/sqlite v1.38.2
 ## explicit; go 1.23.0
 modernc.org/sqlite
 modernc.org/sqlite/lib
