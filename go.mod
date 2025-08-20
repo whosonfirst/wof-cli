@@ -1,6 +1,6 @@
 module github.com/whosonfirst/wof
 
-go 1.24.5
+go 1.25.0
 
 require (
 	github.com/aaronland/go-json-query v0.1.6

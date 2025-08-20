@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	
+
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-flags/multi"
 )
@@ -27,7 +27,7 @@ func DefaultFlagSet() *flag.FlagSet {
 	fs.StringVar(&exporter_uri, "exporter-uri", "whosonfirst://", "A valid whosonfirst/go-whosonfirst-export/v3.Exporter URI.")
 	fs.StringVar(&writer_uri, "writer-uri", "null://", "A valid whosonfirst/go-writer/v3.Writer URI.")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging")
-	
+
 	fs.Var(&str_properties, "string-property", "One or more {KEY}={VALUE} flag where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.")
 	fs.Var(&int_properties, "int-property", "One or more {KEY}={VALUE} flag where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.")
 	fs.Var(&float_properties, "float-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
@@ -39,6 +39,6 @@ func DefaultFlagSet() *flag.FlagSet {
 		fmt.Fprintf(os.Stderr, "Valid options are:\n")
 		fs.PrintDefaults()
 	}
-	
+
 	return fs
 }

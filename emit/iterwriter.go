@@ -4,15 +4,17 @@ import (
 	"bufio"
 	"bytes"
 	"context"
+	"encoding/csv"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log/slog"
+	"sort"
 	"strconv"
 	"strings"
+	"sync/atomic"
 
 	"github.com/aaronland/go-json-query"
-	"github.com/sfomuseum/go-csvdict/v2"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
@@ -33,10 +35,15 @@ type iterwriterCallbackOptions struct {
 
 func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.IterwriterCallback {
 
+	counter := int64(0)
+
 	iter_cb := func(ctx context.Context, rec *iterate.Record, wr writer.Writer) error {
+
+		new_count := atomic.AddInt64(&counter, 1)
 
 		logger := slog.Default()
 		logger = logger.With("path", rec.Path)
+		logger = logger.With("count", new_count)
 
 		// See this? It's important. We are rewriting path to a normalized WOF relative path
 		// That means this will only work with WOF documents
@@ -160,13 +167,27 @@ func iterwriterCallbackFunc(opts *iterwriterCallbackOptions) iterwriter.Iterwrit
 				var buf bytes.Buffer
 				wr := bufio.NewWriter(&buf)
 
-				csv_wr, err := csvdict.NewWriter(wr)
+				fieldnames := make([]string, 0)
 
-				if err != nil {
-					return fmt.Errorf("Failed to create CSV writer for %s, %w", rec.Path, err)
+				for k, _ := range spr_row {
+					fieldnames = append(fieldnames, k)
 				}
 
-				err = csv_wr.WriteRow(spr_row)
+				sort.Strings(fieldnames)
+
+				csv_wr := csv.NewWriter(wr)
+
+				if new_count == 1 {
+					err = csv_wr.Write(fieldnames)
+				}
+
+				values := make([]string, 0)
+
+				for _, k := range fieldnames {
+					values = append(values, spr_row[k])
+				}
+
+				err = csv_wr.Write(values)
 
 				if err != nil {
 					return fmt.Errorf("Failed to write CSV row for %s, %w", rec.Path, err)

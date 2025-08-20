@@ -43,7 +43,7 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 		slog.SetLogLoggerLevel(slog.LevelDebug)
 		slog.Debug("Verbose logging enabled")
 	}
-	
+
 	ex, err := export.NewExporter(ctx, exporter_uri)
 
 	if err != nil {
@@ -116,7 +116,7 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 			logger.Error("Failed to export updated record", "error", err)
 			return err
 		}
-		
+
 		_, err = wof_writer.WriteBytes(ctx, wr, new_body)
 
 		if err != nil {
