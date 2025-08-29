@@ -921,6 +921,9 @@ github.com/sfomuseum/go-sfomuseum-mapshaper
 # github.com/sfomuseum/go-www-show/v2 v2.0.0
 ## explicit; go 1.23.0
 github.com/sfomuseum/go-www-show/v2
+# github.com/sfomuseum/iso8601duration v1.1.0
+## explicit; go 1.18
+github.com/sfomuseum/iso8601duration
 # github.com/sfomuseum/runtimevar v1.3.2
 ## explicit; go 1.24.0
 github.com/sfomuseum/runtimevar

@@ -34,7 +34,7 @@ func (c *EmitCommand) Run(ctx context.Context, args []string) error {
 
 	fs := DefaultFlagSet()
 	fs.Parse(args)
-	
+
 	wr, err := writer.NewWriter(ctx, writer_uri)
 
 	if err != nil {
