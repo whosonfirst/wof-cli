@@ -360,13 +360,13 @@ Disable the `wof geometry` command.
 
 ##### no_iterator_git
 
-Disable import of the [whosonfirst/go-whosonfirst-iterate-git/v2](https://github.com/whosonfirst/go-whosonfirst-iterate-git) package.
+Disable import of the [whosonfirst/go-whosonfirst-iterate-git/v3](https://github.com/whosonfirst/go-whosonfirst-iterate-git) package.
 
 This affects the `wof emit` command.
 
 ##### no_iterator_org
 
-Disable import of the [whosonfirst/go-whosonfirst-iterate-organization/v2](https://github.com/whosonfirst/go-whosonfirst-iterate-organization) package.
+Disable import of the [whosonfirst/go-whosonfirst-iterate-organization/v3](https://github.com/whosonfirst/go-whosonfirst-iterate-organization) package.
 
 This affects the `wof emit` command.
 
