@@ -382,6 +382,10 @@ Disable the `wof pip` command.
 
 Disable the `wof property` command.
 
+##### no_repos
+
+Disable the `wof repos` command.
+
 ##### no_show
 
 Disable the `wof show` command.
@@ -420,6 +424,7 @@ This affects the `wof emit` command.
 
 * https://github.com/whosonfirst/go-whosonfirst-export
 * https://github.com/whosonfirst/go-whosonfirst-format
+* https://github.com/whosonfirst/go-whosonfirst-github
 * https://github.com/whosonfirst/go-whosonfirst-validate
 * https://github.com/whosonfirst/go-whosonfirst-spatial
 * https://github.com/whosonfirst/go-whosonfirst-spatial-pmtiles
