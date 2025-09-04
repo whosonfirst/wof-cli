@@ -26,6 +26,7 @@ Valid commands are:
 * open
 * pip
 * property
+* remove-property
 * repos
 * show
 * supersede
@@ -201,6 +202,30 @@ Usage:
 
 Examples can be found in [property/README.md](property/README.md#examples)
 
+#### wof remove-property
+
+Ensure typed values for one or more Who's On First records.
+
+```
+$> ./bin/wof remove-property -h
+Remove properties from one or more Who's On First records.
+Usage:
+	./bin/wof [options] path(N) path(N)
+Valid options are:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export/v3.Exporter URI. (default "whosonfirst://")
+  -iterator-uri string
+    	A valid whosonfirst/go-whosonfirst-iterate/v3.Iterator URI. (default "repo://")
+  -property value
+    	One or more (fully-qualified) paths for a property to remove.
+  -verbose
+    	Enable verbose (debug) logging
+  -writer-uri string
+    	A valid whosonfirst/go-writer/v3.Writer URI. (default "null://")
+```
+
+Examples can be found in [property/remove/README.md](property/remove/README.md#examples)
+
 #### wof repos
 
 ```
@@ -346,6 +371,10 @@ Disable the `wof centroid` command.
 
 Disable the `wof emit` command.
 
+##### no_ensure_property
+
+Disable the `wof ensure-property` command.
+
 ##### no_export
 
 Disable the `wof export` command.
@@ -381,6 +410,10 @@ Disable the `wof pip` command.
 ##### no_property
 
 Disable the `wof property` command.
+
+##### no_remove_property
+
+Disable the `wof remove-property` command.
 
 ##### no_repos
 
