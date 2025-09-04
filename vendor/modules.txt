@@ -997,7 +997,7 @@ github.com/whosonfirst/go-sanitize
 # github.com/whosonfirst/go-whosonfirst-database v0.0.9
 ## explicit; go 1.24.0
 github.com/whosonfirst/go-whosonfirst-database/sql/tables
-# github.com/whosonfirst/go-whosonfirst-export/v3 v3.0.4
+# github.com/whosonfirst/go-whosonfirst-export/v3 v3.1.0
 ## explicit; go 1.24
 github.com/whosonfirst/go-whosonfirst-export/v3
 github.com/whosonfirst/go-whosonfirst-export/v3/properties
@@ -1087,7 +1087,7 @@ github.com/whosonfirst/go-whosonfirst-sqlite-spr/v2
 # github.com/whosonfirst/go-whosonfirst-uri v1.3.0
 ## explicit; go 1.13
 github.com/whosonfirst/go-whosonfirst-uri
-# github.com/whosonfirst/go-whosonfirst-validate v0.6.1
+# github.com/whosonfirst/go-whosonfirst-validate v0.6.2
 ## explicit; go 1.24
 github.com/whosonfirst/go-whosonfirst-validate
 # github.com/whosonfirst/go-whosonfirst-writer/v3 v3.1.7
