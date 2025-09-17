@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"strings"
 
 	_ "github.com/whosonfirst/go-whosonfirst-iterate-reader/v3"
 
+	"github.com/tidwall/gjson"
 	export "github.com/whosonfirst/go-whosonfirst-export/v3"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
 	uri "github.com/whosonfirst/go-whosonfirst-uri"
@@ -89,8 +91,37 @@ func (c *RemovePropertyCommand) Run(ctx context.Context, args []string) error {
 			logger.Error("Failed to read body", "error", err)
 			return err
 		}
-		
-		has_changes, new_body, err := export.RemovePropertiesIfChanged(ctx, body, properties)
+
+		to_remove := make([]string, 0)
+
+		for _, path := range properties {
+
+			if !strings.Contains(path, ".#.") {
+				to_remove = append(to_remove, path)
+				continue
+			}
+
+			parts := strings.Split(path, ".#.")
+
+			if len(parts) != 2 {
+				logger.Error("Support for complex parts only supports a single '.#.' condition")
+				return fmt.Errorf("Support for complex parts only supports a single '.#.' condition")
+			}
+
+			rsp := gjson.GetBytes(body, parts[0])
+			count := len(rsp.Array())
+
+			for i := 0; i < count; i++ {
+				path = fmt.Sprintf("%s.%d.%s", parts[0], i, parts[1])
+				to_remove = append(to_remove, path)
+			}
+		}
+
+		if len(to_remove) == 0 {
+			continue
+		}
+
+		has_changes, new_body, err := export.RemovePropertiesIfChanged(ctx, body, to_remove)
 
 		if err != nil {
 			logger.Error("Failed to remove feature properties", "error", err)
@@ -100,7 +131,7 @@ func (c *RemovePropertyCommand) Run(ctx context.Context, args []string) error {
 		if !has_changes {
 			continue
 		}
-			
+
 		_, new_body, err = ex.Export(ctx, new_body)
 
 		if err != nil {
