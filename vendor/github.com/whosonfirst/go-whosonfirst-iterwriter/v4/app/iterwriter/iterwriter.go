@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sfomuseum/runtimevar"
+	"github.com/aaronland/gocloud/runtimevar"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
 	"github.com/whosonfirst/go-writer/v3"
 )

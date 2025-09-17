@@ -23,11 +23,11 @@ require (
 	github.com/whosonfirst/go-whosonfirst-iterate-git/v3 v3.0.5
 	github.com/whosonfirst/go-whosonfirst-iterate-reader/v3 v3.0.2
 	github.com/whosonfirst/go-whosonfirst-iterate/v3 v3.2.0
-	github.com/whosonfirst/go-whosonfirst-iterwriter/v4 v4.0.3
+	github.com/whosonfirst/go-whosonfirst-iterwriter/v4 v4.0.4
 	github.com/whosonfirst/go-whosonfirst-reader/v2 v2.0.0
-	github.com/whosonfirst/go-whosonfirst-spatial v0.18.1
-	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.10.3
-	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.15.2
+	github.com/whosonfirst/go-whosonfirst-spatial v0.18.2
+	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.10.4
+	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.15.3
 	github.com/whosonfirst/go-whosonfirst-spr/v2 v2.3.7
 	github.com/whosonfirst/go-whosonfirst-uri v1.3.0
 	github.com/whosonfirst/go-whosonfirst-validate v0.6.2
@@ -59,10 +59,7 @@ require (
 	github.com/ProtonMail/go-crypto v1.1.6 // indirect
 	github.com/RoaringBitmap/roaring v1.9.4 // indirect
 	github.com/aaronland/go-artisanal-integers v0.9.1 // indirect
-	github.com/aaronland/go-aws-auth v1.7.0 // indirect
-	github.com/aaronland/go-aws-auth/v2 v2.0.1 // indirect
-	github.com/aaronland/go-aws-dynamodb v0.4.2 // indirect
-	github.com/aaronland/go-aws-session v0.2.1 // indirect
+	github.com/aaronland/go-aws/v3 v3.0.2 // indirect
 	github.com/aaronland/go-brooklynintegers-api v1.2.10 // indirect
 	github.com/aaronland/go-http-leaflet v0.5.0 // indirect
 	github.com/aaronland/go-http-rewrite v1.1.0 // indirect
@@ -75,36 +72,38 @@ require (
 	github.com/aaronland/go-uid-artisanal v0.0.5 // indirect
 	github.com/aaronland/go-uid-proxy v0.4.1 // indirect
 	github.com/aaronland/go-uid-whosonfirst v0.0.7 // indirect
-	github.com/aaronland/gocloud-blob v0.6.2 // indirect
-	github.com/aaronland/gocloud-docstore v0.0.9 // indirect
+	github.com/aaronland/gocloud v1.0.1 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/apache/arrow/go/v16 v16.1.0 // indirect
 	github.com/apache/thrift v0.19.0 // indirect
 	github.com/aws/aws-sdk-go v1.55.7 // indirect
-	github.com/aws/aws-sdk-go-v2 v1.36.6 // indirect
-	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.11 // indirect
-	github.com/aws/aws-sdk-go-v2/config v1.29.18 // indirect
-	github.com/aws/aws-sdk-go-v2/credentials v1.17.71 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.33 // indirect
+	github.com/aws/aws-sdk-go-v2 v1.39.0 // indirect
+	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.1 // indirect
+	github.com/aws/aws-sdk-go-v2/config v1.31.8 // indirect
+	github.com/aws/aws-sdk-go-v2/credentials v1.18.12 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.19.5 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression v1.7.87 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.7 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.84 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.37 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.37 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.7 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.7 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.3 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.3.37 // indirect
-	github.com/aws/aws-sdk-go-v2/service/cognitoidentity v1.29.9 // indirect
-	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.44.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/iam v1.43.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.12.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.7.5 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.10.17 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.18 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.18.18 // indirect
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.84.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssm v1.60.2 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.25.6 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.30.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.34.1 // indirect
-	github.com/aws/smithy-go v1.22.4 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.4.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/cognitoidentity v1.33.4 // indirect
+	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.50.3 // indirect
+	github.com/aws/aws-sdk-go-v2/service/dynamodbstreams v1.26.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/iam v1.47.5 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.13.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.8.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.11.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.7 // indirect
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.88.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssm v1.64.4 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.29.3 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.34.4 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.38.4 // indirect
+	github.com/aws/smithy-go v1.23.0 // indirect
 	github.com/benbjohnson/clock v1.3.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bits-and-blooms/bitset v1.12.0 // indirect
@@ -152,7 +151,7 @@ require (
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mattn/go-sqlite3 v1.14.30 // indirect
+	github.com/mattn/go-sqlite3 v1.14.32 // indirect
 	github.com/minio/asm2plan9s v0.0.0-20200509001527-cdd76441f9d8 // indirect
 	github.com/minio/c2goasm v0.0.0-20190812172519-36a3d3bbc4f3 // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
@@ -179,12 +178,11 @@ require (
 	github.com/rs/cors v1.11.1 // indirect
 	github.com/schollz/progressbar/v3 v3.18.0 // indirect
 	github.com/sergi/go-diff v1.4.0 // indirect
-	github.com/sfomuseum/go-database v0.0.14 // indirect
+	github.com/sfomuseum/go-database v0.0.15 // indirect
 	github.com/sfomuseum/go-edtf v1.2.1 // indirect
 	github.com/sfomuseum/go-http-protomaps v0.3.0 // indirect
 	github.com/sfomuseum/go-http-rollup v0.0.3 // indirect
 	github.com/sfomuseum/go-www-show/v2 v2.0.0 // indirect
-	github.com/sfomuseum/runtimevar v1.3.2 // indirect
 	github.com/skeema/knownhosts v1.3.1 // indirect
 	github.com/spiffe/go-spiffe/v2 v2.5.0 // indirect
 	github.com/tdewolff/minify/v2 v2.20.32 // indirect
@@ -198,7 +196,7 @@ require (
 	github.com/whosonfirst/go-ioutil v1.0.2 // indirect
 	github.com/whosonfirst/go-rfc-5646 v0.1.0 // indirect
 	github.com/whosonfirst/go-sanitize v0.1.0 // indirect
-	github.com/whosonfirst/go-whosonfirst-database v0.0.9 // indirect
+	github.com/whosonfirst/go-whosonfirst-database v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-flags v0.5.2 // indirect
 	github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1 // indirect
 	github.com/whosonfirst/go-whosonfirst-names v0.1.0 // indirect
@@ -222,17 +220,17 @@ require (
 	go.opentelemetry.io/otel/trace v1.37.0 // indirect
 	go.uber.org/ratelimit v0.3.1 // indirect
 	gocloud.dev v0.43.0 // indirect
-	golang.org/x/crypto v0.40.0 // indirect
+	golang.org/x/crypto v0.41.0 // indirect
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b // indirect
-	golang.org/x/mod v0.25.0 // indirect
-	golang.org/x/net v0.42.0 // indirect
+	golang.org/x/mod v0.26.0 // indirect
+	golang.org/x/net v0.43.0 // indirect
 	golang.org/x/oauth2 v0.30.0 // indirect
 	golang.org/x/sync v0.16.0 // indirect
-	golang.org/x/sys v0.34.0 // indirect
-	golang.org/x/term v0.33.0 // indirect
-	golang.org/x/text v0.27.0 // indirect
+	golang.org/x/sys v0.35.0 // indirect
+	golang.org/x/term v0.34.0 // indirect
+	golang.org/x/text v0.28.0 // indirect
 	golang.org/x/time v0.12.0 // indirect
-	golang.org/x/tools v0.34.0 // indirect
+	golang.org/x/tools v0.35.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/api v0.242.0 // indirect
 	google.golang.org/genproto v0.0.0-20250715232539-7130f93afb79 // indirect
@@ -244,6 +242,6 @@ require (
 	modernc.org/libc v1.66.3 // indirect
 	modernc.org/mathutil v1.7.1 // indirect
 	modernc.org/memory v1.11.0 // indirect
-	modernc.org/sqlite v1.38.2 // indirect
+	modernc.org/sqlite v1.39.0 // indirect
 	zombiezen.com/go/sqlite v1.4.2 // indirect
 )
