@@ -40,21 +40,4 @@ done
 
 ## Fetching all the `whosonfirst-data-admin-*` repositories as GeoParquet files (native)
 
-It is also possible to create a GeoParquet file from one or more Who's On First repos natively (as in "not needing to install ogr2ogr (gdal)"). For example:
-
-```
-TO_EMIT=""
-
-REPOS=`./bin/wof repos -prefix 'whosonfirst-data-admin-'`
-
-for $REPO in ${REPOS}
-do
-	TO_EMIT="${TO_EMIT} https://github.com/whosonfirst-data/${REPO}.git"
-done
-
-./bin/wof emit -writer-uri 'geoparquet://?writer=stdout://' -iterator-uri git:///tmp ${TO_EMIT} > wof.parquet
-```
-
-#### Notes
-
-* Remember, this example is building a GeoParquet file for _all_ the Who's On First repositories so it will take a while.
+_This method has bugs. It will be updated when those issues have been resolved._
