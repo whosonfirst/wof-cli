@@ -36,7 +36,7 @@ done
 
 * If you have GDAL installed with VSI support you can skip writing the `geojsonl` file simply do this: `./bin/wof emit -format geojson -iterator-uri git:///tmp https://github.com/whosonfirst-data/${REPO}.git | ogr2ogr -f Parquery ${REPO}.parquet -oo OGRGeoJSONAllowNonStandard=YES 'GeoJSONSeq:/vsisstdin/'`
 
-* Because GeoParquet files are being created on a per-repo basis there is still the chance that there will be schema mismatches. There _shouldn't_ be but the reality is that it still happens, unforteunately.
+* Because GeoParquet files are being created on a per-repo basis there is still the chance that there will be schema mismatches. There _shouldn't_ be but the reality is that it still happens, unfortunately. You could modify the script above to stream (append) all `.geojsonl` data to a single file and the perform the `ogr2ogr` transformation as a final step (outside of the `for REPO in ${REPOS}` loop).
 
 ## Fetching all the `whosonfirst-data-admin-*` repositories as GeoParquet files (native)
 
@@ -57,4 +57,4 @@ done
 
 #### Notes
 
-* Remember, this example is building a GeoParquet file for _all_ the Who's On First directories so it will take a while.B
+* Remember, this example is building a GeoParquet file for _all_ the Who's On First repositories so it will take a while.
