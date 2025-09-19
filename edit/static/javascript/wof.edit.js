@@ -88,13 +88,26 @@ wof.edit = (function () {
 		raw.setAttribute("contentEditable", "plaintext-only");
 		raw.innerText = str_data;
 
-		raw.onchange = function(e) {
+		/*
+		raw.oninput = function(e) {
 		    const el = e.target;
-		    const val = el.value;
+		    const val = el.innerText;
 
-		    console.log("CHANGE", val);
+		    wof_validate(val).then(() => {
+			
+			wof_format(val).then((rsp) => {
+			    el.innerText = rsp;
+			}).catch((err) => {
+			    console.error("Failed to format data", err);
+			});
+			
+		    }).catch((err) => {
+			console.error("Failed to validate data", err);
+		    });
+		    
 		    return false;
 		};
+		 */
 		
 		const left = document.createElement("div");
 		left.appendChild(map_el);
