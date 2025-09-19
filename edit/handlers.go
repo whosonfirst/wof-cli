@@ -5,9 +5,14 @@ import (
 	"io/fs"
 	"log/slog"
 	"net/http"
+	"path/filepath"
 	"strings"
 	"sync"
 
+	"github.com/whosonfirst/go-whosonfirst-export/v3"
+	"github.com/whosonfirst/go-whosonfirst-validate"
+	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v3"
+	"github.com/whosonfirst/go-writer/v3"
 	"github.com/whosonfirst/wof/edit/static"
 )
 
@@ -68,6 +73,85 @@ func apiListHandler(data_fs fs.FS) http.Handler {
 			return
 		}
 
+	}
+
+	return http.HandlerFunc(fn)
+}
+
+func apiSaveHandler(data_fs fs.FS, wr writer.Writer) http.Handler {
+
+	fn := func(rsp http.ResponseWriter, req *http.Request) {
+
+		ctx := req.Context()
+
+		logger := slog.Default()
+		logger = logger.With("uri", req.URL.Path)
+
+		if req.Method != http.MethodPost {
+			http.Error(rsp, "Method not allowed", http.StatusMethodNotAllowed)
+			return
+		}
+
+		logger.Info("Save record")
+
+		fname := filepath.Base(req.URL.Path)
+
+		_, err := fs.Stat(data_fs, fname)
+
+		if err != nil {
+			logger.Error("Failed to stat URI", "fname", fname, "error", err)
+			http.Error(rsp, "Not found", http.StatusNotFound)
+			return
+		}
+
+		body, err := validate.EnsureValidGeoJSON(req.Body)
+
+		if err != nil {
+			logger.Error("Failed to ensure GeoJSON", "error", err)
+			http.Error(rsp, "Bad request", http.StatusBadRequest)
+			return
+		}
+
+		err = validate.Validate(body)
+
+		if err != nil {
+			logger.Error("Failed to validate body", "error", err)
+			http.Error(rsp, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		// START OF what might be better is to...
+		// ...read the original record from data_fs and then pass it
+		// along with body to a go-whosonfirst-export method which will
+		// to the prepareWith/removeTimestamps methods to determine if
+		// there are any changes
+
+		_, new_body, err := export.Export(ctx, body)
+
+		if err != nil {
+			logger.Error("Failed to export body", "error", err)
+			http.Error(rsp, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		// if has_changed {
+
+		_, err = wof_writer.WriteBytes(ctx, wr, new_body)
+
+		if err != nil {
+			logger.Error("Failed to write body", "error", err)
+			http.Error(rsp, "Internal server error", http.StatusInternalServerError)
+			return
+		}
+
+		// END OF what might be better is to...
+
+		// Write to data_fs here too ? Probably as this makes sense from a UI perspective
+		// but the problem is that fs.FS is read-only...
+		// }
+
+		rsp.Header().Set("Content-type", "application/json")
+		rsp.Write([]byte(new_body))
 	}
 
 	return http.HandlerFunc(fn)

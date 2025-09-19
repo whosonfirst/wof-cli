@@ -78,6 +78,7 @@ wof.edit = (function () {
 	    wof.edit.api.fetch(uri).then((data) => {
 
 		const str_data = JSON.stringify(data);
+		
 		const map_id = "map";
 		
 		const map_el = document.createElement("div");
@@ -100,6 +101,8 @@ wof.edit = (function () {
 		wrapper.appendChild(left);
 		wrapper.appendChild(right);
 
+		// Set up buttons and feedback
+		
 		const validate_btn = document.createElement("button");
 		validate_btn.setAttribute("class", "btn btn-primary");
 		validate_btn.appendChild(document.createTextNode("Validate"));
@@ -119,6 +122,42 @@ wof.edit = (function () {
 		buttons.appendChild(format_btn);		
 		buttons.appendChild(validate_btn);
 		buttons.appendChild(save_btn);
+
+		// Set up UI
+		
+		const feedback = document.createElement("div");
+		feedback.setAttribute("id", "feedback");
+		
+		const ui = document.createElement("div");
+		ui.appendChild(feedback);				
+		ui.appendChild(buttons);		
+		ui.appendChild(wrapper);
+		
+		
+		const root = document.getElementById("canvas");
+		root.innerHTML = "";
+		root.appendChild(ui);
+
+		wof_format(str_data).then((fmt_rsp) => {
+		    raw.innerText = fmt_rsp;
+		}).catch((err) => {
+		    console.error("Failed to format response", err);
+		})
+
+		// Set up map
+		
+		const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);
+		
+		const map = L.map(map_id);
+		map.fitBounds(bounds);
+		
+		const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
+		osm.addTo(map);
+
+		const feature = L.geoJSON(data);
+		feature.addTo(map);
+
+		// Set up button interactions
 
 		format_btn.onclick = function(){
 
@@ -171,8 +210,7 @@ wof.edit = (function () {
 		    }).catch((err) => {
 			console.error("Failed to validate data", err);
 			save_btn.setAttribute("disabled", "disabled");						
-		    });
-		    
+		    });		    
 		};
 
 		save_btn.onclick = function(){
@@ -194,7 +232,24 @@ wof.edit = (function () {
 			wof_format(str_data).then((fmt_rsp) => {
 
 			    raw.innerText = fmt_rsp;
-			    console.log("SAVE DATA HERE", fmt_rsp);
+
+			    wof.edit.api.save(uri, fmt_rsp).then(rsp =>
+				rsp.json()
+			    ).then((data) => {
+
+				console.log("OKAY SAVED");
+
+				const str_data = JSON.stringify(data);
+
+				wof_format(str_data).then((fmt_rsp) => {
+				    raw.innerText = fmt_rsp;
+				}).catch((err) => {
+				    console.error("Document saved, failed to format response", err);
+				});
+				
+			    }).catch((err) => {
+				console.error("Failed to save data", err);
+			    });
 			    
 			}).catch((err) => {
 			    console.error("Failed to format data", err);
@@ -205,35 +260,7 @@ wof.edit = (function () {
 			console.error("Failed to validate data", err);
 			save_btn.setAttribute("disabled", "disabled");						
 		    });
-		    
 		};
-		
-		const ui = document.createElement("div");
-		ui.appendChild(buttons);		
-		ui.appendChild(wrapper);
-		
-		
-		const root = document.getElementById("canvas");
-		root.innerHTML = "";
-		root.appendChild(ui);
-
-		wof_format(str_data).then((fmt_rsp) => {
-		    raw.innerText = fmt_rsp;
-		}).catch((err) => {
-		    console.error("Failed to format response", err);
-		})
-
-		const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);
-		console.log("BOUNDS", bounds);
-		
-		const map = L.map(map_id);
-		map.fitBounds(bounds);
-		
-		const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
-		osm.addTo(map);
-
-		const feature = L.geoJSON(data);
-		feature.addTo(map);
 		
 	    }).catch((err) => {
 		console.error("SAD", err)

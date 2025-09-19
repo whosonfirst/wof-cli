@@ -10,6 +10,7 @@ import (
 
 	"github.com/sfomuseum/go-www-show"
 	wof_uri "github.com/whosonfirst/go-whosonfirst-uri"
+	"github.com/whosonfirst/go-writer/v3"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
@@ -128,15 +129,24 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
 
+	root_fs := root.FS()
+
+	wr, err := writer.NewWriter(ctx, "stdout://")
+
+	if err != nil {
+		return fmt.Errorf("Failed to create new writer, %w", err)
+	}
+
 	// START OF make this a function
 	// that takes (??) and return a http.ServeMux
-
-	root_fs := root.FS()
 
 	mux := http.NewServeMux()
 
 	list_handler := apiListHandler(root_fs)
 	mux.Handle("/api/list", list_handler)
+
+	save_handler := apiSaveHandler(root_fs, wr)
+	mux.Handle("/api/save/", save_handler)
 
 	data_handler := dataHandler(root_fs)
 	data_handler = http.StripPrefix("/data/", data_handler)
