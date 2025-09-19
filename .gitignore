@@ -4,3 +4,4 @@ go.work*
 work
 *.geoparquet
 *.parquet
+.DS_Store

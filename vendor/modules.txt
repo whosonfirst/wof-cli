@@ -913,6 +913,9 @@ github.com/sfomuseum/go-http-rollup
 # github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.4
 ## explicit; go 1.22
 github.com/sfomuseum/go-sfomuseum-mapshaper
+# github.com/sfomuseum/go-www-show v1.0.0
+## explicit; go 1.23.0
+github.com/sfomuseum/go-www-show
 # github.com/sfomuseum/go-www-show/v2 v2.0.0
 ## explicit; go 1.23.0
 github.com/sfomuseum/go-www-show/v2

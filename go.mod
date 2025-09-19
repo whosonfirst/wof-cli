@@ -11,6 +11,7 @@ require (
 	github.com/sfomuseum/go-flags v0.11.0
 	github.com/sfomuseum/go-geojson-show v0.0.13
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.4
+	github.com/sfomuseum/go-www-show v1.0.0
 	github.com/sfomuseum/iso8601duration v1.1.0
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
