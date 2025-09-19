@@ -6,7 +6,7 @@ require (
 	github.com/aaronland/go-json-query v0.1.6
 	github.com/aaronland/go-roster v1.0.0
 	github.com/natefinch/atomic v1.0.1
-	github.com/paulmach/orb v0.11.1
+	github.com/paulmach/orb v0.12.0
 	github.com/sfomuseum/go-csvdict/v2 v2.0.1
 	github.com/sfomuseum/go-flags v0.11.0
 	github.com/sfomuseum/go-geojson-show v0.0.13
@@ -16,9 +16,9 @@ require (
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
 	github.com/whosonfirst/go-reader/v2 v2.0.0
-	github.com/whosonfirst/go-whosonfirst-export/v3 v3.1.0
+	github.com/whosonfirst/go-whosonfirst-export/v3 v3.2.0
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.29
-	github.com/whosonfirst/go-whosonfirst-format v1.0.1
+	github.com/whosonfirst/go-whosonfirst-format v1.0.2
 	github.com/whosonfirst/go-whosonfirst-github v0.9.2
 	github.com/whosonfirst/go-whosonfirst-id v1.3.1
 	github.com/whosonfirst/go-whosonfirst-iterate-git/v3 v3.0.5
@@ -29,7 +29,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-spatial v0.18.2
 	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.10.4
 	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.15.3
-	github.com/whosonfirst/go-whosonfirst-spr/v2 v2.3.7
+	github.com/whosonfirst/go-whosonfirst-spr/v2 v2.3.8
 	github.com/whosonfirst/go-whosonfirst-uri v1.3.0
 	github.com/whosonfirst/go-whosonfirst-validate v0.6.2
 	github.com/whosonfirst/go-whosonfirst-writer/v3 v3.1.7

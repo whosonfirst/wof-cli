@@ -96,7 +96,7 @@ func apiSaveHandler(data_fs fs.FS, wr writer.Writer) http.Handler {
 
 		fname := filepath.Base(req.URL.Path)
 
-		_, err := fs.Stat(data_fs, fname)
+		old_body, err := fs.ReadFile(data_fs, fname)
 
 		if err != nil {
 			logger.Error("Failed to stat URI", "fname", fname, "error", err)
@@ -120,38 +120,44 @@ func apiSaveHandler(data_fs fs.FS, wr writer.Writer) http.Handler {
 			return
 		}
 
-		// START OF what might be better is to...
-		// ...read the original record from data_fs and then pass it
-		// along with body to a go-whosonfirst-export method which will
-		// to the prepareWith/removeTimestamps methods to determine if
-		// there are any changes
-
-		_, new_body, err := export.Export(ctx, body)
+		has_changes, err := export.HasChanges(ctx, old_body, body)
 
 		if err != nil {
-			logger.Error("Failed to export body", "error", err)
+			logger.Error("Failed to determine if body has changes", "error", err)
 			http.Error(rsp, "Internal server error", http.StatusInternalServerError)
 			return
 		}
 
-		// if has_changed {
+		// Return 304 if !has_changes?
+		
+		if has_changes {
 
-		_, err = wof_writer.WriteBytes(ctx, wr, new_body)
+			logger.Info("Record has changed")
+			
+			_, new_body, err := export.Export(ctx, body)
 
-		if err != nil {
-			logger.Error("Failed to write body", "error", err)
-			http.Error(rsp, "Internal server error", http.StatusInternalServerError)
-			return
+			if err != nil {
+				logger.Error("Failed to export body", "error", err)
+				http.Error(rsp, "Internal server error", http.StatusInternalServerError)
+				return
+			}
+
+			_, err = wof_writer.WriteBytes(ctx, wr, new_body)
+
+			if err != nil {
+				logger.Error("Failed to write body", "error", err)
+				http.Error(rsp, "Internal server error", http.StatusInternalServerError)
+				return
+			}
+
+			// Write to data_fs here too ? Probably as this makes sense from a UI perspective
+			// but the problem is that fs.FS is read-only...
+
+			body = new_body
 		}
-
-		// END OF what might be better is to...
-
-		// Write to data_fs here too ? Probably as this makes sense from a UI perspective
-		// but the problem is that fs.FS is read-only...
-		// }
 
 		rsp.Header().Set("Content-type", "application/json")
-		rsp.Write([]byte(new_body))
+		rsp.Write([]byte(body))
 	}
 
 	return http.HandlerFunc(fn)

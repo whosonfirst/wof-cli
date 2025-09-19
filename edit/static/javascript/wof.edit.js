@@ -219,8 +219,8 @@ wof.edit = (function () {
 
 		    try {
 			data = JSON.parse(raw.innerText);
-			save_btn.setAttribute("disabled", "disabled");						
 		    } catch(err) {
+			save_btn.setAttribute("disabled", "disabled");			
 			console.error("Failed to parse data", err);
 			return;
 		    }
@@ -239,6 +239,8 @@ wof.edit = (function () {
 
 				console.log("OKAY SAVED");
 
+				// REDRAW MAP HERE...
+				    
 				const str_data = JSON.stringify(data);
 
 				wof_format(str_data).then((fmt_rsp) => {
