@@ -121,9 +121,46 @@ wof.edit = (function () {
 		wrapper.appendChild(left);
 		wrapper.appendChild(right);
 
+		const validate_btn = document.createElement("button");
+		validate_btn.setAttribute("class", "btn btn-primary");
+		validate_btn.appendChild(document.createTextNode("Validate"));
+
+		const format_btn = document.createElement("button");
+		format_btn.setAttribute("class", "btn btn-primary");
+		format_btn.appendChild(document.createTextNode("Format"));
+
+		const save_btn = document.createElement("button");
+		save_btn.setAttribute("class", "btn btn-primary");
+		save_btn.appendChild(document.createTextNode("Save"));
+
+		const buttons = document.createElement("div");
+		buttons.setAttribute("class", "btn-group");
+		buttons.setAttribute("id", "buttons");
+		
+		buttons.appendChild(format_btn);		
+		buttons.appendChild(validate_btn);
+		buttons.appendChild(save_btn);
+
+		format_btn.onclick = function(){
+
+		    const data = JSON.parse(raw.innerText);
+		    const str_data = JSON.stringify(data);
+
+		    wof_format(str_data).then((fmt_rsp) => {
+			raw.innerText = fmt_rsp;
+		    }).catch((err) => {
+			console.error("Failed to format data", err)
+		    });
+		};
+		
+		const ui = document.createElement("div");
+		ui.appendChild(buttons);		
+		ui.appendChild(wrapper);
+		
+		
 		const root = document.getElementById("canvas");
 		root.innerHTML = "";
-		root.appendChild(wrapper);
+		root.appendChild(ui);
 
 		wof_format(str_data).then((fmt_rsp) => {
 		    raw.innerText = fmt_rsp;
@@ -142,8 +179,6 @@ wof.edit = (function () {
 
 		const feature = L.geoJSON(data);
 		feature.addTo(map);
-
-		console.log("WOO");
 		
 	    }).catch((err) => {
 		console.error("SAD", err)
