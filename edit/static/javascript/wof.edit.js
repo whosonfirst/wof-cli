@@ -77,10 +77,7 @@ wof.edit = (function () {
 
 	    wof.edit.api.fetch(uri).then((data) => {
 
-		console.log("OK", data);
-
 		const str_data = JSON.stringify(data);
-
 		const map_id = "map";
 		
 		const map_el = document.createElement("div");
@@ -90,6 +87,14 @@ wof.edit = (function () {
 		raw.setAttribute("id", "raw");
 		raw.setAttribute("contentEditable", "plaintext-only");
 		raw.innerText = str_data;
+
+		raw.onchange = function(e) {
+		    const el = e.target;
+		    const val = el.value;
+
+		    console.log("CHANGE", val);
+		    return false;
+		};
 		
 		const left = document.createElement("div");
 		left.appendChild(map_el);
