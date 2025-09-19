@@ -128,6 +128,9 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
 
+	// START OF make this a function
+	// that takes (??) and return a http.ServeMux
+
 	root_fs := root.FS()
 
 	mux := http.NewServeMux()
@@ -142,6 +145,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	static_handler := staticHandler()
 	mux.Handle("/", static_handler)
 
+	// END OF make this a function
+
 	browser, err := show.NewBrowser(ctx, "web://")
 
 	if err != nil {
@@ -154,6 +159,4 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	}
 
 	return show.RunWithOptions(ctx, show_opts)
-
-	return nil
 }
