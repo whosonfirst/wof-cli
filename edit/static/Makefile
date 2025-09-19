@@ -9,6 +9,9 @@ leaflet:
 	curl -s -o css/leaflet.css https://unpkg.com/leaflet@$(LEAFLET_VERSION)/dist/leaflet.css
 	curl -s -o javascript/leaflet.js https://unpkg.com/leaflet@$(LEAFLET_VERSION)/dist/leaflet.js
 
+wofjs:
+	curl -s -o javascript/whosonfirst.bundle.min.js https://raw.githubusercontent.com/whosonfirst/js-whosonfirst/refs/heads/main/dist/whosonfirst.bundle.min.js
+
 wasmjs:
 	curl -s -o javascript/sfomuseum.golang.wasm.bundle.js https://raw.githubusercontent.com/sfomuseum/js-sfomuseum-golang-wasm/refs/heads/main/dist/sfomuseum.golang.wasm.bundle.js
 

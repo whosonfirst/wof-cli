@@ -34,7 +34,8 @@ wof.edit = (function () {
 		const count = rsp.length;
 
 		if (count == 1){
-		    console.log("Jump to show here...")
+		    _self.show(rsp[0]);
+		    return;
 		}
 		
 		const items = document.createElement("ul");
@@ -74,8 +75,58 @@ wof.edit = (function () {
 
 	    console.log("SHOW", uri);
 
-	    wof.edit.api.fetch(uri).then((rsp) => {
-		console.log("OK", rsp);
+	    wof.edit.api.fetch(uri).then((data) => {
+
+		console.log("OK", data);
+
+		const str_data = JSON.stringify(data);
+
+		const map_id = "map";
+		
+		const map_el = document.createElement("div");
+		map_el.setAttribute("id", map_id);
+
+		var raw = document.createElement("pre");
+		raw.setAttribute("id", "raw");
+		raw.setAttribute("contentEditable", "plaintext-only");
+		raw.innerText = str_data;
+		
+		const left = document.createElement("div");
+		left.appendChild(map_el);
+
+		const right = document.createElement("div");
+		right.appendChild(raw);
+		
+		var wrapper = document.createElement("div");
+		wrapper.setAttribute("id", "feature");
+
+		wrapper.appendChild(left);
+		wrapper.appendChild(right);
+
+		const root = document.getElementById("canvas");
+		root.innerHTML = "";
+		root.appendChild(wrapper);
+
+		wof_format(str_data).then((fmt_rsp) => {
+		    raw.innerText = fmt_rsp;
+		}).catch((err) => {
+		    console.error("Failed to format response", err);
+		})
+
+		const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);
+		console.log("BOUNDS", bounds);
+		
+		const map = L.map(map_id);
+		map.fitBounds(bounds);
+		
+		const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
+		osm.addTo(map);
+
+		const feature = L.geoJSON(data);
+		feature.addTo(map);
+
+		console.log("WOO");
+		
 	    }).catch((err) => {
 		console.error("SAD", err)
 	    });
