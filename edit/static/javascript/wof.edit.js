@@ -87,27 +87,6 @@ wof.edit = (function () {
 		raw.setAttribute("id", "raw");
 		raw.setAttribute("contentEditable", "plaintext-only");
 		raw.innerText = str_data;
-
-		/*
-		raw.oninput = function(e) {
-		    const el = e.target;
-		    const val = el.innerText;
-
-		    wof_validate(val).then(() => {
-			
-			wof_format(val).then((rsp) => {
-			    el.innerText = rsp;
-			}).catch((err) => {
-			    console.error("Failed to format data", err);
-			});
-			
-		    }).catch((err) => {
-			console.error("Failed to validate data", err);
-		    });
-		    
-		    return false;
-		};
-		 */
 		
 		const left = document.createElement("div");
 		left.appendChild(map_el);
@@ -143,14 +122,90 @@ wof.edit = (function () {
 
 		format_btn.onclick = function(){
 
-		    const data = JSON.parse(raw.innerText);
-		    const str_data = JSON.stringify(data);
+		    var data;
 
+		    try {
+			data = JSON.parse(raw.innerText);
+		    } catch(err) {
+			console.error("Failed to parse data", err);
+			save_btn.setAttribute("disabled", "disabled");
+			return;
+		    }
+		    
+		    const str_data = JSON.stringify(data);
+		    
 		    wof_format(str_data).then((fmt_rsp) => {
 			raw.innerText = fmt_rsp;
+			save_btn.removeAttribute("disabled");
 		    }).catch((err) => {
 			console.error("Failed to format data", err)
+			save_btn.setAttribute("disabled", "disabled");
 		    });
+		};
+
+		validate_btn.onclick = function() {
+
+		    var data;
+
+		    try {
+			data = JSON.parse(raw.innerText);
+		    } catch(err) {
+			console.error("Failed to parse data", err);
+			save_btn.setAttribute("disabled", "disabled");			
+			return;
+		    }
+		    
+		    const str_data = JSON.stringify(data);
+		    
+		    wof_validate(str_data).then(() => {
+			console.log("OK")
+			save_btn.removeAttribute("disabled");
+
+			wof_format(str_data).then((fmt_rsp) => {
+			    raw.innerText = fmt_rsp;			    
+			}).catch((err) => {
+			    console.error("Failed to format data", err);
+			    save_btn.setAttribute("disabled", "disabled");						    
+			});
+			
+		    }).catch((err) => {
+			console.error("Failed to validate data", err);
+			save_btn.setAttribute("disabled", "disabled");						
+		    });
+		    
+		};
+
+		save_btn.onclick = function(){
+
+		    var data;
+
+		    try {
+			data = JSON.parse(raw.innerText);
+			save_btn.setAttribute("disabled", "disabled");						
+		    } catch(err) {
+			console.error("Failed to parse data", err);
+			return;
+		    }
+		    
+		    const str_data = JSON.stringify(data);
+		    
+		    wof_validate(str_data).then(() => {
+
+			wof_format(str_data).then((fmt_rsp) => {
+
+			    raw.innerText = fmt_rsp;
+			    console.log("SAVE DATA HERE", fmt_rsp);
+			    
+			}).catch((err) => {
+			    console.error("Failed to format data", err);
+			    save_btn.setAttribute("disabled", "disabled");						    
+			});
+			
+		    }).catch((err) => {
+			console.error("Failed to validate data", err);
+			save_btn.setAttribute("disabled", "disabled");						
+		    });
+		    
 		};
 		
 		const ui = document.createElement("div");
