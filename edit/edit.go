@@ -6,11 +6,10 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/sfomuseum/go-www-show"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
-	// "github.com/whosonfirst/wof/writer"
-	"github.com/sfomuseum/go-www-show"
 )
 
 type RunOptions struct {
@@ -78,6 +77,9 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	}
 
 	mux := http.NewServeMux()
+
+	static_handler := staticHandler()
+	mux.Handle("/", static_handler)
 
 	browser, err := show.NewBrowser(ctx, "web://")
 
