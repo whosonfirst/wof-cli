@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"log/slog"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strings"
 	"sync"
@@ -21,18 +22,18 @@ func staticHandler() http.Handler {
 	return http.FileServer(http_fs)
 }
 
-func dataHandler(data_fs fs.FS) http.Handler {
-	http_fs := http.FS(data_fs)
+func dataHandler(data_root *os.Root) http.Handler {
+	http_fs := http.FS(data_root.FS())
 	return http.FileServer(http_fs)
 }
 
-func apiListHandler(data_fs fs.FS) http.Handler {
+func apiListHandler(data_root *os.Root) http.Handler {
 
 	once := sync.OnceValues(func() ([]string, error) {
 
 		paths := make([]string, 0)
 
-		err := fs.WalkDir(data_fs, ".", func(path string, d fs.DirEntry, err error) error {
+		err := fs.WalkDir(data_root.FS(), ".", func(path string, d fs.DirEntry, err error) error {
 
 			if err != nil {
 				return err
@@ -78,7 +79,7 @@ func apiListHandler(data_fs fs.FS) http.Handler {
 	return http.HandlerFunc(fn)
 }
 
-func apiSaveHandler(data_fs fs.FS, wr writer.Writer) http.Handler {
+func apiSaveHandler(data_root *os.Root, wr writer.Writer) http.Handler {
 
 	fn := func(rsp http.ResponseWriter, req *http.Request) {
 
@@ -96,7 +97,7 @@ func apiSaveHandler(data_fs fs.FS, wr writer.Writer) http.Handler {
 
 		fname := filepath.Base(req.URL.Path)
 
-		old_body, err := fs.ReadFile(data_fs, fname)
+		old_body, err := data_root.ReadFile(fname)
 
 		if err != nil {
 			logger.Error("Failed to stat URI", "fname", fname, "error", err)
@@ -129,11 +130,11 @@ func apiSaveHandler(data_fs fs.FS, wr writer.Writer) http.Handler {
 		}
 
 		// Return 304 if !has_changes?
-		
+
 		if has_changes {
 
 			logger.Info("Record has changed")
-			
+
 			_, new_body, err := export.Export(ctx, body)
 
 			if err != nil {
@@ -150,8 +151,13 @@ func apiSaveHandler(data_fs fs.FS, wr writer.Writer) http.Handler {
 				return
 			}
 
-			// Write to data_fs here too ? Probably as this makes sense from a UI perspective
-			// but the problem is that fs.FS is read-only...
+			err = data_root.WriteFile(fname, new_body, 0644)
+
+			if err != nil {
+				logger.Error("Failed to write body to data root", "error", err)
+				http.Error(rsp, "Internal server error", http.StatusInternalServerError)
+				return
+			}
 
 			body = new_body
 		}

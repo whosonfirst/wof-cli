@@ -129,9 +129,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
 
-	root_fs := root.FS()
-
-	wr, err := writer.NewWriter(ctx, "stdout://")
+	wr, err := writer.NewWriter(ctx, writer_uri)
 
 	if err != nil {
 		return fmt.Errorf("Failed to create new writer, %w", err)
@@ -142,13 +140,13 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	mux := http.NewServeMux()
 
-	list_handler := apiListHandler(root_fs)
+	list_handler := apiListHandler(root)
 	mux.Handle("/api/list", list_handler)
 
-	save_handler := apiSaveHandler(root_fs, wr)
+	save_handler := apiSaveHandler(root, wr)
 	mux.Handle("/api/save/", save_handler)
 
-	data_handler := dataHandler(root_fs)
+	data_handler := dataHandler(root)
 	data_handler = http.StripPrefix("/data/", data_handler)
 	mux.Handle("/data/", data_handler)
 

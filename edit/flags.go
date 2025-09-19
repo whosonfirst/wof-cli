@@ -13,7 +13,7 @@ var writer_uri string
 func DefaultFlagSet() *flag.FlagSet {
 
 	fs := flagset.NewFlagSet("edit")
-	fs.StringVar(&writer_uri, "writer-uri", "stdout://", "...")
+	fs.StringVar(&writer_uri, "writer-uri", "null://", "...")
 
 	fs.Usage = func() {
 		fmt.Fprintf(os.Stderr, "\"Export-ify\" one or more Who's On First records.\n")

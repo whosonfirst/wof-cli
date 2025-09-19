@@ -2,6 +2,8 @@ var wof = wof || {};
 
 wof.edit = (function () {
 
+    var feature_layer = null;
+    
     var self = {
 	
 	init: function() {
@@ -154,8 +156,8 @@ wof.edit = (function () {
 		const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
 		osm.addTo(map);
 
-		const feature = L.geoJSON(data);
-		feature.addTo(map);
+		feature_layer = L.geoJSON(data);
+		feature_layer.addTo(map);
 
 		// Set up button interactions
 
@@ -239,8 +241,12 @@ wof.edit = (function () {
 
 				console.log("OKAY SAVED");
 
-				// REDRAW MAP HERE...
-				    
+				const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);
+				map.fitBounds(bounds);
+				map.removeLayer(feature_layer);
+				feature_layer = L.geoJSON(data);
+				feature_layer.addTo(map);
+				
 				const str_data = JSON.stringify(data);
 
 				wof_format(str_data).then((fmt_rsp) => {
