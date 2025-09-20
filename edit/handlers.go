@@ -1,6 +1,7 @@
 package edit
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/fs"
 	"log/slog"
@@ -12,7 +13,6 @@ import (
 
 	"github.com/whosonfirst/go-whosonfirst-export/v3"
 	"github.com/whosonfirst/go-whosonfirst-validate"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v3"
 	"github.com/whosonfirst/go-writer/v3"
 	"github.com/whosonfirst/wof/edit/static"
 )
@@ -143,7 +143,12 @@ func apiSaveHandler(data_root *os.Root, wr writer.Writer) http.Handler {
 				return
 			}
 
-			_, err = wof_writer.WriteBytes(ctx, wr, new_body)
+			// Note how this is NOT using whosonfirst/go-whosonfirst-writer that
+			// will explicitly write files as 123/456/7/1234567.geojson which is
+			// not necessarily the desired effect.
+			
+			br := bytes.NewReader(new_body)
+			_, err = wr.Write(ctx, fname, br)
 
 			if err != nil {
 				logger.Error("Failed to write body", "error", err)
