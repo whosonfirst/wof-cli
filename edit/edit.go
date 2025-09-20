@@ -7,10 +7,10 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"sync"
 
 	"github.com/sfomuseum/go-www-show"
 	wof_uri "github.com/whosonfirst/go-whosonfirst-uri"
-	"github.com/whosonfirst/go-writer/v3"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
@@ -75,6 +75,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to open root, %w", err)
 	}
 
+	uri_map := new(sync.Map)
+
 	cb := func(ctx context.Context, uri string) error {
 
 		logger.Info("Process record", "uri", uri)
@@ -119,6 +121,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 			return fmt.Errorf("Failed to close %s after writing, %w", uri, err)
 		}
 
+		uri_map.Store(fname, uri)
 		logger.Info("Copy record to tmpdir root", "uri", uri, "fname", fname)
 		return nil
 	}
@@ -129,12 +132,6 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
 
-	wr, err := writer.NewWriter(ctx, writer_uri)
-
-	if err != nil {
-		return fmt.Errorf("Failed to create new writer, %w", err)
-	}
-
 	// START OF make this a function
 	// that takes (??) and return a http.ServeMux
 
@@ -143,7 +140,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	list_handler := apiListHandler(root)
 	mux.Handle("/api/list", list_handler)
 
-	save_handler := apiSaveHandler(root, wr)
+	save_handler := apiSaveHandler(root, uri_map)
 	mux.Handle("/api/save/", save_handler)
 
 	data_handler := dataHandler(root)

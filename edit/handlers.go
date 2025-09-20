@@ -1,7 +1,6 @@
 package edit
 
 import (
-	"bytes"
 	"encoding/json"
 	"io/fs"
 	"log/slog"
@@ -13,8 +12,8 @@ import (
 
 	"github.com/whosonfirst/go-whosonfirst-export/v3"
 	"github.com/whosonfirst/go-whosonfirst-validate"
-	"github.com/whosonfirst/go-writer/v3"
 	"github.com/whosonfirst/wof/edit/static"
+	"github.com/whosonfirst/wof/writer"
 )
 
 func staticHandler() http.Handler {
@@ -79,7 +78,7 @@ func apiListHandler(data_root *os.Root) http.Handler {
 	return http.HandlerFunc(fn)
 }
 
-func apiSaveHandler(data_root *os.Root, wr writer.Writer) http.Handler {
+func apiSaveHandler(data_root *os.Root, uri_map *sync.Map) http.Handler {
 
 	fn := func(rsp http.ResponseWriter, req *http.Request) {
 
@@ -96,6 +95,17 @@ func apiSaveHandler(data_root *os.Root, wr writer.Writer) http.Handler {
 		logger.Info("Save record")
 
 		fname := filepath.Base(req.URL.Path)
+
+		v, exists := uri_map.Load(fname)
+
+		if !exists {
+			logger.Error("Failed to find URI in lookup", "fname", fname)
+			http.Error(rsp, "Not found", http.StatusNotFound)
+			return
+		}
+
+		uri := v.(string)
+		logger = logger.With("uri", uri)
 
 		old_body, err := data_root.ReadFile(fname)
 
@@ -145,10 +155,11 @@ func apiSaveHandler(data_root *os.Root, wr writer.Writer) http.Handler {
 
 			// Note how this is NOT using whosonfirst/go-whosonfirst-writer that
 			// will explicitly write files as 123/456/7/1234567.geojson which is
-			// not necessarily the desired effect.
-			
-			br := bytes.NewReader(new_body)
-			_, err = wr.Write(ctx, fname, br)
+			// not necessarily the desired effect. This is also not using go-writer
+			// since nothing else does and right now the semantics around writing
+			// files from the tool are encapsulated in wof-cli/writer.
+
+			err = writer.Write(ctx, uri, new_body)
 
 			if err != nil {
 				logger.Error("Failed to write body", "error", err)
