@@ -13,11 +13,15 @@ wof.edit = (function () {
 		sfomuseum.golang.wasm.fetch("wasm/wof_format.wasm").then((rsp) => {
 		    
 		    sfomuseum.golang.wasm.fetch("wasm/wof_validate.wasm").then((rsp) => {
-			
-			resolve();
+
+			sfomuseum.golang.wasm.fetch("wasm/wof_placetypes.wasm").then((rsp) => {			
+			    resolve();
+			}).catch((err) => {
+			    reject("Failed to load wof_placetypes WASM binary " + err);
+			});
 			
 		    }).catch((err) => {
-			reject("Failed to wof_validate WASM binary " + err);
+			reject("Failed to load wof_validate WASM binary " + err);
 		    });
 		    
 		}).catch((err) => {
@@ -26,7 +30,7 @@ wof.edit = (function () {
 
 		});
 	},
-
+	
 	list: function() {
 
 	    const _self = self;
@@ -95,7 +99,15 @@ wof.edit = (function () {
 		left.appendChild(map_el);
 
 		const right = document.createElement("div");
+		right.setAttribute("id", "right");
 		right.appendChild(raw);
+
+		const form_t = document.getElementById("edit-form");
+		console.log("FORM YO", form_t);
+		
+		if (form_t){
+		    right.appendChild(form_t);
+		}
 		
 		var wrapper = document.createElement("div");
 		wrapper.setAttribute("id", "feature");
@@ -239,8 +251,6 @@ wof.edit = (function () {
 				rsp.json()
 			    ).then((data) => {
 
-				console.log("OKAY SAVED");
-
 				const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);
 				map.fitBounds(bounds);
 				map.removeLayer(feature_layer);
@@ -274,6 +284,11 @@ wof.edit = (function () {
 		console.error("SAD", err)
 	    });
 	},
+
+	populate_form: function(data){
+
+	},
+	
     };
     
     return self;

@@ -24,4 +24,237 @@
     <script type="text/javascript" src="javascript/wof.edit.js"></script>
     <script type="text/javascript" src="javascript/wof.edit.api.js"></script>        
     <script type="text/javascript" src="javascript/wof.edit.init.js"></script>
+    <template id="edit-form">
+	<form class="needs-validation" novalidate action="" method="POST">
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/name.json -->
+	    <div class="form-group">
+		<label for="wof-name">Name</label>&nbsp;<small>(<code>wof:name</code>)</small>
+		<input type="text" class="form-control wof-input" name="wof:name" data-wof-validation-regex="^.{1,}$" value="{{ wof_doc.properties['wof:name'] }}">
+		<small id="wof-name-help" class="form-text text-muted">An English UTF-7 transliterated representation of the name. (Some features have UTF-8 names.)</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/placetype.json -->
+	    <div class="form-group">
+		<label for="wof-placetype">Placetype</label>&nbsp;<small>(<code>wof:placetype</code>)</small>
+		<input type="text" class="form-control wof-input" name="wof:placetype" disabled value="{{ wof_doc.properties['wof:placetype'] }}">
+		<small id="wof-placetype-help" class="form-text text-muted">What WOF calls a record's administrative division type.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/placetype_alt.json -->
+	    <div class="form-group">
+		<label for="wof-placetype_alt">Alternate Placetypes</label>&nbsp;<small>(<code>wof:placetype_alt</code>)</small>
+		<input type="text" class="form-control wof-input" name="wof:placetype_alt" data-wof-type="list" value='{{ (wof_doc.properties['wof:placetype_alt'] or [])|tojson }}'>
+		<small id="wof-placetype_alt-help" class="form-text text-muted">A single placetype denoting alternate representations of a place (exclusive of the placetype value).</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/shortcode.json -->
+	    <div class="form-group">
+		<label for="wof-shortcode">Shortcode</label>&nbsp;<small>(<code>wof:shortcode</code>)</small>
+		<input type="text" class="form-control wof-input" name="wof:shortcode" data-wof-validation-regex="^[A-Za-z0-9]{2,3}$" value="{{ wof_doc.properties['wof:shortcode'] }}">
+		<small id="wof-shortcode-help" class="form-text text-muted">A two or three character alphabetic code, preferring three characters for country, two characters for region, and either two or three characters for county.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/mz/is_current.json -->
+	    <div class="form-group">
+		<label for="mz-is_current">Is Current</label>&nbsp;<small>(<code>mz:is_current</code>)</small>
+		<input type="text" class="form-control wof-input" name="mz:is_current" data-wof-validation-regex="^(-1|0|1)$" value="{{ wof_doc.properties['mz:is_current'] }}">
+		<small id="mz-is_current-help" class="form-text text-muted">Defaults to -1 when status is not known, set to 1 when we know a place is active, and 0 if it's closed.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/mz/is_funky.json -->
+	    <div class="form-group">
+		<label for="mz-is_funky">Disabled</label>&nbsp;<small>(<code>mz:is_funky</code>)</small>
+		<input type="text" class="form-control wof-input" name="mz:is_funky" data-wof-validation-regex="^(-1|0|1)$" value="{{ wof_doc.properties['mz:is_funky'] }}">
+		<small id="mz-is_funky-help" class="form-text text-muted">Used when Mapzen suspects the record is bad or inappropriate but additional confirmation is needed before the feature is deprecated. Records with a 1 value are recommended to be hidden from map display and search unless explicitly asked for by name.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/mz/hierarchy_label.json -->
+	    <div class="form-group">
+		<label for="mz-hierarchy_label">Include in Hierarchy Label</label>&nbsp;<small>(<code>mz:hierarchy_label</code>)</small>
+		<input type="text" class="form-control wof-input" name="mz:hierarchy_label" data-wof-validation-regex="^(-1|0|1)$" value="{{ wof_doc.properties['mz:hierarchy_label'] }}">
+		<small id="mz-hierarchy_label-help" class="form-text text-muted">Used when generating place labels in geocoding software, like Pelias; this property defaults to True unless it is set to 0 manually. When Pelias decorates an address string, the hierarchy_label property is used to determine what is included in that address string.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/edtf/cessation.json -->
+	    <div class="form-group">
+		<label for="edtf-cessation">Cessation</label>&nbsp;<small>(<code>edtf:cessation</code>)</small>
+		<input type="text" class="form-control wof-input" name="edtf:cessation" value="{{ wof_doc.properties['edtf:cessation'] }}">
+		<small id="edtf-cessation-help" class="form-text text-muted">Indicates when a place stopped being a going concern. The semantics for something ceasing may vary from placetype to placetype. For example, a venue may cease operations or a country may split in to multiple countries. Supports EDTF date notation like: 2000, 2000-01, 2000-01-01 and approximate dates like ~2000. Defaults to uuuu when unknown.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/edtf/deprecated.json -->
+	    <div class="form-group">
+		<label for="edtf-deprecated">Deprecated</label>&nbsp;<small>(<code>edtf:deprecated</code>)</small>
+		<input type="text" class="form-control wof-input" name="edtf:deprecated" value="{{ wof_doc.properties['edtf:deprecated'] }}">
+		<small id="edtf-deprecated-help" class="form-text text-muted">Indicates the date when a place was determined to be invalid (was never a going concern). Supports EDTF date notation like: 2000, 2000-01, 2000-01-01 and approximate dates like ~2000. Defaults to uuuu when unknown.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/edtf/inception.json -->
+	    <div class="form-group">
+		<label for="edtf-inception">Inception</label>&nbsp;<small>(<code>edtf:inception</code>)</small>
+		<input type="text" class="form-control wof-input" name="edtf:inception" value="{{ wof_doc.properties['edtf:inception'] }}">
+		<small id="edtf-inception-help" class="form-text text-muted">Indicates the date when a place was first created or established. Supports EDTF date notation like: 2000, 2000-01, 2000-01-01 and approximate dates like ~2000. Defaults to uuuu when unknown.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/edtf/superseded.json -->
+	    <div class="form-group">
+		<label for="edtf-superseded">Superseded</label>&nbsp;<small>(<code>edtf:superseded</code>)</small>
+		<input type="text" class="form-control wof-input" name="edtf:superseded" value="{{ wof_doc.properties['edtf:superseded'] }}">
+		<small id="edtf-superseded-help" class="form-text text-muted">Indicates the date when a record was superseded by another record. Supports EDTF date notation like: 2000, 2000-01, 2000-01-01 and approximate dates like ~2000. Defaults to uuuu when unknown.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/population.json -->
+	    <div class="form-group">
+		<label for="wof-population">Population</label>&nbsp;<small>(<code>wof:population</code>)</small>
+		<input type="text" class="form-control wof-input" name="wof:population" data-wof-validation-regex="^\d+$" value="{{ wof_doc.properties['wof:population'] }}">
+		<small id="wof-population-help" class="form-text text-muted">An integer value to represent the most current, known population of a place.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/mz/min_zoom.json -->
+	    <div class="form-group">
+		<label for="mz-min_zoom">Min Zoom</label>&nbsp;<small>(<code>mz:min_zoom</code>)</small>
+		<input type="text" class="form-control wof-input" name="mz:min_zoom" data-wof-validation-regex="^\d+\.?\d*$" value="{{ wof_doc.properties['mz:min_zoom'] }}">
+		<small id="mz-min_zoom-help" class="form-text text-muted">Float values (though in practice mosts are integer values) that match to web map zoom schema. Common range is 0.0 to 18.0, though they can be greater.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/mz/max_zoom.json -->
+	    <div class="form-group">
+		<label for="mz-max_zoom">Max Zoom</label>&nbsp;<small>(<code>mz:max_zoom</code>)</small>
+		<input type="text" class="form-control wof-input" name="mz:max_zoom" data-wof-validation-regex="^\d+\.?\d*$" value="{{ wof_doc.properties['mz:max_zoom'] }}">
+		<small id="mz-max_zoom-help" class="form-text text-muted">Float values (though in practice mosts are integer values) that match to web map zoom schema. Common range is 0.0 to 18.0, though they can be greater.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/lbl/min_zoom.json -->
+	    <div class="form-group">
+		<label for="lbl-min_zoom">Label Min Zoom</label>&nbsp;<small>(<code>lbl:min_zoom</code>)</small>
+		<input type="text" class="form-control wof-input" name="lbl:min_zoom" data-wof-validation-regex="^\d+\.?\d*$" value="{{ wof_doc.properties['lbl:min_zoom'] }}">
+		<small id="lbl-min_zoom-help" class="form-text text-muted">When the feature's label should first appear. Float values (though in practice mosts are integer values) that match to web map zoom schema. Common range is 0.0 to 18.0, though they can be greater.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/lbl/max_zoom.json -->
+	    <div class="form-group">
+		<label for="lbl-max_zoom">Label Max Zoom</label>&nbsp;<small>(<code>lbl:max_zoom</code>)</small>
+		<input type="text" class="form-control wof-input" name="lbl:max_zoom" data-wof-validation-regex="^\d+\.?\d*$" value="{{ wof_doc.properties['lbl:max_zoom'] }}">
+		<small id="lbl-max_zoom-help" class="form-text text-muted">When the feature's label should be removed (or switched to a different representation like exterior ring labels). Float values (though in practice mosts are integer values) that match to web map zoom schema. Common range is 0.0 to 18.0, though they can be greater.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/lang_x_spoken.json -->
+	    <div class="form-group">
+		<label for="wof-lang_x_spoken">Spoken Languages</label>&nbsp;<small>(<code>wof:lang_x_spoken</code>)</small>
+		<input type="text" class="form-control wof-input" name="wof:lang_x_spoken" data-wof-type="list" pattern="^[a-z]{3}$" value='{{ (wof_doc.properties['wof:lang_x_spoken'] or [])|tojson }}'>
+		<small id="wof-lang_x_spoken-help" class="form-text text-muted">One or more ISO-639-3 language identifiers. These represent the languages, inclusive of official languages, spoken in the location of the corresponding WOF record.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/lang_x_official.json -->
+	    <div class="form-group">
+		<label for="wof-lang_x_official">Official Languages</label>&nbsp;<small>(<code>wof:lang_x_official</code>)</small>
+		<input type="text" class="form-control wof-input" name="wof:lang_x_official" data-wof-type="list" pattern="^[a-z]{3}$" value='{{ (wof_doc.properties['wof:lang_x_official'] or [])|tojson }}'>
+		<small id="wof-lang_x_official-help" class="form-text text-muted">One or more ISO-639-3 language identifiers. These represent the officially recognized languages of the location of the corresponding WOF record.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/country.json -->
+	    <div class="form-group">
+		<label for="wof-country">Country Code</label>&nbsp;<small>(<code>wof:country</code>)</small>
+		<input type="text" disabled class="form-control wof-input" name="wof:country" data-wof-validation-regex="^[A-Za-z]{2}$" value="{{ wof_doc.properties['wof:country'] }}">
+		<small id="wof-country-help" class="form-text text-muted">A two-letter country code from ISO 3166.</small>
+	    </div>
+	    <!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/iso/country.json -->
+	    <div class="form-group">
+		<label for="iso-country">ISO Country Code</label>&nbsp;<small>(<code>iso:country</code>)</small>
+		<input type="text" disabled class="form-control wof-input" name="iso:country" data-wof-validation-regex="^[A-Za-z]{2}$" value="{{ wof_doc.properties['iso:country'] }}">
+		<small id="iso-country-help" class="form-text text-muted">The two-letter country code from ISO 3166-1.</small>
+	    </div>
+	    
+	    <h4>Localized Names</h4>
+	    <div class="form-group">
+		<label for="alternate-names-selected">Filter</label>
+		<input type="text" class="form-control" id="alternate-names-selected">
+		{%- if localized_names|length == 1 %}
+		<small class="form-text text-muted">This place has localized names in 1 language. English is shown by default. Add more to the filter box to show more languages.</small>
+		{%- else %}
+		<small class="form-text text-muted">This place has localized names in {{ localized_names|length }} languages. English is shown by default. Add more to the filter box to show more languages.</small>
+		{%- endif %}
+	    </div>
+	    <div class="form-group">
+		{%- for lang, specs in localized_names.items() %}
+		<div class="row localized-names-row" data-lang="{{ lang }}" style="display: none;">
+		    <div class="col-md-2"><h4>{{ lang_expansion.get(lang, lang) }}</h4><small>(<code>{{ lang }}</code>)</small></div>
+		    <div class="col-md-10">
+			{%- for spec, expanded_spec in name_specs.items() %}
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">{{ expanded_spec }}</label>
+			    <div class="col-md-10">
+				<input name="name:{{ lang }}_x_{{ spec }}" data-spec="{{ spec }}" class="form-control use-tagify" value='{{ (localized_names[lang][spec] or [])|tojson }}' />
+			    </div>
+			</div>
+			{%- endfor %}
+		    </div>
+		</div>
+		{%- endfor %}
+		<div id="localized-names-row-template" class="row localized-names-row" data-lang="" style="display: none;">
+		    <div class="col-md-2"><h4></h4><small>(<code></code>)</small></div>
+		    <div class="col-md-10">
+			{%- for spec, expanded_spec in name_specs.items() %}
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">{{ expanded_spec }}</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="{{ spec }}" class="form-control" value="" />
+			    </div>
+			</div>
+			{%- endfor %}
+		    </div>
+		</div>
+	    </div>
+	    
+	    <h4>Localized Labels</h4>
+	    <div class="form-group">
+		<label for="localized-labels-selected">Filter</label>
+		<input type="text" class="form-control" id="localized-labels-selected">
+		{%- if localized_labels|length == 1 %}
+		<small class="form-text text-muted">This place has localized labels in 1 language. English is shown by default. Add more to the filter box to show more languages.</small>
+		{%- else %}
+		<small class="form-text text-muted">This place has localized labels in {{ localized_labels|length }} languages. English is shown by default. Add more to the filter box to show more languages.</small>
+		{%- endif %}
+	    </div>
+	    <div class="form-group">
+		{%- for lang, specs in localized_labels.items() %}
+		<div class="row localized-labels-row" data-lang="{{ lang }}" style="display: none;">
+		    <div class="col-md-2"><h4>{{ lang_expansion.get(lang, lang) }}</h4><small>(<code>{{ lang }}</code>)</small></div>
+		    <div class="col-md-10">
+			{%- for spec, expanded_spec in label_specs.items() %}
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">{{ expanded_spec }}</label>
+			    <div class="col-md-10">
+				<input name="label:{{ lang }}_x_{{ spec }}" data-spec="{{ spec }}" class="form-control use-tagify" value='{{ (localized_labels[lang][spec] or [])|tojson }}' />
+			    </div>
+			</div>
+			{%- endfor %}
+		    </div>
+		</div>
+		{%- endfor %}
+		<div id="localized-labels-row-template" class="row localized-labels-row" data-lang="" style="display: none;">
+		    <div class="col-md-2"><h4></h4><small>(<code></code>)</small></div>
+		    <div class="col-md-10">
+			{%- for spec, expanded_spec in label_specs.items() %}
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">{{ expanded_spec }}</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="{{ spec }}" class="form-control" value="" />
+			    </div>
+			</div>
+			{%- endfor %}
+		    </div>
+		</div>
+	    </div>
+	    
+	    <h4>Concordances</h4>
+	    <div class="form-group">
+		{%- for k, v in (wof_doc.properties['wof:concordances'] or {}).items() %}
+		<div class="form-group concordance-row">
+		    <div class="row">
+			<label class="col-sm-4 col-form-label">{{ provider_expansion.get(k, k) }}&nbsp;<small>(<code>{{ k }}</code>)</small></label>
+			<div class="col-sm-8">
+			    <input type="text" class="form-control" name="wof:concordances_x_{{ k }}" value="{{ v }}" />
+			</div>
+		    </div>
+		</div>
+		{%- endfor %}
+		<div id="new-concordance-row" class="form-group concordance-row">
+		    <div class="row">
+			<div class="col-sm-4">
+			    <input type="text" class="form-control" name="new-wof:concordances-name" placeholder="wd:id" />
+			</div>
+			<div class="col-sm-8">
+			    <input type="text" class="form-control" name="new-wof:concordances-value" placeholder="Q1234" />
+			</div>
+		    </div>
+		</div>
+		<div class="row">
+		    <button type="button" id="add-concordance" class="btn btn-sm btn-outline-primary">Add New Concordance</button>
+		</div>
+	    </div>	    
+	</form>
+    </template>
 </html>
