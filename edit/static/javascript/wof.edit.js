@@ -10,25 +10,13 @@ wof.edit = (function () {
 	    
 	    return new Promise((resolve, reject) => {
 
-		sfomuseum.golang.wasm.fetch("wasm/wof_format.wasm").then((rsp) => {
-		    
-		    sfomuseum.golang.wasm.fetch("wasm/wof_validate.wasm").then((rsp) => {
-
-			sfomuseum.golang.wasm.fetch("wasm/wof_placetypes.wasm").then((rsp) => {			
-			    resolve();
-			}).catch((err) => {
-			    reject("Failed to load wof_placetypes WASM binary " + err);
-			});
-			
-		    }).catch((err) => {
-			reject("Failed to load wof_validate WASM binary " + err);
-		    });
-		    
+		sfomuseum.golang.wasm.fetch("wasm/wof_edit.wasm").then((rsp) => {			
+		    resolve();
 		}).catch((err) => {
-		    reject("Failed to load update wof_format WASM binary " + err);
+		    reject("Failed to load wof_placetypes WASM binary " + err);
 		});
-
-		});
+		
+	    });
 	},
 	
 	list: function() {
