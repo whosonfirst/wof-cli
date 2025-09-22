@@ -18,20 +18,21 @@ require (
 	github.com/whosonfirst/go-reader/v2 v2.0.0
 	github.com/whosonfirst/go-whosonfirst-export/v3 v3.2.0
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.29
-	github.com/whosonfirst/go-whosonfirst-format v1.0.2
+	github.com/whosonfirst/go-whosonfirst-format v1.1.0
 	github.com/whosonfirst/go-whosonfirst-github v0.9.2
 	github.com/whosonfirst/go-whosonfirst-id v1.3.1
 	github.com/whosonfirst/go-whosonfirst-iterate-git/v3 v3.0.5
 	github.com/whosonfirst/go-whosonfirst-iterate-reader/v3 v3.0.2
 	github.com/whosonfirst/go-whosonfirst-iterate/v3 v3.2.0
 	github.com/whosonfirst/go-whosonfirst-iterwriter/v4 v4.0.4
+	github.com/whosonfirst/go-whosonfirst-placetypes v0.9.0
 	github.com/whosonfirst/go-whosonfirst-reader/v2 v2.0.0
 	github.com/whosonfirst/go-whosonfirst-spatial v0.18.2
 	github.com/whosonfirst/go-whosonfirst-spatial-pmtiles v0.10.4
 	github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.15.3
 	github.com/whosonfirst/go-whosonfirst-spr/v2 v2.3.8
 	github.com/whosonfirst/go-whosonfirst-uri v1.3.0
-	github.com/whosonfirst/go-whosonfirst-validate v0.6.2
+	github.com/whosonfirst/go-whosonfirst-validate v0.7.0
 	github.com/whosonfirst/go-whosonfirst-writer/v3 v3.1.7
 	github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.2
 	github.com/whosonfirst/go-writer-geoparquet/v3 v3.1.2
@@ -201,7 +202,6 @@ require (
 	github.com/whosonfirst/go-whosonfirst-flags v0.5.2 // indirect
 	github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1 // indirect
 	github.com/whosonfirst/go-whosonfirst-names v0.1.0 // indirect
-	github.com/whosonfirst/go-whosonfirst-placetypes v0.8.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-sources v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-spelunker v0.0.6 // indirect
 	github.com/whosonfirst/go-whosonfirst-sqlite-spr/v2 v2.1.0 // indirect
