@@ -90,11 +90,10 @@ wof.edit = (function () {
 		right.setAttribute("id", "right");
 		right.appendChild(raw);
 
-		const form_t = document.getElementById("edit-form");
-		console.log("FORM YO", form_t);
+		const form_t = document.querySelector("#edit-form");
 		
 		if (form_t){
-		    right.appendChild(form_t);
+		    right.appendChild(form_t.content.cloneNode(true));
 		}
 		
 		var wrapper = document.createElement("div");
