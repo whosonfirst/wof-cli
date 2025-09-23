@@ -3,6 +3,7 @@ var wof = wof || {};
 wof.edit = (function () {
 
     var feature_layer = null;
+    var alert_timeout = null;
     
     var self = {
 	
@@ -19,6 +20,67 @@ wof.edit = (function () {
 	    });
 	},
 
+	feedback: function(msg, ttl){
+
+	    if (! ttl){
+		ttl = 5000;
+	    }
+	    
+	    self.alert(msg, ttl);
+	},
+
+	alert: function(msg, ttl){
+
+	    const dlg = document.createElement("dialog");
+	    dlg.setAttribute("id", "alert");
+	    dlg.setAttribute("class", "alert");
+	    
+	    const close = document.createElement("div");
+	    close.setAttribute("class", "alert-close");
+
+		close.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg>';	    
+
+	    close.onclick = function(e){
+
+		if (alert_timeout){
+		    clearTimeout(alert_timeout);
+		}
+		
+		dlg.close()
+		document.body.removeChild(dlg);		
+	    };
+
+	    const body = document.createElement("div");
+	    body.setAttribute("class", "alert-body");
+	    
+	    body.appendChild(document.createTextNode(msg));
+
+	    dlg.appendChild(close);
+	    dlg.appendChild(body);
+
+	    document.body.append(dlg);	    
+	    dlg.showModal();
+
+	    if (ttl){
+
+		if (alert_timeout){
+		    clearTimeout(alert_timeout);
+		}
+		
+		alert_timeout = setTimeout(function(){
+
+		    const dlg = document.querySelector("#alert");
+		    console.debug("Remove dialog", dlg);
+		    
+		    if (dlg){
+			dlg.close()
+			document.body.removeChild(dlg);
+		    }
+		    
+		}, ttl);
+	    }
+	},
+	
 	list: function() {
 
 	    const _self = self;
@@ -60,14 +122,13 @@ wof.edit = (function () {
 		root.appendChild(items);
 		
 	    }).catch((err) => {
+		_self.alert("Failed to retrieve list of records to edit, " + err);
 		console.error("Failed to retrieve list to edit", err);
 	    });
 	    
 	},
 
 	show: function(uri) {
-
-	    console.log("SHOW", uri);
 
 	    const _self = self;
 	    
@@ -158,7 +219,6 @@ wof.edit = (function () {
 		// ui.appendChild(buttons);		
 		ui.appendChild(wrapper);
 		
-		
 		const root = document.getElementById("canvas");
 		root.innerHTML = "";
 		root.appendChild(ui);
@@ -166,7 +226,8 @@ wof.edit = (function () {
 		wof_format(str_data).then((fmt_rsp) => {
 		    raw.innerText = fmt_rsp;
 		}).catch((err) => {
-		    console.error("Failed to format response", err);
+		    _self.alert("Failed to format data, " + err);
+		    console.error("Failed to format data", err);
 		})
 
 		// Set up map
@@ -197,6 +258,7 @@ wof.edit = (function () {
 			const row = document.querySelector("#raw");
 			data = JSON.parse(raw.innerText);
 		    } catch(err) {
+			_self.alert("Failed to parse raw data, " + err);
 			console.error("Failed to parse raw data", err);
 			return false;
 		    }
@@ -231,6 +293,7 @@ wof.edit = (function () {
 		    try {
 			data = JSON.parse(raw.innerText);
 		    } catch(err) {
+			_self.alert("Failed to parse raw data, " + err);
 			console.error("Failed to parse data", err);
 			save_btn.setAttribute("disabled", "disabled");
 			return;
@@ -242,6 +305,7 @@ wof.edit = (function () {
 			raw.innerText = fmt_rsp;
 			save_btn.removeAttribute("disabled");
 		    }).catch((err) => {
+			_self.alert("Failed to format raw data, " + err);
 			console.error("Failed to format data", err)
 			save_btn.setAttribute("disabled", "disabled");
 		    });
@@ -254,6 +318,7 @@ wof.edit = (function () {
 		    try {
 			data = JSON.parse(raw.innerText);
 		    } catch(err) {
+			_self.alert("Failed to parse raw data, " + err);
 			console.error("Failed to parse data", err);
 			save_btn.setAttribute("disabled", "disabled");			
 			return;
@@ -268,11 +333,13 @@ wof.edit = (function () {
 			wof_format(str_data).then((fmt_rsp) => {
 			    raw.innerText = fmt_rsp;			    
 			}).catch((err) => {
+			    _self.alert("Failed to format raw data, " + err);			    
 			    console.error("Failed to format data", err);
 			    save_btn.setAttribute("disabled", "disabled");						    
 			});
 			
 		    }).catch((err) => {
+			_self.alert("Data validation failed, " + err);
 			console.error("Failed to validate data", err);
 			save_btn.setAttribute("disabled", "disabled");						
 		    });		    
@@ -280,12 +347,14 @@ wof.edit = (function () {
 
 		save_btn.onclick = function(){
 
+		    const raw = document.querySelector("#raw");		    
 		    var data;
 
 		    try {
 			data = JSON.parse(raw.innerText);
 		    } catch(err) {
-			save_btn.setAttribute("disabled", "disabled");			
+			save_btn.setAttribute("disabled", "disabled");
+			_self.alert("Failed to parse raw data, " + err);
 			console.error("Failed to parse data", err);
 			return;
 		    }
@@ -311,21 +380,26 @@ wof.edit = (function () {
 				const str_data = JSON.stringify(data);
 
 				wof_format(str_data).then((fmt_rsp) => {
+				    _self.feedback("Data saved", 2000);				    
 				    raw.innerText = fmt_rsp;
 				}).catch((err) => {
+				    _self.alert("Data save but document formatting failed, " + err);
 				    console.error("Document saved, failed to format response", err);
 				});
 				
 			    }).catch((err) => {
+				_self.alert("Failed to save data, " + err);
 				console.error("Failed to save data", err);
 			    });
 			    
 			}).catch((err) => {
+			    _self.alert("Data formatting failed, " + err);
 			    console.error("Failed to format data", err);
 			    save_btn.setAttribute("disabled", "disabled");						    
 			});
 			
 		    }).catch((err) => {
+			_self.alert("Data validation failed, " + err);			
 			console.error("Failed to validate data", err);
 			save_btn.setAttribute("disabled", "disabled");						
 		    });
@@ -338,6 +412,8 @@ wof.edit = (function () {
 
 	populate_form: function(t, data){
 
+	    const _self = self;
+	    
 	    const form = t.content.cloneNode(true);
 	    
 	    const inputs = form.querySelectorAll(".wof-input");
@@ -351,7 +427,6 @@ wof.edit = (function () {
 		    
 		    const el = e.target;
 		    const id = el.getAttribute("id");
-		    console.log("CHANGE", id, el.value);
 
 		    var data;
 		    
@@ -359,6 +434,7 @@ wof.edit = (function () {
 			const row = document.querySelector("#raw");
 			data = JSON.parse(raw.innerText);
 		    } catch(err) {
+			_self.alert("Failed to parse raw data, " + err);
 			console.error("Failed to parse raw data", err);
 			return false;
 		    }
@@ -378,6 +454,7 @@ wof.edit = (function () {
 			    console.error("Failed to format response", err);
 			});
 		    }).catch((err) => {
+			_self.alert("Data validation failed, " + err);			
 			console.error("Data validation failed", err);
 		    });
 		};
@@ -414,6 +491,7 @@ wof.edit = (function () {
 			    }
 			    
 			}).catch((err) => {
+			    _self.alert("There was a problem listing placetypes, " + err);
 			    console.error("Failed to derive placetypes", err)
 			});
 			

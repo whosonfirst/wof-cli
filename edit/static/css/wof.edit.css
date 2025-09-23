@@ -6,6 +6,18 @@ pre {
 	padding-right:1rem;	
 }
 
+.alert {
+	background-color: #fff;
+	width: 50vw;
+	height: 50vh;
+	border: 2px solid #000;
+}
+
+.alert-close {
+	display: flex;
+	justify-content: right;
+}
+
 .navbar-brand {
 	padding-left:.75rem;
 }
