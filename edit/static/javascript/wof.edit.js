@@ -90,11 +90,68 @@ wof.edit = (function () {
 		right.setAttribute("id", "right");
 		right.appendChild(raw);
 
+		// START OF populate form
+		// Templates are defined below
+		
 		const form_t = document.querySelector("#edit-form");
 		
 		if (form_t){
-		    right.appendChild(form_t.content.cloneNode(true));
+
+		    const form = form_t.content.cloneNode(true);
+		    
+		    const inputs = form.querySelectorAll(".wof-input");
+		    const count_inputs = inputs.length;
+		    
+		    for (var i=0; i < count_inputs; i++){
+			
+			const input_el = inputs[i];
+			const id = input_el.getAttribute("id");
+			
+			if (! data.properties[id]){
+			    console.warn("Missing property", id);
+			    continue
+			}
+
+			switch (id){
+			    case "wof:placetype":
+
+				// wof_edit.wasm
+				wof_placetypes().then(rsp => {
+
+				    const placetypes = JSON.parse(rsp);
+				    const count = placetypes.length;
+
+				    for (var j=0; j < count; j++){
+
+					const pt = placetypes[j].name;
+					
+					const opt = document.createElement("option");
+					opt.setAttribute("value", pt);
+
+					if (pt == data.properties[id]){
+					    opt.setAttribute("selected", "selected");
+					}
+					
+					opt.appendChild(document.createTextNode(pt));
+					input_el.appendChild(opt);					
+				    }
+				    
+				}).catch((err) => {
+				    console.error("Failed to derive placetypes", err)
+				});
+
+				break;
+				
+			    default:
+				input_el.value = data.properties[id];
+				break;
+			}
+		    }		
+		    
+		    right.appendChild(form);
 		}
+
+		// END OF populate form
 		
 		var wrapper = document.createElement("div");
 		wrapper.setAttribute("id", "feature");

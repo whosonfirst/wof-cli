@@ -17,8 +17,15 @@ pre {
 	border: solid thin;
 	padding: 1rem;
 	font-family: monospace;
+	display:none;
+}
+
+#right {
+	padding-left:.5rem;
+	padding-right:.5rem;
 	overflow: scroll;
 	height: 100vh;
+	margin-bottom:5rem;
 }
 
 #map {
