@@ -1,9 +1,13 @@
 pre {
 }
 
-#buttons {
-	padding: .5rem;
-	float:right;
+#navbar-content {
+	justify-content: right;
+	padding-right:1rem;	
+}
+
+.navbar-brand {
+	padding-left:.75rem;
 }
 
 #feature {

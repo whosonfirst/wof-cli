@@ -146,13 +146,16 @@ wof.edit = (function () {
 		buttons.appendChild(save_btn);
 
 		// Set up UI
+
+		const navbar = document.querySelector("#navbar-content");
+		navbar.appendChild(buttons);
 		
 		const feedback = document.createElement("div");
 		feedback.setAttribute("id", "feedback");
 		
 		const ui = document.createElement("div");
 		ui.appendChild(feedback);				
-		ui.appendChild(buttons);		
+		// ui.appendChild(buttons);		
 		ui.appendChild(wrapper);
 		
 		
