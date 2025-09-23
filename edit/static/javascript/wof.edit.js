@@ -11,9 +11,14 @@ wof.edit = (function () {
 	    
 	    return new Promise((resolve, reject) => {
 
-		sfomuseum.golang.wasm.fetch("wasm/wof_edit.wasm").then((rsp) => {			
+		const spinner = document.querySelector("#spinner-svg");
+		spinner.style.display = "inline-block";
+		
+		sfomuseum.golang.wasm.fetch("wasm/wof_edit.wasm").then((rsp) => {
+		    spinner.style.display = "none";		    
 		    resolve();
 		}).catch((err) => {
+		    spinner.style.display = "none";		    		    
 		    reject("Failed to load wof_placetypes WASM binary " + err);
 		});
 		
