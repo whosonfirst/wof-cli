@@ -32,3 +32,17 @@ pre {
 	width: 100%;
 	height: 100vh;
 }
+
+.form-group {
+	margin-bottom: 1rem;
+}
+
+.form-group label {
+	font-weight: 700;
+}
+
+.form-group .form-text {
+	display:block;
+	margin-top: .5rem;
+	font-style:italic;
+}

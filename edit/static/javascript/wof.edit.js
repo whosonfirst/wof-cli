@@ -69,6 +69,8 @@ wof.edit = (function () {
 
 	    console.log("SHOW", uri);
 
+	    const _self = self;
+	    
 	    wof.edit.api.fetch(uri).then((data) => {
 
 		const str_data = JSON.stringify(data);
@@ -94,62 +96,13 @@ wof.edit = (function () {
 		// Templates are defined below
 		
 		const form_t = document.querySelector("#edit-form");
+		const form = _self.populate_form(form_t, data);
+
+		const form_wrapper = document.createElement("div");
+		form_wrapper.setAttribute("id", "form-wrapper");
+		form_wrapper.appendChild(form);
 		
-		if (form_t){
-
-		    const form = form_t.content.cloneNode(true);
-		    
-		    const inputs = form.querySelectorAll(".wof-input");
-		    const count_inputs = inputs.length;
-		    
-		    for (var i=0; i < count_inputs; i++){
-			
-			const input_el = inputs[i];
-			const id = input_el.getAttribute("id");
-			
-			if (! data.properties[id]){
-			    console.warn("Missing property", id);
-			    continue
-			}
-
-			switch (id){
-			    case "wof:placetype":
-
-				// wof_edit.wasm
-				wof_placetypes().then(rsp => {
-
-				    const placetypes = JSON.parse(rsp);
-				    const count = placetypes.length;
-
-				    for (var j=0; j < count; j++){
-
-					const pt = placetypes[j].name;
-					
-					const opt = document.createElement("option");
-					opt.setAttribute("value", pt);
-
-					if (pt == data.properties[id]){
-					    opt.setAttribute("selected", "selected");
-					}
-					
-					opt.appendChild(document.createTextNode(pt));
-					input_el.appendChild(opt);					
-				    }
-				    
-				}).catch((err) => {
-				    console.error("Failed to derive placetypes", err)
-				});
-
-				break;
-				
-			    default:
-				input_el.value = data.properties[id];
-				break;
-			}
-		    }		
-		    
-		    right.appendChild(form);
-		}
+		right.appendChild(form_wrapper);
 
 		// END OF populate form
 		
@@ -160,7 +113,16 @@ wof.edit = (function () {
 		wrapper.appendChild(right);
 
 		// Set up buttons and feedback
+
+		const form_btn = document.createElement("button");
+		form_btn.setAttribute("class", "btn btn-primary");
+		form_btn.appendChild(document.createTextNode("Form view"));
+		form_btn.setAttribute("disabled", "disabled");
 		
+		const data_btn = document.createElement("button");
+		data_btn.setAttribute("class", "btn btn-primary");
+		data_btn.appendChild(document.createTextNode("Data view"));
+
 		const validate_btn = document.createElement("button");
 		validate_btn.setAttribute("class", "btn btn-primary");
 		validate_btn.appendChild(document.createTextNode("Validate"));
@@ -176,7 +138,9 @@ wof.edit = (function () {
 		const buttons = document.createElement("div");
 		buttons.setAttribute("class", "btn-group");
 		buttons.setAttribute("id", "buttons");
-		
+
+		buttons.appendChild(form_btn);
+		buttons.appendChild(data_btn);				
 		buttons.appendChild(format_btn);		
 		buttons.appendChild(validate_btn);
 		buttons.appendChild(save_btn);
@@ -217,6 +181,25 @@ wof.edit = (function () {
 
 		// Set up button interactions
 
+		form_btn.onclick = function(){
+		    form_btn.setAttribute("disabled", "disabled");		    
+		    data_btn.removeAttribute("disabled");
+
+		    console.log("FORM", form);
+		    form_wrapper.style.display = "block";
+		    raw.style.display = "none";
+		    return false;
+		};
+
+		data_btn.onclick = function(){
+		    data_btn.setAttribute("disabled", "disabled");		    
+		    form_btn.removeAttribute("disabled");
+
+		    raw.style.display = "block";
+		    form_wrapper.style.display = "none";
+		    return false;
+		};
+		
 		format_btn.onclick = function(){
 
 		    var data;
@@ -329,10 +312,98 @@ wof.edit = (function () {
 	    });
 	},
 
-	populate_form: function(data){
+	populate_form: function(t, data){
 
+	    const form = t.content.cloneNode(true);
+	    
+	    const inputs = form.querySelectorAll(".wof-input");
+	    const count_inputs = inputs.length;
+	    
+	    for (var i=0; i < count_inputs; i++){
+		
+		const input_el = inputs[i];
+		const id = input_el.getAttribute("id");
+		
+		if (! id in data.properties){
+		    console.warn("Missing property", id);
+		    continue
+		}
+
+		switch (id){
+		    case "wof:placetype":
+			
+			// wof_edit.wasm
+			wof_placetypes().then(rsp => {
+			    
+			    const placetypes = JSON.parse(rsp);
+			    const count = placetypes.length;
+			    
+			    for (var j=0; j < count; j++){
+				
+				const pt = placetypes[j].name;
+				
+				const opt = document.createElement("option");
+				opt.setAttribute("value", pt);
+				
+				if (pt == data.properties[id]){
+				    opt.setAttribute("selected", "selected");
+				}
+				
+				opt.appendChild(document.createTextNode(pt));
+				input_el.appendChild(opt);					
+			    }
+			    
+			}).catch((err) => {
+			    console.error("Failed to derive placetypes", err)
+			});
+			
+			break;
+
+		    case "mz:is_current":
+			self.populate_existential_flag(input_el, data.properties[id]);
+			break;
+		    case "mz:is_funky":
+			self.populate_existential_flag(input_el, data.properties[id]);			
+			break;			
+		    default:
+
+			var v = "";
+
+			if (data.properties[id]){
+			    v = data.properties[id];
+			};
+			
+			input_el.value = v;
+			break;
+		}
+	    }
+	    
+	    return form;
 	},
-	
+
+	populate_existential_flag: function(input_el, flag_v){
+
+	    const flags = {
+		"true": 1,
+		"false": 0,
+		"unknown": -1,			    
+	    };
+	    
+	    for (const k in flags) {
+		const v = flags[k];
+		
+		const opt = document.createElement("option");
+		opt.setAttribute("value", v);
+		
+		if (v == flag_v){
+		    opt.setAttribute("selected", "selected");
+		}
+		
+		opt.appendChild(document.createTextNode(k));
+		input_el.appendChild(opt);					
+	    }
+	    
+	},
     };
     
     return self;
