@@ -18,7 +18,7 @@ wof.edit = (function () {
 		
 	    });
 	},
-	
+
 	list: function() {
 
 	    const _self = self;
@@ -185,11 +185,32 @@ wof.edit = (function () {
 		// Set up button interactions
 
 		form_btn.onclick = function(){
+		    
 		    form_btn.setAttribute("disabled", "disabled");		    
 		    data_btn.removeAttribute("disabled");
 
-		    console.log("FORM", form);
+		    // START OF rebuild form
+
+		    var data;
+		    
+		    try {
+			const row = document.querySelector("#raw");
+			data = JSON.parse(raw.innerText);
+		    } catch(err) {
+			console.error("Failed to parse raw data", err);
+			return false;
+		    }
+			
+		    const form_t = document.querySelector("#edit-form");
+		    const form = _self.populate_form(form_t, data);
+			
+		    form_wrapper.innerHTML = "";
+		    form_wrapper.appendChild(form);
+		    
 		    form_wrapper.style.display = "block";
+
+		    // END OF rebuild form
+		    
 		    raw.style.display = "none";
 		    return false;
 		};
@@ -325,6 +346,42 @@ wof.edit = (function () {
 	    for (var i=0; i < count_inputs; i++){
 		
 		const input_el = inputs[i];
+
+		input_el.onchange = function(e){
+		    
+		    const el = e.target;
+		    const id = el.getAttribute("id");
+		    console.log("CHANGE", id, el.value);
+
+		    var data;
+		    
+		    try {
+			const row = document.querySelector("#raw");
+			data = JSON.parse(raw.innerText);
+		    } catch(err) {
+			console.error("Failed to parse raw data", err);
+			return false;
+		    }
+		    
+		    switch (id){
+			default:
+			    data.properties[id] = el.value;
+			    break;
+		    }
+
+		    const str_data = JSON.stringify(data);
+
+		    wof_validate(str_data).then(() => {
+			wof_format(str_data).then((fmt_rsp) => {
+			    raw.innerText = fmt_rsp;
+			}).catch((err) => {
+			    console.error("Failed to format response", err);
+			});
+		    }).catch((err) => {
+			console.error("Data validation failed", err);
+		    });
+		};
+		
 		const id = input_el.getAttribute("id");
 		
 		if (! id in data.properties){
