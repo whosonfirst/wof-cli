@@ -30,13 +30,15 @@ pre {
 .alert {
 	background-color: #fff;
 	width: 50vw;
-	height: 50vh;
+	padding: 1rem;
 	border: 2px solid #000;
+	margin-top: 3rem !important;
 }
 
 .alert-close {
 	display: flex;
 	justify-content: right;
+	margin-bottom: 1rem;
 }
 
 .navbar-brand {

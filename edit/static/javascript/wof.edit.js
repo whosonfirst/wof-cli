@@ -63,7 +63,7 @@ wof.edit = (function () {
 	    dlg.appendChild(close);
 	    dlg.appendChild(body);
 
-	    document.body.append(dlg);	    
+	    document.body.prepend(dlg);	    
 	    dlg.showModal();
 
 	    if (ttl){
@@ -211,6 +211,9 @@ wof.edit = (function () {
 
 		// Set up UI
 
+		format_btn.setAttribute("disabled", "disabled");
+		validate_btn.setAttribute("disabled", "disabled");
+		
 		const navbar = document.querySelector("#navbar-content");
 		navbar.appendChild(buttons);
 		
@@ -254,6 +257,9 @@ wof.edit = (function () {
 		    form_btn.setAttribute("disabled", "disabled");		    
 		    data_btn.removeAttribute("disabled");
 
+		    format_btn.setAttribute("disabled", "disabled");
+		    validate_btn.setAttribute("disabled", "disabled");
+		    
 		    // START OF rebuild form
 
 		    var data;
@@ -285,6 +291,9 @@ wof.edit = (function () {
 		    data_btn.setAttribute("disabled", "disabled");		    
 		    form_btn.removeAttribute("disabled");
 
+		    format_btn.removeAttribute("disabled");
+		    validate_btn.removeAttribute("disabled");
+		    
 		    raw.style.display = "block";
 		    form_wrapper.style.display = "none";
 		    return false;
@@ -522,7 +531,7 @@ wof.edit = (function () {
 			break;
 		    case "mz:is_funky":
 			self.populate_existential_flag(input_el, data.properties[id]);			
-			break;			
+			break;
 		    default:
 
 			var v = "";
@@ -535,12 +544,41 @@ wof.edit = (function () {
 			break;
 		}
 	    }
+
+	    // wof:concordances
+	    
+	    const concordances_el = form.querySelector("#wof-concordances");
+	    const concordances_t = document.querySelector("#wof-concordances-row");	    
+
+	    console.log("CONCORDANCES", concordances_el, concordances_t);
+	    
+	    for (const k in data.properties["wof:concordances"]){
+
+		const v = data.properties["wof:concordances"][k];
+		const row = concordances_t.content.cloneNode(true);
+
+		// Note: It is important to update row _before_ appending it to concordances_el
+		
+		const label = row.querySelector(".label");
+		label.innerText = k;	// Lookup name for k here (whosonfirst-sources)
+		
+		const prefix = row.querySelector(".prefix");
+		prefix.innerText = k;
+
+		const input = row.querySelector(".form-control");
+		input.setAttribute("name", k);
+		input.setAttribute("value", v);
+
+		concordances_el.appendChild(row);		
+	    }
 	    
 	    return form;
 	},
 
 	populate_existential_flag: function(input_el, flag_v){
 
+	    // TBD: Just do this from a template?
+	    
 	    const flags = {
 		"true": 1,
 		"false": 0,
