@@ -140,7 +140,6 @@ wof.edit = (function () {
 	    wof.edit.api.fetch(uri).then((data) => {
 
 		const str_data = JSON.stringify(data);
-		
 		const map_id = "map";
 		
 		const map_el = document.createElement("div");
@@ -158,8 +157,7 @@ wof.edit = (function () {
 		right.setAttribute("id", "right");
 		right.appendChild(raw);
 
-		// START OF populate form
-		// Templates are defined below
+		// Populate form
 		
 		const form_t = document.querySelector("#edit-form");
 		const form = _self.populate_form(form_t, data);
@@ -170,7 +168,7 @@ wof.edit = (function () {
 		
 		right.appendChild(form_wrapper);
 
-		// END OF populate form
+		// Set up feature wrapper
 		
 		var wrapper = document.createElement("div");
 		wrapper.setAttribute("id", "feature");
@@ -221,13 +219,14 @@ wof.edit = (function () {
 		
 		const ui = document.createElement("div");
 		ui.appendChild(feedback);				
-		// ui.appendChild(buttons);		
 		ui.appendChild(wrapper);
 		
 		const root = document.getElementById("canvas");
 		root.innerHTML = "";
 		root.appendChild(ui);
 
+		// Format data and add to pre element
+		
 		wof_format(str_data).then((fmt_rsp) => {
 		    raw.innerText = fmt_rsp;
 		}).catch((err) => {
@@ -352,12 +351,16 @@ wof.edit = (function () {
 
 		save_btn.onclick = function(){
 
+		    const spinner = document.querySelector("#spinner-svg");
+		    spinner.style.display = "inline-block";
+		    
 		    const raw = document.querySelector("#raw");		    
 		    var data;
 
 		    try {
 			data = JSON.parse(raw.innerText);
 		    } catch(err) {
+			spinner.style.display = "none";		    			
 			save_btn.setAttribute("disabled", "disabled");
 			_self.alert("Failed to parse raw data, " + err);
 			console.error("Failed to parse data", err);
@@ -385,25 +388,30 @@ wof.edit = (function () {
 				const str_data = JSON.stringify(data);
 
 				wof_format(str_data).then((fmt_rsp) => {
+				    spinner.style.display = "none";		    				    
 				    _self.feedback("Data saved", 2000);				    
 				    raw.innerText = fmt_rsp;
 				}).catch((err) => {
+				    spinner.style.display = "none";		    				    
 				    _self.alert("Data save but document formatting failed, " + err);
 				    console.error("Document saved, failed to format response", err);
 				});
 				
 			    }).catch((err) => {
+				spinner.style.display = "none";		    
 				_self.alert("Failed to save data, " + err);
 				console.error("Failed to save data", err);
 			    });
 			    
 			}).catch((err) => {
+			    spinner.style.display = "none";		    			    
 			    _self.alert("Data formatting failed, " + err);
 			    console.error("Failed to format data", err);
 			    save_btn.setAttribute("disabled", "disabled");						    
 			});
 			
 		    }).catch((err) => {
+			spinner.style.display = "none";		    			
 			_self.alert("Data validation failed, " + err);			
 			console.error("Failed to validate data", err);
 			save_btn.setAttribute("disabled", "disabled");						
@@ -411,7 +419,8 @@ wof.edit = (function () {
 		};
 		
 	    }).catch((err) => {
-		console.error("SAD", err)
+		_self.alert("Failed to retrieve record, " + err);
+		console.error("Failed to retrieve record", err)
 	    });
 	},
 
@@ -446,7 +455,13 @@ wof.edit = (function () {
 		    
 		    switch (id){
 			default:
-			    data.properties[id] = el.value;
+
+			    if (el.value == ""){
+				delete data.properties[id];
+			    } else {
+				data.properties[id] = el.value;
+			    }
+			    
 			    break;
 		    }
 
@@ -467,8 +482,8 @@ wof.edit = (function () {
 		const id = input_el.getAttribute("id");
 		
 		if (! id in data.properties){
-		    console.warn("Missing property", id);
-		    continue
+		    console.debug("Missing property", id);
+		    continue;
 		}
 
 		switch (id){
@@ -550,4 +565,5 @@ wof.edit = (function () {
     };
     
     return self;
+    
 })();
