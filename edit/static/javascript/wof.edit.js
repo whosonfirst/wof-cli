@@ -551,6 +551,8 @@ wof.edit = (function () {
 	    const concordances_t = document.querySelector("#wof-concordances-row");	    
 
 	    console.log("CONCORDANCES", concordances_el, concordances_t);
+
+	    // Add concordance here...
 	    
 	    for (const k in data.properties["wof:concordances"]){
 
@@ -569,6 +571,39 @@ wof.edit = (function () {
 		input.setAttribute("name", k);
 		input.setAttribute("value", v);
 
+		input.onchange = function(e){
+		    const el = e.target;
+
+		    const k = el.getAttribute("name");
+		    const v = el.getAttribute("value");
+
+		    console.log("UPDATE", k, v);
+		    return false;
+		};
+
+		const remove_func = function(e){
+		    const el = e.target;
+		    const prefix = el.getAttribute("data-prefix");
+		    console.log("REMOVE", prefix);
+		    return false;
+		};
+
+		// START OF this is annoying...
+		    
+		const remove_btn = row.querySelector(".concordance-rm");
+		remove_btn.setAttribute("data-prefix", k);
+		remove_btn.onclick = remove_func;
+		
+		const remove_svg = remove_btn.querySelector("svg");
+		remove_svg.setAttribute("data-prefix", k);
+		remove_svg.onclick = remove_func;
+
+		const remove_path = remove_svg.querySelector("path");
+		remove_path.setAttribute("data-prefix", k);
+		remove_path.onclick = remove_func;
+
+		// END OF this is annoying...
+		    
 		concordances_el.appendChild(row);		
 	    }
 	    
