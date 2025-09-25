@@ -550,6 +550,36 @@ wof.edit = (function () {
 	    const concordances_el = form.querySelector("#wof-concordances");
 	    const concordances_t = document.querySelector("#wof-concordances-row");	    
 
+	    const concordances_update_func = function(e){
+		const el = e.target;
+		
+		const prefix = el.getAttribute("name");
+		const v = el.value;
+
+		if (v == ""){
+
+		    if (! confirm("Do you want to remove the concordance for " + prefix + "?")){
+
+			// BUT THEN WHAT? replace old value or... ?
+			return false;
+		    }
+
+		    _self.remove_concordance(prefix).catch((err) => {
+			_self.alert("Failed to remove the concordance for " + prefix + ", " + err);
+		    });
+		    
+		    return false;
+		}
+		
+		_self.update_concordance(prefix, v).then(() => {
+		    el.value = v;
+		}).catch((err) => {
+		    _self.alert("Failed to update concordance for " + prefix + ", " + err);
+		});
+		
+		return false;
+	    };
+	    
 	    const concordances_remove_func = function(e){
 		
 		e.stopPropagation();
@@ -565,42 +595,11 @@ wof.edit = (function () {
 		if (! confirm("Are you sure you want to delete the concordance for " + prefix + "?")){
 		    return false;
 		}
-		
-		_self.start_spinner();
-		
-		try {
-		    const row = document.querySelector("#raw");
-		    data = JSON.parse(raw.innerText);
-		} catch(err) {
-		    _self.alert("Failed to parse raw data, " + err);
-		    console.error("Failed to parse raw data", err);
-		    _self.stop_spinner();						
-		    return false;
-		}
-		
-		try {
-		    const row = document.getElementById("wof-concordances-" + prefix);
-		    const parent = row.parentNode;
-		    parent.removeChild(row);
-		} catch(err) {
-		    _self.alert("Failed to remove row, " + err);
-		    console.error("Failed to remove row", err);
-		    _self.stop_spinner();									
-		    return false;
-		}
-		
-		delete(data.properties["wof:concordances"][prefix]);
-		const str_data = JSON.stringify(data);
-		
-		wof_format(str_data).then((fmt_rsp) => {
-		    raw.innerText = fmt_rsp;
-		    _self.stop_spinner();
-		    _self.feedback("That concordance has been removed.", 1500);
+
+		_self.remove_concordance(prefix).then(() => {
+		    _self.feedback("The concordance for " + prefix + " has been removed", 1500);
 		}).catch((err) => {
-		    _self.alert("Failed to format raw data, " + err);
-		    console.error("Failed to format data", err);
-		    _self.stop_spinner();						
-		    return false;
+		    _self.alert("Failed to remove the concordance for " + prefix + ", " + err);
 		});
 		
 		return false;
@@ -630,16 +629,7 @@ wof.edit = (function () {
 		input.setAttribute("name", k);
 		input.setAttribute("value", v);
 
-		input.onchange = function(e){
-		    const el = e.target;
-
-		    const k = el.getAttribute("name");
-		    const v = el.getAttribute("value");
-
-		    console.log("UPDATE", k, v);
-		    return false;
-		};
-
+		input.onchange = concordances_update_func;
 
 		// START OF this is annoying...
 		    
@@ -694,6 +684,97 @@ wof.edit = (function () {
 	    
 	},
 
+	update_concordance: function(prefix, v){
+
+	    const _self = self;
+
+	    return new Promise((resolve, reject) => {
+		
+		_self.start_spinner();
+		
+		try {
+		    const row = document.querySelector("#raw");
+		    data = JSON.parse(raw.innerText);
+		} catch(err) {
+		    console.error("Failed to parse raw data", err);
+		    _self.stop_spinner();
+		    
+		    reject("Failed to parse raw data, " + err);
+		    return;
+		}
+	    	    
+		data.properties["wof:concordances"][prefix] = v;
+		console.debug("Update concordances", data.properties["wof:concordances"]);
+		
+		const str_data = JSON.stringify(data);
+		
+		wof_format(str_data).then((fmt_rsp) => {
+		    raw.innerText = fmt_rsp;
+		    _self.stop_spinner();
+		    
+		    resolve();
+		    return;
+		}).catch((err) => {
+		    console.error("Failed to format data", err);
+		    _self.stop_spinner();
+		    
+		    reject("Failed to format raw data, " + err);
+		    return;
+		});
+	    });
+	},
+	
+	remove_concordance: function(prefix){
+
+	    const _self = self;
+
+	    return new Promise((resolve, reject) => {
+		
+		_self.start_spinner();
+		
+		try {
+		    const row = document.querySelector("#raw");
+		    data = JSON.parse(raw.innerText);
+		} catch(err) {
+		    console.error("Failed to parse raw data", err);
+		    _self.stop_spinner();
+
+		    reject("Failed to parse raw data, " + err);		    
+		    return;
+		}
+	    
+		try {
+		    const row = document.getElementById("wof-concordances-" + prefix);
+		    const parent = row.parentNode;
+		    parent.removeChild(row);
+		} catch(err) {
+		    console.error("Failed to remove row", err);
+		    _self.stop_spinner();
+
+		    reject("Failed to remove row, " + err);		    
+		    return false;
+		}
+	    
+		delete(data.properties["wof:concordances"][prefix]);
+		const str_data = JSON.stringify(data);
+		
+		wof_format(str_data).then((fmt_rsp) => {
+		    raw.innerText = fmt_rsp;
+		    _self.stop_spinner();
+
+		    resolve();
+		    return;
+		}).catch((err) => {
+		    console.error("Failed to format data", err);
+		    _self.stop_spinner();
+
+		    reject("Failed to format raw data, " + err);		    
+		    return;
+		});
+
+	    });
+	},
+	
 	start_spinner: function(){
 		const spinner = document.querySelector("#spinner-svg");
 		spinner.style.display = "inline-block";
