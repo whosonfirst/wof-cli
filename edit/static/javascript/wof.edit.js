@@ -559,6 +559,9 @@ wof.edit = (function () {
 		const v = data.properties["wof:concordances"][k];
 		const row = concordances_t.content.cloneNode(true);
 
+		const wrapper = row.querySelector(".concordance-row");
+		wrapper.setAttribute("id", "wof-concordances-" + k);
+		
 		// Note: It is important to update row _before_ appending it to concordances_el
 		
 		const label = row.querySelector(".label");
@@ -582,9 +585,44 @@ wof.edit = (function () {
 		};
 
 		const remove_func = function(e){
+		    
 		    const el = e.target;
 		    const prefix = el.getAttribute("data-prefix");
-		    console.log("REMOVE", prefix);
+
+		    try {
+			const row = document.querySelector("#raw");
+			data = JSON.parse(raw.innerText);
+		    } catch(err) {
+			_self.alert("Failed to parse raw data, " + err);
+			console.error("Failed to parse raw data", err);
+			return false;
+		    }
+		    
+		    delete(data.properties[prefix]);
+
+		    const str_data = JSON.stringify(data);
+		    
+		    wof_format(str_data).then((fmt_rsp) => {
+			raw.innerText = fmt_rsp;
+			// save_btn.removeAttribute("disabled");
+		    }).catch((err) => {
+			_self.alert("Failed to format raw data, " + err);
+			console.error("Failed to format data", err)
+			// save_btn.setAttribute("disabled", "disabled");
+			return false;
+		    });
+
+		    try {
+			console.log("GET ID", "wof-concordances-" + prefix);
+			const row = document.getElementById("wof-concordances-" + prefix)
+			const parent = row.parentNode;
+			parent.removeChild(row);
+		    } catch(err) {
+			_self.alert("Failed to remove row, " + err);
+			console.error("Failed to remove row", err);
+			return false;
+		    }
+		    
 		    return false;
 		};
 
