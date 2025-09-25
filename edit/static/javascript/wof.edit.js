@@ -550,9 +550,65 @@ wof.edit = (function () {
 	    const concordances_el = form.querySelector("#wof-concordances");
 	    const concordances_t = document.querySelector("#wof-concordances-row");	    
 
+	    const concordances_remove_func = function(e){
+		
+		e.stopPropagation();
+		
+		const el = e.target;
+		const prefix = el.getAttribute("data-prefix");
+		
+		if (! prefix){
+		    _self.alert("Failed to remove concordance, unable to determine prefix");
+		    return false;
+		}
+		
+		if (! confirm("Are you sure you want to delete the concordance for " + prefix + "?")){
+		    return false;
+		}
+		
+		_self.start_spinner();
+		
+		try {
+		    const row = document.querySelector("#raw");
+		    data = JSON.parse(raw.innerText);
+		} catch(err) {
+		    _self.alert("Failed to parse raw data, " + err);
+		    console.error("Failed to parse raw data", err);
+		    _self.stop_spinner();						
+		    return false;
+		}
+		
+		try {
+		    const row = document.getElementById("wof-concordances-" + prefix);
+		    const parent = row.parentNode;
+		    parent.removeChild(row);
+		} catch(err) {
+		    _self.alert("Failed to remove row, " + err);
+		    console.error("Failed to remove row", err);
+		    _self.stop_spinner();									
+		    return false;
+		}
+		
+		delete(data.properties["wof:concordances"][prefix]);
+		const str_data = JSON.stringify(data);
+		
+		wof_format(str_data).then((fmt_rsp) => {
+		    raw.innerText = fmt_rsp;
+		    _self.stop_spinner();
+		    _self.feedback("That concordance has been removed.", 1500);
+		}).catch((err) => {
+		    _self.alert("Failed to format raw data, " + err);
+		    console.error("Failed to format data", err);
+		    _self.stop_spinner();						
+		    return false;
+		});
+		
+		return false;
+	    };
+	    
 	    console.log("CONCORDANCES", concordances_el, concordances_t);
 
-	    // Add concordance here...
+	    // Add concordance button event(s) here...
 	    
 	    for (const k in data.properties["wof:concordances"]){
 
@@ -584,62 +640,26 @@ wof.edit = (function () {
 		    return false;
 		};
 
-		const remove_func = function(e){
-		    
-		    const el = e.target;
-		    const prefix = el.getAttribute("data-prefix");
-
-		    try {
-			const row = document.querySelector("#raw");
-			data = JSON.parse(raw.innerText);
-		    } catch(err) {
-			_self.alert("Failed to parse raw data, " + err);
-			console.error("Failed to parse raw data", err);
-			return false;
-		    }
-		    
-		    delete(data.properties[prefix]);
-
-		    const str_data = JSON.stringify(data);
-		    
-		    wof_format(str_data).then((fmt_rsp) => {
-			raw.innerText = fmt_rsp;
-			// save_btn.removeAttribute("disabled");
-		    }).catch((err) => {
-			_self.alert("Failed to format raw data, " + err);
-			console.error("Failed to format data", err)
-			// save_btn.setAttribute("disabled", "disabled");
-			return false;
-		    });
-
-		    try {
-			console.log("GET ID", "wof-concordances-" + prefix);
-			const row = document.getElementById("wof-concordances-" + prefix)
-			const parent = row.parentNode;
-			parent.removeChild(row);
-		    } catch(err) {
-			_self.alert("Failed to remove row, " + err);
-			console.error("Failed to remove row", err);
-			return false;
-		    }
-		    
-		    return false;
-		};
 
 		// START OF this is annoying...
 		    
 		const remove_btn = row.querySelector(".concordance-rm");
 		remove_btn.setAttribute("data-prefix", k);
-		remove_btn.onclick = remove_func;
-		
+		remove_btn.onclick = concordances_remove_func;
+
 		const remove_svg = remove_btn.querySelector("svg");
 		remove_svg.setAttribute("data-prefix", k);
-		remove_svg.onclick = remove_func;
+		remove_svg.onclick = concordances_remove_func;
 
-		const remove_path = remove_svg.querySelector("path");
-		remove_path.setAttribute("data-prefix", k);
-		remove_path.onclick = remove_func;
-
+		const remove_paths = remove_svg.querySelectorAll("path");
+		const count_paths = remove_paths.length;
+		
+		for (var p=0; p < count_paths; p++){
+		    const path = remove_paths[p];
+		    path.setAttribute("data-prefix", k);
+		    path.onclick = concordances_remove_func;
+		}
+		
 		// END OF this is annoying...
 		    
 		concordances_el.appendChild(row);		
@@ -673,6 +693,18 @@ wof.edit = (function () {
 	    }
 	    
 	},
+
+	start_spinner: function(){
+		const spinner = document.querySelector("#spinner-svg");
+		spinner.style.display = "inline-block";
+	},
+
+	stop_spinner: function(){
+	    const spinner = document.querySelector("#spinner-svg");
+	    spinner.style.display = "none";
+	},
+	
+
     };
     
     return self;
