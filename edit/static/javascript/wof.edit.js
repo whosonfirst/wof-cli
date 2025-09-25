@@ -550,6 +550,13 @@ wof.edit = (function () {
 	    const concordances_el = form.querySelector("#wof-concordances");
 	    const concordances_t = document.querySelector("#wof-concordances-row");	    
 
+	    const concordances_add_func = function(e){
+		e.stopPropagation()
+
+		console.log("Add");
+		return false;
+	    };
+	    
 	    const concordances_update_func = function(e){
 		const el = e.target;
 		
@@ -604,10 +611,20 @@ wof.edit = (function () {
 		
 		return false;
 	    };
-	    
-	    console.log("CONCORDANCES", concordances_el, concordances_t);
 
-	    // Add concordance button event(s) here...
+	    const add_btn = form.querySelector("#wof-concordances-add");
+	    add_btn.onclick = concordances_add_func;
+	    
+	    const add_svg = add_btn.querySelector("svg");
+	    add_svg.onclick = concordances_add_func;
+	    
+	    const add_paths = add_svg.querySelectorAll("path");
+	    const count_add = add_paths.length;
+	    
+	    for (var p=0; p < count_add; p++){
+		const path = add_paths[p];
+		path.onclick = concordances_add_func;
+	    }
 	    
 	    for (const k in data.properties["wof:concordances"]){
 
@@ -632,7 +649,7 @@ wof.edit = (function () {
 		input.onchange = concordances_update_func;
 
 		// START OF this is annoying...
-		    
+		
 		const remove_btn = row.querySelector(".concordance-rm");
 		remove_btn.setAttribute("data-prefix", k);
 		remove_btn.onclick = concordances_remove_func;
@@ -642,9 +659,9 @@ wof.edit = (function () {
 		remove_svg.onclick = concordances_remove_func;
 
 		const remove_paths = remove_svg.querySelectorAll("path");
-		const count_paths = remove_paths.length;
+		const count_remove = remove_paths.length;
 		
-		for (var p=0; p < count_paths; p++){
+		for (var p=0; p < count_remove; p++){
 		    const path = remove_paths[p];
 		    path.setAttribute("data-prefix", k);
 		    path.onclick = concordances_remove_func;
@@ -654,6 +671,8 @@ wof.edit = (function () {
 		    
 		concordances_el.appendChild(row);		
 	    }
+
+	    // All done...
 	    
 	    return form;
 	},
