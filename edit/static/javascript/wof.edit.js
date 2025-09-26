@@ -159,8 +159,7 @@ wof.edit = (function () {
 
 		// Populate form
 		
-		const form_t = document.querySelector("#edit-form");
-		const form = _self.populate_form(form_t, data);
+		const form = _self.populate_form(data);
 
 		const form_wrapper = document.createElement("div");
 		form_wrapper.setAttribute("id", "form-wrapper");
@@ -273,8 +272,7 @@ wof.edit = (function () {
 			return false;
 		    }
 			
-		    const form_t = document.querySelector("#edit-form");
-		    const form = _self.populate_form(form_t, data);
+		    const form = _self.populate_form(data);
 			
 		    form_wrapper.innerHTML = "";
 		    form_wrapper.appendChild(form);
@@ -433,9 +431,10 @@ wof.edit = (function () {
 	    });
 	},
 
-	populate_form: function(t, data){
-	    
-	    const form = t.content.cloneNode(true);
+	populate_form: function(data){
+
+	    const form_t = document.querySelector("#edit-form");	    
+	    const form = form_t.content.cloneNode(true);
 
 	    self.populate_form_wof_input(form, data);	    
 	    self.populate_form_concordances(form, data);
@@ -981,12 +980,6 @@ wof.edit = (function () {
 	    spinner.style.display = "none";
 	},
 	
-	load_data: function() {
-
-	    return new Promise((resolve, reject) => {
-
-	    });
-	},
     };
     
     return self;
