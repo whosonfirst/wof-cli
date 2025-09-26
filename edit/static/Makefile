@@ -9,16 +9,14 @@ leaflet:
 	curl -s -o css/leaflet.css https://unpkg.com/leaflet@$(LEAFLET_VERSION)/dist/leaflet.css
 	curl -s -o javascript/leaflet.js https://unpkg.com/leaflet@$(LEAFLET_VERSION)/dist/leaflet.js
 
+# https://github.com/yairEO/tagify
+tagify:
+	curl -s -o css/tagify.css https://unpkg.com/@yaireo/tagify@2.31.6/dist/tagify.css
+	curl -s -o javascript/tagify.js https://raw.githubusercontent.com/yairEO/tagify/refs/heads/master/dist/tagify.js
+	curl -s -o javascript/tagify.js.map https://raw.githubusercontent.com/yairEO/tagify/refs/heads/master/dist/tagify.js.map
+
 wofjs:
 	curl -s -o javascript/whosonfirst.bundle.min.js https://raw.githubusercontent.com/whosonfirst/js-whosonfirst/refs/heads/main/dist/whosonfirst.bundle.min.js
 
 wasmjs:
 	curl -s -o javascript/sfomuseum.golang.wasm.bundle.js https://raw.githubusercontent.com/sfomuseum/js-sfomuseum-golang-wasm/refs/heads/main/dist/sfomuseum.golang.wasm.bundle.js
-
-# curl -s -I https://github.com/whosonfirst/go-whosonfirst-validate/raw/refs/heads/main/www/wasm/wof_validate.wasm | grep location
-wasm-validate:
-	curl -s -o wasm/wof_validate.wasm https://raw.githubusercontent.com/whosonfirst/go-whosonfirst-validate/refs/heads/main/www/wasm/wof_validate.wasm
-
-# curl -s -I https://github.com/whosonfirst/go-whosonfirst-format/raw/refs/heads/main/www/wasm/wof_format.wasm | grep location
-wasm-format:
-	curl -s -L -o wasm/wof_format.wasm https://raw.githubusercontent.com/whosonfirst/go-whosonfirst-format/refs/heads/main/www/wasm/wof_format.wasm

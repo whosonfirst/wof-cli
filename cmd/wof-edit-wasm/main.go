@@ -33,7 +33,7 @@ func main() {
 	js.Global().Set("wof_placetypes_children", children_func)
 	js.Global().Set("wof_placetypes_descendants", descendants_func)
 	js.Global().Set("wof_placetypes_ancestors", ancestors_func)				
-
+	
 	format_func := format.FormatFunc()
 	defer format_func.Release()
 

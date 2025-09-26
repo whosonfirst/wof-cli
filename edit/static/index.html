@@ -8,7 +8,8 @@
 	<meta name="HandheldFriendly" content="true">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="css/leaflet.css" />		
+	<link rel="stylesheet" type="text/css" href="css/leaflet.css" />
+	<link rel="stylesheet" type="text/css" href="css/tagify.css" />			
 	<link rel="stylesheet" type="text/css" href="css/wof.edit.css" />
     </head>
     <body>
@@ -238,22 +239,63 @@
 		</div>	    
 	    </form>
 	</template>
-	
-	<template id="localized-names">
-	    <div class="row localized-names-row" data-lang="" style="display: none;">
-		<div class="col-md-2"><h4></h4><small>(<code></code></small></div>
+
+	<template id="localized-names-row">
+	    <div class="row localized-names-row" data-lang="" style="">
+		<div class="col-md-2"><h4 class="lang-name"></h4><small>(<code class="lang-code"></code>)</small></div>
 		<div class="col-md-10">
-		    <!-- template#localized-name-item -->
+                    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Colloquial</label>
+			<div class="col-md-10">
+                            <tags class="tagify  form-control use-tagify" aria-haspopup="true" aria-expanded="false" role="tagslist">
+				<span contenteditable="" data-placeholder="​" aria-placeholder="" class="tagify__input" role="textbox" aria-multiline="false"></span>
+			    </tags>
+			    <input name="name:LANG_x_colloquial" data-spec="colloquial" class="form-control use-tagify" value="[]">
+			</div>
+                    </div>
+                    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Historical</label>
+			<div class="col-md-10">
+                            <tags class="tagify  form-control use-tagify" aria-haspopup="true" aria-expanded="false" role="tagslist">
+				<span contenteditable="" data-placeholder="​" aria-placeholder="" class="tagify__input" role="textbox" aria-multiline="false"></span>
+			    </tags>
+			    <input name="name:LANG_x_historical" data-spec="historical" class="form-control use-tagify" value="[]">
+			</div>
+                    </div>
+                    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Preferred</label>
+			<div class="col-md-10">
+                            <tags class="tagify  form-control use-tagify" aria-haspopup="true" aria-expanded="false" role="tagslist">
+				<!--
+				<tag title="San Francisco International Airport" contenteditable="false" spellcheck="false" class="tagify__tag tagify--noAnim" role="tag" value="San Francisco International Airport"><x title="" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x><div><span class="tagify__tag-text">San Francisco International Airport</span></div></tag>
+				-->
+				<span contenteditable="" data-placeholder="​" aria-placeholder="" class="tagify__input" role="textbox" aria-multiline="false"></span>
+			    </tags>
+			    <input name="name:LANG_x_preferred" data-spec="preferred" class="form-control use-tagify" value="[]">
+			</div>
+                    </div>
+                    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Unknown</label>
+			<div class="col-md-10">
+                            <tags class="tagify  form-control use-tagify" aria-haspopup="true" aria-expanded="false" role="tagslist">
+				<span contenteditable="" data-placeholder="​" aria-placeholder="" class="tagify__input" role="textbox" aria-multiline="false"></span>
+			    </tags>
+			    <input name="name:LANG_x_unknown" data-spec="unknown" class="form-control use-tagify" value="[]">
+			</div>
+                    </div>
+                    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Variant</label>
+			<div class="col-md-10">
+                            <tags class="tagify  form-control use-tagify" aria-haspopup="true" aria-expanded="false" role="tagslist">
+				<!--
+				<tag title="SFO" contenteditable="false" spellcheck="false" class="tagify__tag tagify--noAnim" role="tag" value="SFO"><x title="" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x><div><span class="tagify__tag-text">SFO</span></div></tag><tag title="KSFO" contenteditable="false" spellcheck="false" class="tagify__tag tagify--noAnim" role="tag" value="KSFO"><x title="" class="tagify__tag__removeBtn" role="button" aria-label="remove tag"></x><div><span class="tagify__tag-text">KSFO</span></div></tag>
+				-->
+				<span contenteditable="" data-placeholder="​" aria-placeholder="" class="tagify__input" role="textbox" aria-multiline="false"></span>
+			    </tags><input name="name:LANG_x_variant" data-spec="variant" class="form-control use-tagify" value="[]">
+			</div>
+                    </div>
 		</div>
-	    </div>	
-	</template>
-	<template id="localized-names-item">
-	    <div class="form-group row">
-		<label class="col-md-2 col-form-label"></label>
-		<div class="col-md-10">
-		    <input name="" data-spec="" class="form-control use-tagify" value="" />
-		</div>
-	    </div>
+            </div>
 	</template>
 
 	<template id="localized-labels">
@@ -312,9 +354,9 @@
 	</template>
 	    
     </body>
-    <!-- https://github.com/yairEO/tagify -->
     <script type="text/javascript" src="javascript/bootstrap.bundle.js"></script>    
     <script type="text/javascript" src="javascript/leaflet.js"></script>
+    <script type="text/javascript" src="javascript/tagify.js"></script>    
     <script type="text/javascript" src="javascript/whosonfirst.bundle.min.js"></script>    
     <script type="text/javascript" src="javascript/sfomuseum.golang.wasm.bundle.js"></script>
     <script type="text/javascript" src="javascript/wof.edit.js"></script>
