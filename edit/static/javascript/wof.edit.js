@@ -550,76 +550,13 @@ wof.edit = (function () {
 	    const concordances_el = form.querySelector("#wof-concordances");
 	    const concordances_t = document.querySelector("#wof-concordances-row");	    
 
-	    const concordances_add_func = function(e){
-		e.stopPropagation()
-
-		
-		const dlg = document.createElement("dialog");
-		dlg.setAttribute("id", "dialog");
-		dlg.setAttribute("class", "dialog");
-		
-		const exit_func = function(){
-		    dlg.close()
-		    document.body.removeChild(dlg);		
-		};
-
-		const close = document.createElement("div");
-		close.setAttribute("class", "dialog-close");
-		
-		close.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg>';	    
-		
-		close.onclick = function(e){
-		    
-		    if (alert_timeout){
-			clearTimeout(alert_timeout);
-		    }
-
-		    exit_func();
-		};
-		
-		const body = document.createElement("div");
-		body.setAttribute("class", "dialog-body");
-
-		const new_t = document.querySelector("#new-concordances-row");
-		const row = new_t.content.cloneNode(true);
-		
-		body.appendChild(row);
-
-		const buttons = document.createElement("div");
-		buttons.setAttribute("id", "new-concordance-buttons");
-		
-		const add_btn = document.createElement("button");
-		add_btn.setAttribute("class", "btn btn-primary");
-		add_btn.appendChild(document.createTextNode("Add concordance"));
-
-		add_btn.onclick = function(e){
-		    console.log("Add");
-		    return false;
-		};
-
-		const cancel_btn = document.createElement("button");
-		cancel_btn.setAttribute("class", "btn btn");
-		cancel_btn.appendChild(document.createTextNode("Cancel"));
-
-		cancel_btn.onclick = function(e){
-		    console.log("Cancel");
-		    exit_func();
-		    return false;
-		};
-		
-		buttons.appendChild(cancel_btn);		
-		buttons.appendChild(add_btn);
-		
-		dlg.appendChild(close);
-		dlg.appendChild(body);
-		dlg.appendChild(buttons);
-		
-		document.body.prepend(dlg);	    
-		dlg.showModal();
-		
-		console.log("Add");
-		return false;
-	    };
+	    // Set up wof:concordances button event functions
+	    // The order of these functions is relevant, meaning that the "add" function
+	    // references both the "update" and "remove" functions so it needs to be defined
+	    // last. But wait, there's more! Nestled in between the "update" and "remove" and the
+	    // "add" function is a "new_concordances_row" function. Again, this is all necessary
+	    // because of scoping wah-wah. Could all of these be moved in to dicrete functions?
+	    // Probably, but that is tomorrow's problem right now.
 	    
 	    const concordances_update_func = function(e){
 		const el = e.target;
@@ -676,6 +613,172 @@ wof.edit = (function () {
 		return false;
 	    };
 
+	    const new_concordances_row = function(prefix, value){
+
+		const row = concordances_t.content.cloneNode(true);
+		
+		const wrapper = row.querySelector(".concordance-row");
+		wrapper.setAttribute("id", "wof-concordances-" + prefix);
+		
+		// Note: It is important to update row _before_ appending it to concordances_el
+		
+		const label_el = row.querySelector(".label");
+		label_el.innerText = prefix;	// Lookup name for k here (whosonfirst-sources)
+		
+		const prefix_el = row.querySelector(".prefix");
+		prefix_el.innerText = prefix;
+		
+		const input_el = row.querySelector(".form-control");
+		input_el.setAttribute("name", prefix);
+		input_el.setAttribute("value", value);
+		
+		input_el.onchange = concordances_update_func;
+
+		// START OF this is annoying...
+		
+		const remove_btn = row.querySelector(".concordance-rm");
+		remove_btn.setAttribute("data-prefix", prefix);
+		remove_btn.onclick = concordances_remove_func;
+
+		const remove_svg = remove_btn.querySelector("svg");
+		remove_svg.setAttribute("data-prefix", prefix);
+		remove_svg.onclick = concordances_remove_func;
+
+		const remove_paths = remove_svg.querySelectorAll("path");
+		const count_remove = remove_paths.length;
+		
+		for (var p=0; p < count_remove; p++){
+		    const path = remove_paths[p];
+		    path.setAttribute("data-prefix", prefix);
+		    path.onclick = concordances_remove_func;
+		}
+
+		return row;
+	    };
+
+	    
+	    const concordances_add_func = function(e){
+		
+		e.stopPropagation()
+		
+		const dlg = document.createElement("dialog");
+		dlg.setAttribute("id", "dialog");
+		dlg.setAttribute("class", "dialog");
+		
+		const exit_func = function(){
+		    dlg.close()
+		    document.body.removeChild(dlg);		
+		};
+
+		const close = document.createElement("div");
+		close.setAttribute("class", "dialog-close");
+		
+		close.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg>';	    
+		
+		close.onclick = function(e){
+		    exit_func();
+		    return false;
+		};
+		
+		const body = document.createElement("div");
+		body.setAttribute("class", "dialog-body");
+
+		const new_t = document.querySelector("#new-concordances-row");
+		const row = new_t.content.cloneNode(true);
+		
+		body.appendChild(row);
+
+		const buttons = document.createElement("div");
+		buttons.setAttribute("id", "new-concordance-buttons");
+		
+		const add_btn = document.createElement("button");
+		add_btn.setAttribute("class", "btn btn-primary");
+		add_btn.appendChild(document.createTextNode("Add concordance"));
+
+		add_btn.onclick = function(e){
+		    console.log("Add");
+
+		    _self.start_spinner();
+		    
+		    const prefix_el = document.querySelector("#new-wof:concordances-name");
+		    const value_el = document.querySelector("#new-wof:concordances-value");
+
+		    if (! prefix_el){
+			_self.stop_spinner();			
+			_self.alert("Failed to derive prefix");
+			return false;
+		    }
+
+		    if (! value_el){
+			_self.stop_spinner();			
+			_self.alert("Failed to derive valud");
+			return false;
+		    }
+
+		    const prefix = prefix_el.value;
+		    const value = value_el.value;
+
+		    if (! prefix){
+			_self.stop_spinner();			
+			_self.alert("Prefix must not be blank");
+			return false;
+		    }
+
+		    if (! value){
+			_self.stop_spinner();			
+			_self.alert("Value must not be blank");
+			return false;
+		    }
+
+		    var data;
+
+		    _self.load_data().then((rsp) => {
+			data = rsp;
+		    }).catch((err) => {
+			console.error("Failed to parse raw data", err);
+			_self.stop_spinner();
+			_self.alert("Failed to parse data, " + err);
+			return false;
+		    });
+		    
+		    if (prefix in data.properties["wof:concordances"]){
+			_self.stop_spinner();
+			_self.alert("There is already a concordance with that prefix");
+			return false;
+		    }
+		    
+		    // START OF put me in a function...
+			
+		    const row = new_concordances_row(prefix, value);
+		    concordances_el.prepend(row);		
+			
+		    return false;
+		};
+
+		const cancel_btn = document.createElement("button");
+		cancel_btn.setAttribute("class", "btn btn");
+		cancel_btn.appendChild(document.createTextNode("Cancel"));
+
+		cancel_btn.onclick = function(e){
+		    console.log("Cancel");
+		    exit_func();
+		    return false;
+		};
+		
+		buttons.appendChild(cancel_btn);		
+		buttons.appendChild(add_btn);
+		
+		dlg.appendChild(close);
+		dlg.appendChild(body);
+		dlg.appendChild(buttons);
+		
+		document.body.prepend(dlg);	    
+		dlg.showModal();
+		
+		console.log("Add");
+		return false;
+	    };
+	    
 	    const add_btn = form.querySelector("#wof-concordances-add");
 	    add_btn.onclick = concordances_add_func;
 	    
@@ -689,58 +792,20 @@ wof.edit = (function () {
 		const path = add_paths[p];
 		path.onclick = concordances_add_func;
 	    }
+
+	    // Finally add all the existing concordances
 	    
 	    for (const k in data.properties["wof:concordances"]){
-
 		const v = data.properties["wof:concordances"][k];
-		const row = concordances_t.content.cloneNode(true);
-
-		const wrapper = row.querySelector(".concordance-row");
-		wrapper.setAttribute("id", "wof-concordances-" + k);
-		
-		// Note: It is important to update row _before_ appending it to concordances_el
-		
-		const label = row.querySelector(".label");
-		label.innerText = k;	// Lookup name for k here (whosonfirst-sources)
-		
-		const prefix = row.querySelector(".prefix");
-		prefix.innerText = k;
-
-		const input = row.querySelector(".form-control");
-		input.setAttribute("name", k);
-		input.setAttribute("value", v);
-
-		input.onchange = concordances_update_func;
-
-		// START OF this is annoying...
-		
-		const remove_btn = row.querySelector(".concordance-rm");
-		remove_btn.setAttribute("data-prefix", k);
-		remove_btn.onclick = concordances_remove_func;
-
-		const remove_svg = remove_btn.querySelector("svg");
-		remove_svg.setAttribute("data-prefix", k);
-		remove_svg.onclick = concordances_remove_func;
-
-		const remove_paths = remove_svg.querySelectorAll("path");
-		const count_remove = remove_paths.length;
-		
-		for (var p=0; p < count_remove; p++){
-		    const path = remove_paths[p];
-		    path.setAttribute("data-prefix", k);
-		    path.onclick = concordances_remove_func;
-		}
-		
-		// END OF this is annoying...
-		    
+		const row = new_concordances_row(k, v);
 		concordances_el.appendChild(row);		
-	    }
-
+	    }	    
+	    
 	    // All done...
 	    
 	    return form;
 	},
-
+	
 	populate_existential_flag: function(input_el, flag_v){
 
 	    // TBD: Just do this from a template?
@@ -868,7 +933,19 @@ wof.edit = (function () {
 	    spinner.style.display = "none";
 	},
 	
+	load_data: function() {
 
+	    return new Promise((resolve, reject) => {
+
+		try {
+		    const row = document.querySelector("#raw");
+		    const data = JSON.parse(raw.innerText);
+		    resolve(data);
+		} catch(err) {
+		    reject("Failed to parse raw data, " + err);		    
+		}
+	    });
+	},
     };
     
     return self;
