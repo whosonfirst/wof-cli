@@ -700,8 +700,8 @@ wof.edit = (function () {
 
 		    _self.start_spinner();
 		    
-		    const prefix_el = document.querySelector("#new-wof:concordances-name");
-		    const value_el = document.querySelector("#new-wof:concordances-value");
+		    const prefix_el = row.querySelector("#new-wof-concordances-name");
+		    const value_el = row.querySelector("#new-wof-concordances-value");
 
 		    if (! prefix_el){
 			_self.stop_spinner();			
