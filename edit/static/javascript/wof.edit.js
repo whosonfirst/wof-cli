@@ -931,36 +931,43 @@ wof.edit = (function () {
 		    reject("Failed to parse raw data, " + err);		    
 		    return;
 		}
-	    
-		try {
-		    const row = document.getElementById("wof-concordances-" + prefix);
-		    const parent = row.parentNode;
-		    parent.removeChild(row);
-		} catch(err) {
-		    console.error("Failed to remove row", err);
-		    _self.stop_spinner();
-
-		    reject("Failed to remove row, " + err);		    
-		    return false;
-		}
-	    
+	    	    
 		delete(data.properties["wof:concordances"][prefix]);
 		const str_data = JSON.stringify(data);
 		
-		wof_format(str_data).then((fmt_rsp) => {
-		    raw.innerText = fmt_rsp;
-		    _self.stop_spinner();
+		wof_validate(str_data).then(() => {
+		    wof_format(str_data).then((fmt_rsp) => {
 
-		    resolve();
-		    return;
+			try {
+			    const row = document.getElementById("wof-concordances-" + prefix);
+			    const parent = row.parentNode;
+			    parent.removeChild(row);
+			} catch(err) {
+			    console.error("Failed to remove row", err);
+			    _self.stop_spinner();
+			    
+			    reject("Failed to remove row, " + err);		    
+			    return false;
+			}
+			
+			raw.innerText = fmt_rsp;
+			_self.stop_spinner();
+			
+			resolve();
+			return;
+		    }).catch((err) => {
+			console.error("Failed to format data", err);
+			_self.stop_spinner();
+			
+			reject("Failed to format raw data, " + err);		    
+			return;
+		    });
 		}).catch((err) => {
-		    console.error("Failed to format data", err);
+		    console.error("Data validation failed", err);
 		    _self.stop_spinner();
-
-		    reject("Failed to format raw data, " + err);		    
+		    reject("Data validation failed, " + err);
 		    return;
 		});
-
 	    });
 	},
 	
