@@ -434,10 +434,18 @@ wof.edit = (function () {
 	},
 
 	populate_form: function(t, data){
-
-	    const _self = self;
 	    
 	    const form = t.content.cloneNode(true);
+
+	    self.populate_form_wof_input(form, data);	    
+	    self.populate_form_concordances(form, data);
+	    
+	    return form;
+	},
+
+	populate_form_wof_input: function(form, data){
+
+	    const _self = self;
 	    
 	    const inputs = form.querySelectorAll(".wof-input");
 	    const count_inputs = inputs.length;
@@ -544,8 +552,12 @@ wof.edit = (function () {
 			break;
 		}
 	    }
+	    
+	},
+	
+	populate_form_concordances: function(form, data){
 
-	    // wof:concordances
+	    const _self = self;
 	    
 	    const concordances_el = form.querySelector("#wof-concordances");
 	    const concordances_t = document.querySelector("#wof-concordances-row");	    
@@ -831,10 +843,8 @@ wof.edit = (function () {
 		const row = new_concordances_row(k, v);
 		concordances_el.appendChild(row);		
 	    }	    
+
 	    
-	    // All done...
-	    
-	    return form;
 	},
 	
 	populate_existential_flag: function(input_el, flag_v){
