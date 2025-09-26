@@ -655,7 +655,6 @@ wof.edit = (function () {
 
 		return row;
 	    };
-
 	    
 	    const concordances_add_func = function(e){
 		
@@ -690,18 +689,13 @@ wof.edit = (function () {
 
 		const buttons = document.createElement("div");
 		buttons.setAttribute("id", "new-concordance-buttons");
-		
-		const add_btn = document.createElement("button");
-		add_btn.setAttribute("class", "btn btn-primary");
-		add_btn.appendChild(document.createTextNode("Add concordance"));
 
-		add_btn.onclick = function(e){
-		    console.log("Add");
+		const add_btn_func = function(e){
 
 		    _self.start_spinner();
 		    
-		    const prefix_el = row.querySelector("#new-wof-concordances-name");
-		    const value_el = row.querySelector("#new-wof-concordances-value");
+		    const prefix_el = document.querySelector("#new-wof-concordances-name");
+		    const value_el = document.querySelector("#new-wof-concordances-value");
 
 		    if (! prefix_el){
 			_self.stop_spinner();			
@@ -732,35 +726,72 @@ wof.edit = (function () {
 
 		    var data;
 
-		    _self.load_data().then((rsp) => {
-			data = rsp;
-		    }).catch((err) => {
+		    try {
+			const row = document.querySelector("#raw");
+			data = JSON.parse(raw.innerText);
+		    } catch(err) {
 			console.error("Failed to parse raw data", err);
 			_self.stop_spinner();
 			_self.alert("Failed to parse data, " + err);
 			return false;
-		    });
-		    
+		    };
+
 		    if (prefix in data.properties["wof:concordances"]){
 			_self.stop_spinner();
 			_self.alert("There is already a concordance with that prefix");
 			return false;
 		    }
+
+		    data.properties["wof:concordances"][prefix] = value;
+			
+		    const str_data = JSON.stringify(data);
 		    
-		    // START OF put me in a function...
+		    wof_validate(str_data).then(() => {
+
+			wof_format(str_data).then((fmt_rsp) => {
+			    
+			    raw.innerText = fmt_rsp;
+
+			    const row = new_concordances_row(prefix, value);
+			    concordances_el.prepend(row);		
+			    
+			    exit_func();
+			    _self.stop_spinner();			    
+			    _self.feedback("New concordance added", 1500);
+			    
+			}).catch((err) => {
+			    _self.stop_spinner();			    
+			    _self.alert("Failed to format raw data, " + err);			    
+			    console.error("Failed to format data", err);
+			});
 			
-		    const row = new_concordances_row(prefix, value);
-		    concordances_el.prepend(row);		
-			
+		    }).catch((err) => {
+			_self.stop_spinner();			
+			_self.alert("Data validation failed, " + err);
+			console.error("Failed to validate data", err);
+		    });		    
+		    
 		    return false;
 		};
+		
+		const add_btn = document.createElement("button");
+		add_btn.setAttribute("class", "btn btn-primary");
+		add_btn.appendChild(document.createTextNode("Add concordance"));
 
+		add_btn.onclick = function(e){
+		    try {
+			add_btn_func(e);
+		    } catch(err) {
+			_self.alert("Failed to add concordance, " + err);
+			return false;
+		    }
+		};
+		
 		const cancel_btn = document.createElement("button");
 		cancel_btn.setAttribute("class", "btn btn");
 		cancel_btn.appendChild(document.createTextNode("Cancel"));
 
 		cancel_btn.onclick = function(e){
-		    console.log("Cancel");
 		    exit_func();
 		    return false;
 		};
@@ -937,13 +968,6 @@ wof.edit = (function () {
 
 	    return new Promise((resolve, reject) => {
 
-		try {
-		    const row = document.querySelector("#raw");
-		    const data = JSON.parse(raw.innerText);
-		    resolve(data);
-		} catch(err) {
-		    reject("Failed to parse raw data, " + err);		    
-		}
 	    });
 	},
     };
