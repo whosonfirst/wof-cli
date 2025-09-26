@@ -553,6 +553,70 @@ wof.edit = (function () {
 	    const concordances_add_func = function(e){
 		e.stopPropagation()
 
+		
+		const dlg = document.createElement("dialog");
+		dlg.setAttribute("id", "dialog");
+		dlg.setAttribute("class", "dialog");
+		
+		const exit_func = function(){
+		    dlg.close()
+		    document.body.removeChild(dlg);		
+		};
+
+		const close = document.createElement("div");
+		close.setAttribute("class", "dialog-close");
+		
+		close.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg>';	    
+		
+		close.onclick = function(e){
+		    
+		    if (alert_timeout){
+			clearTimeout(alert_timeout);
+		    }
+
+		    exit_func();
+		};
+		
+		const body = document.createElement("div");
+		body.setAttribute("class", "dialog-body");
+
+		const new_t = document.querySelector("#new-concordances-row");
+		const row = new_t.content.cloneNode(true);
+		
+		body.appendChild(row);
+
+		const buttons = document.createElement("div");
+		buttons.setAttribute("id", "new-concordance-buttons");
+		
+		const add_btn = document.createElement("button");
+		add_btn.setAttribute("class", "btn btn-primary");
+		add_btn.appendChild(document.createTextNode("Add concordance"));
+
+		add_btn.onclick = function(e){
+		    console.log("Add");
+		    return false;
+		};
+
+		const cancel_btn = document.createElement("button");
+		cancel_btn.setAttribute("class", "btn btn");
+		cancel_btn.appendChild(document.createTextNode("Cancel"));
+
+		cancel_btn.onclick = function(e){
+		    console.log("Cancel");
+		    exit_func();
+		    return false;
+		};
+		
+		buttons.appendChild(cancel_btn);		
+		buttons.appendChild(add_btn);
+		
+		dlg.appendChild(close);
+		dlg.appendChild(body);
+		dlg.appendChild(buttons);
+		
+		document.body.prepend(dlg);	    
+		dlg.showModal();
+		
 		console.log("Add");
 		return false;
 	    };

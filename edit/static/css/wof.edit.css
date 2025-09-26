@@ -13,6 +13,11 @@
 pre {
 }
 
+#new-concordance-buttons {
+	display: flex;
+	justify-content: right;
+}
+
 #spinner {
         animation: rotate 5s linear infinite;
         transform-origin: center;
@@ -36,6 +41,20 @@ pre {
 }
 
 .alert-close {
+	display: flex;
+	justify-content: right;
+	margin-bottom: 1rem;
+}
+
+.dialog {
+	background-color: #fff;
+	width: 50vw;
+	padding: 1rem;
+	border: 2px solid #000;
+	margin-top: 3rem !important;
+}
+
+.dialog-close {
 	display: flex;
 	justify-content: right;
 	margin-bottom: 1rem;
