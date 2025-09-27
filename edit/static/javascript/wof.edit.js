@@ -565,9 +565,15 @@ wof.edit = (function () {
 
 	    const _self = self;
 
+	    const names_group = form.querySelector("#localized-names-group")
 	    const names_desc = form.querySelector("#localized-names-description");
 	    const names_count = form.querySelector("#localized-names-count");
+	    
+	    const t = document.querySelector("#localized-names-row");
+	    const row = t.content.cloneNode(true);
 
+	    // names_group.appendChild(row);
+	    
 	    var count_names = 0;
 	    
 	    for (var k in data.properties){
