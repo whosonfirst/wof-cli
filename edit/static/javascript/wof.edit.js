@@ -4,6 +4,12 @@ wof.edit = (function () {
 
     var feature_layer = null;
     var alert_timeout = null;
+
+    const lang_spoken = ["ara", "ara_AE", "ben", "ben_IN", "ben_BD", "dan", "ell", "eng", "eng_GB", "eng_US", "fin", "fra", "ger", "ind", "ita", "jpn", "kan", "kor", "mal", "nld", "nor", "pol", "por", "por_BR", "por_PT", "ron", "rus", "spa", "spa_AR", "spa_MX", "spa_ES", "swe", "tam", "tel", "tha", "tur", "zho", "zho_CN", "zho_TW"];
+
+    const lang_official = ["ara", "ara_AE", "ben", "ben_IN", "ben_BD", "dan", "ell", "eng", "eng_GB", "eng_US", "fin", "fra", "ger", "ind", "ita", "jpn", "kan", "kor", "mal", "nld", "nor", "pol", "por", "por_BR", "por_PT", "ron", "rus", "spa", "spa_AR", "spa_MX", "spa_ES", "swe", "tam", "tel", "tha", "tur", "zho", "zho_CN", "zho_TW"];
+
+    const lang_ok = [{"lang": "afr", "searchBy": ["afr"], "value": "afr"}, {"lang": "ara", "searchBy": ["ara", "Arabic"], "value": "Arabic (ara)"}, {"lang": "arz", "searchBy": ["arz"], "value": "arz"}, {"lang": "ben", "searchBy": ["ben", "Bengali"], "value": "Bengali (ben)"}, {"lang": "bul", "searchBy": ["bul"], "value": "bul"}, {"lang": "cat", "searchBy": ["cat"], "value": "cat"}, {"lang": "ces", "searchBy": ["ces"], "value": "ces"}, {"lang": "cym", "searchBy": ["cym"], "value": "cym"}, {"lang": "dan", "searchBy": ["dan", "Danish"], "value": "Danish (dan)"}, {"lang": "deu", "searchBy": ["deu"], "value": "deu"}, {"lang": "eng", "searchBy": ["eng", "English"], "value": "English (eng)"}, {"lang": "epo", "searchBy": ["epo"], "value": "epo"}, {"lang": "est", "searchBy": ["est"], "value": "est"}, {"lang": "eus", "searchBy": ["eus"], "value": "eus"}, {"lang": "fas", "searchBy": ["fas"], "value": "fas"}, {"lang": "fin", "searchBy": ["fin", "Finnish"], "value": "Finnish (fin)"}, {"lang": "fra", "searchBy": ["fra", "French"], "value": "French (fra)"}, {"lang": "guj", "searchBy": ["guj"], "value": "guj"}, {"lang": "heb", "searchBy": ["heb"], "value": "heb"}, {"lang": "hun", "searchBy": ["hun"], "value": "hun"}, {"lang": "hye", "searchBy": ["hye"], "value": "hye"}, {"lang": "ind", "searchBy": ["ind", "Indonesian"], "value": "Indonesian (ind)"}, {"lang": "ita", "searchBy": ["ita", "Italian"], "value": "Italian (ita)"}, {"lang": "jpn", "searchBy": ["jpn", "Japanese"], "value": "Japanese (jpn)"}, {"lang": "kat", "searchBy": ["kat"], "value": "kat"}, {"lang": "kor", "searchBy": ["kor", "Korean"], "value": "Korean (kor)"}, {"lang": "ltz", "searchBy": ["ltz"], "value": "ltz"}, {"lang": "mar", "searchBy": ["mar"], "value": "mar"}, {"lang": "msa", "searchBy": ["msa"], "value": "msa"}, {"lang": "nav", "searchBy": ["nav"], "value": "nav"}, {"lang": "nld", "searchBy": ["nld", "Dutch"], "value": "Dutch (nld)"}, {"lang": "nno", "searchBy": ["nno"], "value": "nno"}, {"lang": "nob", "searchBy": ["nob"], "value": "nob"}, {"lang": "nor", "searchBy": ["nor", "Norwegian"], "value": "Norwegian (nor)"}, {"lang": "pdc", "searchBy": ["pdc"], "value": "pdc"}, {"lang": "pol", "searchBy": ["pol", "Polish"], "value": "Polish (pol)"}, {"lang": "por", "searchBy": ["por", "Portuguese"], "value": "Portuguese (por)"}, {"lang": "ron", "searchBy": ["ron", "Romanian"], "value": "Romanian (ron)"}, {"lang": "rus", "searchBy": ["rus", "Russian"], "value": "Russian (rus)"}, {"lang": "sco", "searchBy": ["sco"], "value": "sco"}, {"lang": "slk", "searchBy": ["slk"], "value": "slk"}, {"lang": "spa", "searchBy": ["spa", "Spanish"], "value": "Spanish (spa)"}, {"lang": "srp", "searchBy": ["srp"], "value": "srp"}, {"lang": "swe", "searchBy": ["swe", "Swedish"], "value": "Swedish (swe)"}, {"lang": "tam", "searchBy": ["tam", "Tamil"], "value": "Tamil (tam)"}, {"lang": "tgl", "searchBy": ["tgl"], "value": "tgl"}, {"lang": "tha", "searchBy": ["tha", "Thai"], "value": "Thai (tha)"}, {"lang": "tur", "searchBy": ["tur", "Turkish"], "value": "Turkish (tur)"}, {"lang": "ukr", "searchBy": ["ukr"], "value": "ukr"}, {"lang": "urd", "searchBy": ["urd"], "value": "urd"}, {"lang": "vie", "searchBy": ["vie"], "value": "vie"}, {"lang": "yue", "searchBy": ["yue"], "value": "yue"}, {"lang": "zho", "searchBy": ["zho", "Chinese"], "value": "Chinese (zho)"}];
     
     var self = {
 	
@@ -436,7 +442,8 @@ wof.edit = (function () {
 	    const form_t = document.querySelector("#edit-form");	    
 	    const form = form_t.content.cloneNode(true);
 
-	    self.populate_form_wof_input(form, data);	    
+	    self.populate_form_wof_input(form, data);
+	    self.populate_form_names(form, data);	    	    
 	    self.populate_form_concordances(form, data);
 	    
 	    return form;
@@ -552,6 +559,36 @@ wof.edit = (function () {
 		}
 	    }
 	    
+	},
+
+	populate_form_names: function(form, data){
+
+	    const _self = self;
+
+	    const names_desc = form.querySelector("#localized-names-description");
+	    const names_count = form.querySelector("#localized-names-count");
+
+	    var count_names = 0;
+	    
+	    for (var k in data.properties){
+
+		if (k.startsWith("name:")){
+		    count_names += 1;
+		}
+	    }
+
+	    switch (count_names){
+		case 0:
+		    break;
+		case 1:
+		    names_count.innerText = "1 language";
+		    names_desc.style.display = "inline-block";
+		    break;
+		default:
+		    names_count.innerText = count_names + " languages";
+		    names_desc.style.display = "inline-block";
+		    break;
+	    }		    
 	},
 	
 	populate_form_concordances: function(form, data){
