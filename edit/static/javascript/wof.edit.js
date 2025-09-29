@@ -241,7 +241,7 @@ wof.edit = (function () {
 		    _self.alert("Failed to format data, " + err);
 		    console.error("Failed to format data", err);
 		})
-
+		
 		// Set up map
 		
 		const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);
@@ -285,7 +285,7 @@ wof.edit = (function () {
 		    
 		    form_wrapper.style.display = "block";
 
-		    // END OF rebuild form
+		    // END OF rebuild form				    
 		    
 		    raw.style.display = "none";
 		    return false;
@@ -459,7 +459,8 @@ wof.edit = (function () {
 	    for (var i=0; i < count_inputs; i++){
 		
 		const input_el = inputs[i];
-
+		const input_id = input_el.getAttribute("id");
+		
 		input_el.onchange = function(e){
 		    
 		    const el = e.target;
@@ -477,6 +478,51 @@ wof.edit = (function () {
 		    }
 		    
 		    switch (id){
+			case "wof:lang_x_spoken":
+
+			    try {
+				
+				var tag_langs = [];
+				
+				const str_langs = el.value;
+				console.log("VALUE", str_langs);
+				
+				if (str_langs != ""){
+				    tag_langs = JSON.parse(str_langs);
+				}
+				
+			    } catch(err) {
+				console.error("Failed to parse tag data", err);
+				_self.alert("Failed to parse tag data", err);
+				return false;
+			    }
+			    
+			    const count_langs = tag_langs.length;
+			    console.log("COUNT", count_langs);
+			    
+			    if (count_langs == 0){
+				
+				if ("wof:lang_x_spoken" in data.properties){
+				    delete data.properties["wof:lang_x_spoken"];			    
+				} else {
+				    return;
+				}
+				
+			    } else {
+				
+				var langs = [];
+				
+				for (var i=0; i < count_tags; i++){
+				    console.log("LANG", i, tag_langs.value);
+				    langs.push(tag_langs[i].value);
+				}
+				
+				console.log("SET", langs);
+				data.properties["wof:lang_x_spoken"] = langs;
+			    }
+
+			    break;
+			    
 			default:
 
 			    if (el.value == ""){
@@ -494,6 +540,7 @@ wof.edit = (function () {
 			wof_format(str_data).then((fmt_rsp) => {
 			    raw.innerText = fmt_rsp;
 			}).catch((err) => {
+			    _self.alert("Failed to format response " + err);
 			    console.error("Failed to format response", err);
 			});
 		    }).catch((err) => {
@@ -546,6 +593,20 @@ wof.edit = (function () {
 		    case "mz:is_funky":
 			self.populate_existential_flag(input_el, data.properties[id]);			
 			break;
+		    case "wof:lang_x_spoken":
+
+			console.log("FOO");
+			// FORMAT wof:lang_x_spoken for tagify here..
+
+			    try {
+				Tagify(input_el, {
+				    whiteList: lang_spoken
+				});			
+			    } catch(err) {
+				console.error("SAD", err, input_el);
+			    };
+			    
+			break;
 		    default:
 
 			var v = "";
@@ -560,7 +621,7 @@ wof.edit = (function () {
 	    }
 	    
 	},
-
+	
 	populate_form_names: function(form, data){
 
 	    const _self = self;
