@@ -11,6 +11,8 @@ wof.edit = (function () {
 
     const lang_ok = [{"lang": "afr", "searchBy": ["afr"], "value": "afr"}, {"lang": "ara", "searchBy": ["ara", "Arabic"], "value": "Arabic (ara)"}, {"lang": "arz", "searchBy": ["arz"], "value": "arz"}, {"lang": "ben", "searchBy": ["ben", "Bengali"], "value": "Bengali (ben)"}, {"lang": "bul", "searchBy": ["bul"], "value": "bul"}, {"lang": "cat", "searchBy": ["cat"], "value": "cat"}, {"lang": "ces", "searchBy": ["ces"], "value": "ces"}, {"lang": "cym", "searchBy": ["cym"], "value": "cym"}, {"lang": "dan", "searchBy": ["dan", "Danish"], "value": "Danish (dan)"}, {"lang": "deu", "searchBy": ["deu"], "value": "deu"}, {"lang": "eng", "searchBy": ["eng", "English"], "value": "English (eng)"}, {"lang": "epo", "searchBy": ["epo"], "value": "epo"}, {"lang": "est", "searchBy": ["est"], "value": "est"}, {"lang": "eus", "searchBy": ["eus"], "value": "eus"}, {"lang": "fas", "searchBy": ["fas"], "value": "fas"}, {"lang": "fin", "searchBy": ["fin", "Finnish"], "value": "Finnish (fin)"}, {"lang": "fra", "searchBy": ["fra", "French"], "value": "French (fra)"}, {"lang": "guj", "searchBy": ["guj"], "value": "guj"}, {"lang": "heb", "searchBy": ["heb"], "value": "heb"}, {"lang": "hun", "searchBy": ["hun"], "value": "hun"}, {"lang": "hye", "searchBy": ["hye"], "value": "hye"}, {"lang": "ind", "searchBy": ["ind", "Indonesian"], "value": "Indonesian (ind)"}, {"lang": "ita", "searchBy": ["ita", "Italian"], "value": "Italian (ita)"}, {"lang": "jpn", "searchBy": ["jpn", "Japanese"], "value": "Japanese (jpn)"}, {"lang": "kat", "searchBy": ["kat"], "value": "kat"}, {"lang": "kor", "searchBy": ["kor", "Korean"], "value": "Korean (kor)"}, {"lang": "ltz", "searchBy": ["ltz"], "value": "ltz"}, {"lang": "mar", "searchBy": ["mar"], "value": "mar"}, {"lang": "msa", "searchBy": ["msa"], "value": "msa"}, {"lang": "nav", "searchBy": ["nav"], "value": "nav"}, {"lang": "nld", "searchBy": ["nld", "Dutch"], "value": "Dutch (nld)"}, {"lang": "nno", "searchBy": ["nno"], "value": "nno"}, {"lang": "nob", "searchBy": ["nob"], "value": "nob"}, {"lang": "nor", "searchBy": ["nor", "Norwegian"], "value": "Norwegian (nor)"}, {"lang": "pdc", "searchBy": ["pdc"], "value": "pdc"}, {"lang": "pol", "searchBy": ["pol", "Polish"], "value": "Polish (pol)"}, {"lang": "por", "searchBy": ["por", "Portuguese"], "value": "Portuguese (por)"}, {"lang": "ron", "searchBy": ["ron", "Romanian"], "value": "Romanian (ron)"}, {"lang": "rus", "searchBy": ["rus", "Russian"], "value": "Russian (rus)"}, {"lang": "sco", "searchBy": ["sco"], "value": "sco"}, {"lang": "slk", "searchBy": ["slk"], "value": "slk"}, {"lang": "spa", "searchBy": ["spa", "Spanish"], "value": "Spanish (spa)"}, {"lang": "srp", "searchBy": ["srp"], "value": "srp"}, {"lang": "swe", "searchBy": ["swe", "Swedish"], "value": "Swedish (swe)"}, {"lang": "tam", "searchBy": ["tam", "Tamil"], "value": "Tamil (tam)"}, {"lang": "tgl", "searchBy": ["tgl"], "value": "tgl"}, {"lang": "tha", "searchBy": ["tha", "Thai"], "value": "Thai (tha)"}, {"lang": "tur", "searchBy": ["tur", "Turkish"], "value": "Turkish (tur)"}, {"lang": "ukr", "searchBy": ["ukr"], "value": "ukr"}, {"lang": "urd", "searchBy": ["urd"], "value": "urd"}, {"lang": "vie", "searchBy": ["vie"], "value": "vie"}, {"lang": "yue", "searchBy": ["yue"], "value": "yue"}, {"lang": "zho", "searchBy": ["zho", "Chinese"], "value": "Chinese (zho)"}];
     
+    const close_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg>';
+    
     var self = {
 	
 	init: function() {
@@ -49,7 +51,7 @@ wof.edit = (function () {
 	    const close = document.createElement("div");
 	    close.setAttribute("class", "alert-close");
 
-		close.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg>';	    
+		close.innerHTML = close_svg;	    
 
 	    close.onclick = function(e){
 
@@ -173,6 +175,10 @@ wof.edit = (function () {
 		
 		right.appendChild(form_wrapper);
 
+		// Mmmmmmmaybe... automatically fix old edtf: (and other) values
+		// here? This depends on form the form and raw (pre) elements being
+		// populated.
+		
 		// Set up feature wrapper
 		
 		var wrapper = document.createElement("div");
@@ -456,107 +462,143 @@ wof.edit = (function () {
 	    const inputs = form.querySelectorAll(".wof-input");
 	    const count_inputs = inputs.length;
 	    
+	    const onchange = function(e){
+		    
+		const el = e.target;
+		const id = el.getAttribute("id");
+		
+		var change_data;
+		
+		try {
+		    const row = document.querySelector("#raw");
+		    change_data = JSON.parse(raw.innerText);
+		} catch(err) {
+		    _self.alert("Failed to parse raw data, " + err);
+		    console.error("Failed to parse raw data", err);
+		    return false;
+		}
+		
+		switch (id){
+		    case "wof:lang_x_spoken":
+
+			var tag_langs_spoken = [];
+			
+			try {			   
+			    
+			    const str_langs = el.value;
+			    
+			    if (str_langs != ""){
+				tag_langs_spoken = JSON.parse(str_langs);
+			    }
+			    
+			} catch(err) {
+			    console.error("Failed to parse tag data", err);
+			    _self.alert("Failed to parse tag data", err);
+			    return false;
+			}
+			
+			const count_langs_spoken = tag_langs_spoken.length;
+			
+			if (count_langs_spoken == 0){
+			    
+			    if ("wof:lang_x_spoken" in change_data.properties){
+				delete change_data.properties["wof:lang_x_spoken"];			    
+			    } else {
+				return;
+			    }
+			    
+			} else {
+			    
+			    var langs = [];
+			    
+			    for (var i=0; i < count_langs_spoken; i++){
+				langs.push(tag_langs_spoken[i].value);
+			    }
+			    
+			    change_data.properties["wof:lang_x_spoken"] = langs;
+			}
+			
+			break;
+
+		    case "wof:lang_x_official":
+			
+			var tag_langs_official = [];
+			
+			try {
+			    const str_langs = el.value;
+			    
+			    if (str_langs != ""){
+				tag_langs_official = JSON.parse(str_langs);
+			    }
+			    
+			} catch(err) {
+			    console.error("Failed to parse tag data", err);
+			    _self.alert("Failed to parse tag data", err);
+			    return false;
+			}
+			
+			const count_langs_official = tag_langs_official.length;
+			
+			if (count_langs_official == 0){
+			    
+			    if ("wof:lang_x_official" in change_data.properties){
+				delete change_data.properties["wof:lang_x_official"];			    
+			    } else {
+				return;
+			    }
+			    
+			} else {
+			    
+			    var langs = [];
+			    
+			    for (var i=0; i < count_langs_official; i++){
+				langs.push(tag_langs_official[i].value);
+			    }
+			    
+			    change_data.properties["wof:lang_x_official"] = langs;
+			}
+			
+			break;			
+		    default:
+			
+			if (el.value == ""){
+			    delete change_data.properties[id];
+			} else {
+			    change_data.properties[id] = el.value;
+			}
+			
+			break;
+		}
+		
+		const str_data = JSON.stringify(change_data);
+		
+		wof_validate(str_data).then(() => {
+		    wof_format(str_data).then((fmt_rsp) => {
+			raw.innerText = fmt_rsp;
+		    }).catch((err) => {
+			_self.alert("Failed to format response " + err);
+			console.error("Failed to format response", err);
+		    });
+		}).catch((err) => {
+		    _self.alert("Data validation failed, " + err);			
+		    console.error("Data validation failed", err);
+		});
+	    };
+	    
 	    for (var i=0; i < count_inputs; i++){
 		
 		const input_el = inputs[i];
-		const input_id = input_el.getAttribute("id");
+		const input_id = input_el.getAttribute("id");		
 		
-		input_el.onchange = function(e){
-		    
-		    const el = e.target;
-		    const id = el.getAttribute("id");
-
-		    var data;
-		    
-		    try {
-			const row = document.querySelector("#raw");
-			data = JSON.parse(raw.innerText);
-		    } catch(err) {
-			_self.alert("Failed to parse raw data, " + err);
-			console.error("Failed to parse raw data", err);
-			return false;
-		    }
-		    
-		    switch (id){
-			case "wof:lang_x_spoken":
-
-			    try {
-				
-				var tag_langs = [];
-				
-				const str_langs = el.value;
-				console.log("VALUE", str_langs);
-				
-				if (str_langs != ""){
-				    tag_langs = JSON.parse(str_langs);
-				}
-				
-			    } catch(err) {
-				console.error("Failed to parse tag data", err);
-				_self.alert("Failed to parse tag data", err);
-				return false;
-			    }
-			    
-			    const count_langs = tag_langs.length;
-			    console.log("COUNT", count_langs);
-			    
-			    if (count_langs == 0){
-				
-				if ("wof:lang_x_spoken" in data.properties){
-				    delete data.properties["wof:lang_x_spoken"];			    
-				} else {
-				    return;
-				}
-				
-			    } else {
-				
-				var langs = [];
-				
-				for (var i=0; i < count_tags; i++){
-				    console.log("LANG", i, tag_langs.value);
-				    langs.push(tag_langs[i].value);
-				}
-				
-				console.log("SET", langs);
-				data.properties["wof:lang_x_spoken"] = langs;
-			    }
-
-			    break;
-			    
-			default:
-
-			    if (el.value == ""){
-				delete data.properties[id];
-			    } else {
-				data.properties[id] = el.value;
-			    }
-			    
-			    break;
-		    }
-
-		    const str_data = JSON.stringify(data);
-
-		    wof_validate(str_data).then(() => {
-			wof_format(str_data).then((fmt_rsp) => {
-			    raw.innerText = fmt_rsp;
-			}).catch((err) => {
-			    _self.alert("Failed to format response " + err);
-			    console.error("Failed to format response", err);
-			});
-		    }).catch((err) => {
-			_self.alert("Data validation failed, " + err);			
-			console.error("Data validation failed", err);
-		    });
-		};
-		
-		const id = input_el.getAttribute("id");
-		
-		if (! id in data.properties){
-		    console.debug("Missing property", id);
+		if (! input_id in data.properties){
+		    console.debug("Missing property", input_id);
 		    continue;
 		}
 
-		switch (id){
+		input_el.onchange = onchange;
+		
+		switch (input_id){
+
 		    case "wof:placetype":
 			
 			// wof_edit.wasm
@@ -572,7 +614,7 @@ wof.edit = (function () {
 				const opt = document.createElement("option");
 				opt.setAttribute("value", pt);
 				
-				if (pt == data.properties[id]){
+				if (pt == data.properties[input_id]){
 				    opt.setAttribute("selected", "selected");
 				}
 				
@@ -588,31 +630,70 @@ wof.edit = (function () {
 			break;
 
 		    case "mz:is_current":
-			self.populate_existential_flag(input_el, data.properties[id]);
+			self.populate_existential_flag(input_el, data.properties[input_id]);
 			break;
 		    case "mz:is_funky":
-			self.populate_existential_flag(input_el, data.properties[id]);			
+			self.populate_existential_flag(input_el, data.properties[input_id]);			
 			break;
 		    case "wof:lang_x_spoken":
 
-			console.log("FOO");
-			// FORMAT wof:lang_x_spoken for tagify here..
-
-			    try {
-				Tagify(input_el, {
-				    whiteList: lang_spoken
-				});			
-			    } catch(err) {
-				console.error("SAD", err, input_el);
-			    };
+			if (input_id in data.properties){
 			    
+			    const count_langs = data.properties[input_id].length;
+			    var tag_langs = [];
+			    
+			    for (var l=0; l < count_langs; l++){
+				tag_langs.push({
+				    value: data.properties[input_id][l]
+				});
+			    }
+			    
+			    const str_langs = JSON.stringify(tag_langs);
+			    input_el.value = str_langs;
+			}
+			
+			// Remember: The 'new' is important. That might seem obvious to you
+			// but it took me forever to figure that out...
+			// https://github.com/yairEO/tagify/blob/master/src/parts/helpers.js#L119
+			
+			new Tagify(input_el, {
+			    whiteList: lang_spoken
+			});			
+			
 			break;
+
+		    case "wof:lang_x_official":
+
+			if (input_id in data.properties){
+			    
+			    const count_langs = data.properties[input_id].length;
+			    var tag_langs = [];
+			    
+			    for (var l=0; l < count_langs; l++){
+				tag_langs.push({
+				    value: data.properties[input_id][l]
+				});
+			    }
+			    
+			    const str_langs = JSON.stringify(tag_langs);
+			    input_el.value = str_langs;
+			}
+			
+			// Remember: The 'new' is important. That might seem obvious to you
+			// but it took me forever to figure that out...
+			// https://github.com/yairEO/tagify/blob/master/src/parts/helpers.js#L119
+			
+			new Tagify(input_el, {
+			    whiteList: lang_official
+			});			
+			
+			break;			
 		    default:
 
 			var v = "";
 
-			if (data.properties[id]){
-			    v = data.properties[id];
+			if (data.properties[input_id]){
+			    v = data.properties[input_id];
 			};
 			
 			input_el.value = v;
@@ -621,6 +702,22 @@ wof.edit = (function () {
 	    }
 	    
 	},
+
+	/*
+	populate_form_languages_spoken(form, data){
+
+	    const spoken_el = form.getElementById("wof:lang_x_spoken");
+	    
+	    try {
+		new Tagify(spoken_el, {
+		    whiteList: lang_spoken
+		});			
+	    } catch(err) {
+		console.error("SAD", err, spoken_el);
+	    };
+	    
+	},
+	 */
 	
 	populate_form_names: function(form, data){
 
@@ -787,7 +884,7 @@ wof.edit = (function () {
 		const close = document.createElement("div");
 		close.setAttribute("class", "dialog-close");
 		
-		close.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg>';	    
+		close.innerHTML = close_svg;
 		
 		close.onclick = function(e){
 		    exit_func();
