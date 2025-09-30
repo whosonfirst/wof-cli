@@ -147,6 +147,40 @@ wof.edit = (function () {
 	    
 	    wof.edit.api.fetch(uri).then((data) => {
 
+		// START OF monkey-patching pre-2019 EDTF values
+		
+		const edtf_props = [
+		    "edtf:inception",
+		    "edtf:cessation",		    
+		];
+
+		const edtf_count = edtf_props.length;
+
+		for (var i=0; i < edtf_count; i++){
+
+		    const prop = edtf_props[i];
+
+		    if (prop in data.properties){
+
+			var v = data.properties[prop];
+			
+			switch (v){
+			    case "open":
+				v = "..";
+				break;
+			    case "uuuu":
+				v = "";
+				break;
+			    default:
+				break;
+			}
+
+			data.properties[prop] = v;
+		    }
+		}
+
+		// END OF monkey-patching pre-2019 EDTF values		
+		
 		const str_data = JSON.stringify(data);
 		const map_id = "map";
 		
@@ -175,10 +209,6 @@ wof.edit = (function () {
 		
 		right.appendChild(form_wrapper);
 
-		// Mmmmmmmaybe... automatically fix old edtf: (and other) values
-		// here? This depends on form the form and raw (pre) elements being
-		// populated.
-		
 		// Set up feature wrapper
 		
 		var wrapper = document.createElement("div");
