@@ -15,7 +15,7 @@ require (
 	github.com/sfomuseum/iso8601duration v1.1.0
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
-	github.com/whosonfirst/go-reader/v2 v2.0.0
+	github.com/whosonfirst/go-reader/v2 v2.1.0
 	github.com/whosonfirst/go-whosonfirst-export/v3 v3.2.0
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.29
 	github.com/whosonfirst/go-whosonfirst-format v1.1.0

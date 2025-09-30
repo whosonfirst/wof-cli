@@ -733,35 +733,16 @@ wof.edit = (function () {
 	    
 	},
 
-	/*
-	populate_form_languages_spoken(form, data){
-
-	    const spoken_el = form.getElementById("wof:lang_x_spoken");
-	    
-	    try {
-		new Tagify(spoken_el, {
-		    whiteList: lang_spoken
-		});			
-	    } catch(err) {
-		console.error("SAD", err, spoken_el);
-	    };
-	    
-	},
-	 */
-	
 	populate_form_names: function(form, data){
 
 	    const _self = self;
 
+	    // Count languages and display
+	    
 	    const names_group = form.querySelector("#localized-names-group")
 	    const names_desc = form.querySelector("#localized-names-description");
 	    const names_count = form.querySelector("#localized-names-count");
-	    
-	    const t = document.querySelector("#localized-names-row");
-	    const row = t.content.cloneNode(true);
 
-	    // names_group.appendChild(row);
-	    
 	    var count_names = 0;
 	    
 	    for (var k in data.properties){
@@ -783,6 +764,101 @@ wof.edit = (function () {
 		    names_desc.style.display = "inline-block";
 		    break;
 	    }		    
+
+	    // Adding and removing languages
+	    
+	    const t = document.querySelector("#localized-names-row");
+	    
+	    const names_selected = form.querySelector("#localized-names-selected");
+
+	    const tags_selected = new Tagify(names_selected, {
+		whiteList: lang_ok,
+	    });
+	    
+	    tags_selected.on("add", function(e){
+		
+		const lang = e.detail.data.value;
+		const id = "localized-names-row-" + lang;
+		
+		console.debug("Add name(s)", lang, id);
+
+		// Note: We are counting on Tagify.js deduping and not dispatching
+		// the same language tag twice to this event.
+
+		    try {
+			const node = t.content.cloneNode(true);
+			const row = node.querySelector(".localized-names-row");
+			
+			row.setAttribute("id", id);
+			row.setAttribute("data-lang", lang);
+			
+			const name_el = row.querySelector(".lang-name");
+			name_el.innerText = lang;	// LOOKUP NAME HERE
+			
+			const code_el = row.querySelector(".lang-code");
+			code_el.innerText = lang;
+			
+			const input_els = row.querySelectorAll("input");
+			const count_els = input_els.length;
+			
+			for (var i=0; i < count_els; i++){
+
+			    const el = input_els[i];
+			    const spec = el.getAttribute("data-spec");
+
+			    const el_id = "name:" + lang + "_x_" + spec;
+			    console.debug("Add el", el_id);
+			    
+			    el.setAttribute("name", el_id);
+			    el.setAttribute("id", el_id);
+
+			    const el_tag = new Tagify(el);
+			    
+			    el_tag.on("add", function(e){
+
+				// why is this always null?
+				console.log("ADD", el_id, e.detail.value);
+			    });
+
+			    el_tag.on("remove", function(e){
+
+				if (! e.data){
+				    return;
+				}
+				
+				console.log("REMOVE", el_id, e.data.value);
+			    });
+			    
+			}
+			
+			names_group.prepend(row);
+			
+		    } catch (err) {
+			console.error("Failed to add name(s) row for ", lang, id, err);
+		    }
+	    });
+
+	    tags_selected.on("remove", function(e){
+
+		if (!e.detail.data){
+		    return;
+		}
+
+		const lang = e.detail.data.value;
+		const id = "localized-names-row-" + lang;
+		
+		console.debug("Remove name(s)", lang, id);
+
+		const row = document.getElementById(id);
+
+		if (! row){
+		    console.warn("Failed to locate name(s) row for language", lang, id);
+		    return;
+		}
+
+		row.parentNode.removeChild(row);
+	    });
+	    
 	},
 	
 	populate_form_concordances: function(form, data){
