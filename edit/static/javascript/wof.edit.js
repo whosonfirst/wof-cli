@@ -44,14 +44,16 @@ wof.edit = (function () {
 
 	alert: function(msg, ttl){
 
+	    console.log(msg);
+	    
 	    const dlg = document.createElement("dialog");
 	    dlg.setAttribute("id", "alert");
 	    dlg.setAttribute("class", "alert");
 	    
 	    const close = document.createElement("div");
 	    close.setAttribute("class", "alert-close");
-
-		close.innerHTML = close_svg;	    
+	    
+	    close.innerHTML = close_svg;	    
 
 	    close.onclick = function(e){
 
@@ -67,13 +69,12 @@ wof.edit = (function () {
 	    body.setAttribute("class", "alert-body");
 	    
 	    body.appendChild(document.createTextNode(msg));
-
 	    dlg.appendChild(close);
 	    dlg.appendChild(body);
 
-	    document.body.prepend(dlg);	    
+	    document.body.prepend(dlg);
 	    dlg.showModal();
-
+	    
 	    if (ttl){
 
 		if (alert_timeout){
@@ -800,6 +801,25 @@ wof.edit = (function () {
 			
 			const input_els = row.querySelectorAll("input");
 			const count_els = input_els.length;
+
+			// START OF if there's a built-in method to do this
+			// I can't find it...
+			    
+			const list_tags = function(tag){
+
+			    const tag_els = tag.getTagElms();
+			    const count_tags = tag_els.length;
+			    
+			    var tags = [];
+			    
+			    for (var t=0; t < count_tags; t++){
+				tags.push(tag_els[t].getAttribute("value"));
+			    }
+
+			    return tags;
+			};
+
+			// END OF if there's a built-in method to do this
 			
 			for (var i=0; i < count_els; i++){
 
@@ -807,26 +827,25 @@ wof.edit = (function () {
 			    const spec = el.getAttribute("data-spec");
 
 			    const el_id = "name:" + lang + "_x_" + spec;
-			    console.debug("Add el", el_id);
-			    
 			    el.setAttribute("name", el_id);
 			    el.setAttribute("id", el_id);
 
 			    const el_tag = new Tagify(el);
 			    
 			    el_tag.on("add", function(e){
-
-				// why is this always null?
-				console.log("ADD", el_id, e.detail.value);
+				const tags = list_tags(el_tag);
+				console.log("ADD", el_id, tags);
 			    });
 
 			    el_tag.on("remove", function(e){
 
-				if (! e.data){
+				if (! e.detail.data){
+				    console.log("WUB WUB");
 				    return;
 				}
-				
-				console.log("REMOVE", el_id, e.data.value);
+
+				const tags = list_tags(el_tag);
+				console.log("REMOVE", el_id, e.detail.data.value, tags);
 			    });
 			    
 			}
@@ -1123,8 +1142,6 @@ wof.edit = (function () {
 		
 		document.body.prepend(dlg);	    
 		dlg.showModal();
-		
-		console.log("Add");
 		return false;
 	    };
 	    
