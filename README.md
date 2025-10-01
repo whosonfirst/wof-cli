@@ -18,6 +18,7 @@ $> ./bin/wof -h
 Usage: wof [CMD] [OPTIONS]
 Valid commands are:
 * centroid
+* edit
 * emit
 * ensure-property
 * export
@@ -46,6 +47,17 @@ Usage:
 ```
 
 Examples can be found in [centroid/README.md](centroid/README.md#examples)
+
+#### wof edit
+
+```
+$> ./bin/wof edit -h
+Launch a local web server running on a random port hosting a web application for editing one or more Who's On First records.
+Usage:
+	 ./bin/wof path(N) path(N)
+```
+
+Examples can be found in [edit/README.md](edit/README.md#examples)
 
 #### wof emit
 
