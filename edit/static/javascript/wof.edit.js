@@ -775,6 +775,8 @@ wof.edit = (function () {
 	    const tags_selected = new Tagify(names_selected, {
 		whiteList: lang_ok,
 	    });
+
+	    // Update tags/languages here...
 	    
 	    tags_selected.on("add", function(e){
 		
@@ -834,18 +836,66 @@ wof.edit = (function () {
 			    
 			    el_tag.on("add", function(e){
 				const tags = list_tags(el_tag);
-				console.log("ADD", el_id, tags);
+				console.debug("Add language tag", el_id, tags);
+
+				_self.start_spinner();
+				_self.load_data().then((data) => {
+
+				    data.properties[el_id] = tags;
+				    
+				    _self.save_data(data).then(() => {
+					console.debug("Saved lanaguage tags on add", el_id, tags);
+					_self.stop_spinner();
+				    }).catch((err) => {
+					_self.stop_spinner();
+					console.error("Failed to save language tags on add", el_id, err);
+					_self.alert("Failed to save data, " + err);
+				    });
+				    
+				}).catch((err) => {
+				    _self.stop_spinner();
+				    console.error("Failed to load data for language tags on add", el_id, err);				    
+				    _self.alert("Failed to load data, " + err)
+				});
 			    });
 
 			    el_tag.on("remove", function(e){
 
 				if (! e.detail.data){
-				    console.log("WUB WUB");
 				    return;
 				}
 
 				const tags = list_tags(el_tag);
-				console.log("REMOVE", el_id, e.detail.data.value, tags);
+				console.debug("Remove language tags", el_id, tags);
+
+				_self.start_spinner();
+				_self.load_data().then((data) => {
+
+				    if (tags.length == 0){
+
+					if (el_id in data.properties){
+					    delete(data.properties[el_id]);
+					}
+					
+				    } else {
+					data.properties[el_id] = tags;
+				    }
+				    
+				    _self.save_data(data).then(() => {
+					console.debug("Updated name tags on remove", el_id, tags);
+					_self.stop_spinner();
+				    }).catch((err) => {
+					_self.stop_spinner();
+					console.error("Failed to update language tags on remove", el_id, err);
+					_self.alert("Failed to update language tags on remove, " + err);
+				    });
+				    
+				}).catch((err) => {
+				    _self.stop_spinner();
+					console.error("Failed to load language tags on remove", el_id, err);				    
+				    _self.alert("Failed to load data, " + err)
+				});
+				
 			    });
 			    
 			}
@@ -1302,6 +1352,67 @@ wof.edit = (function () {
 	stop_spinner: function(){
 	    const spinner = document.querySelector("#spinner-svg");
 	    spinner.style.display = "none";
+	},
+
+	save_data: function(data) {
+
+	    return new Promise((resolve, reject) => {
+
+		const raw = document.querySelector("#raw");
+
+		if (! raw){
+		    reject("Missing #raw data element.");
+		}	
+		
+		self.export_data(data).then((fmt_rsp) => {
+		    raw.innerText = fmt_rsp;
+		    resolve();
+		}).catch((err) => {
+		    console.error("Failed to export data", err);
+		    reject("Failed to export data, " + err);
+		});
+	    });
+	},
+	
+	export_data: function(data){
+
+	    return new Promise((resolve, reject) => {
+		
+	    	const str_data = JSON.stringify(data);
+		
+		wof_validate(str_data).then(() => {
+		    wof_format(str_data).then((fmt_rsp) => {
+			resolve(fmt_rsp);
+		    }).catch((err) => {
+			console.error("Data formatting failed", str_data, err);			
+			reject("Data formatting failed, " + err);
+		    });
+		}).catch((err) => {
+		    console.error("Data validation failed", data, err);
+		    reject("Data validation failed, " + err);
+		});
+	    });
+	},
+	
+	load_data: function(){
+
+	    return new Promise((resolve, reject) => {
+		
+		const raw = document.querySelector("#raw");
+
+		if (! raw){
+		    console.error("Missing #raw data element");
+		    reject("Missing #raw data element.");
+		}	
+		
+		try {
+		    const data = JSON.parse(raw.innerText);
+		    resolve(data);
+		} catch(err) {
+		    console.error("Failed to parse #raw data", err);
+		    reject(err);
+		}
+	    });
 	},
 	
     };
