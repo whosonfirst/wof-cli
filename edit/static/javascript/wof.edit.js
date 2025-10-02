@@ -776,7 +776,8 @@ wof.edit = (function () {
 		whiteList: lang_ok,
 	    });
 
-	    // Update tags/languages here...
+	    // Default to English unless there are already languages being shown
+	    // and we are toggling between form and data mode...
 	    
 	    tags_selected.on("add", function(e){
 		
@@ -833,10 +834,20 @@ wof.edit = (function () {
 			    el.setAttribute("id", el_id);
 
 			    const el_tag = new Tagify(el);
+
+			    // Add language tags
 			    
-			    el_tag.on("add", function(e){
+			    if (el_id in data.properties){
+				console.debug("Add language tags", el_id, data.properties[el_id]);
+				el_tag.addTags(data.properties[el_id]);
+			    }
+
+			    // When new language tags are added (or updated)
+
+			    const on_edit = function(e){
+				
 				const tags = list_tags(el_tag);
-				console.debug("Add language tag", el_id, tags);
+				console.debug("Edit language tag", el_id, tags);
 
 				_self.start_spinner();
 				_self.load_data().then((data) => {
@@ -844,21 +855,26 @@ wof.edit = (function () {
 				    data.properties[el_id] = tags;
 				    
 				    _self.save_data(data).then(() => {
-					console.debug("Saved lanaguage tags on add", el_id, tags);
+					console.debug("Saved lanaguage tags on edit", el_id, tags);
 					_self.stop_spinner();
 				    }).catch((err) => {
 					_self.stop_spinner();
-					console.error("Failed to save language tags on add", el_id, err);
+					console.error("Failed to save language tags on edit", el_id, err);
 					_self.alert("Failed to save data, " + err);
 				    });
 				    
 				}).catch((err) => {
 				    _self.stop_spinner();
-				    console.error("Failed to load data for language tags on add", el_id, err);				    
+				    console.error("Failed to load data for language tags on edit", el_id, err);				    
 				    _self.alert("Failed to load data, " + err)
 				});
-			    });
+			    };
+			    
+			    el_tag.on("add", on_edit);
+			    el_tag.on("change", on_edit);
 
+			    // When existing language tags are removed
+			    
 			    el_tag.on("remove", function(e){
 
 				if (! e.detail.data){
