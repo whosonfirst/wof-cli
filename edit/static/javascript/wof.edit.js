@@ -1,3 +1,8 @@
+/**
+ * @namespace wof.edit
+ * @description Methods for editing Who's On First records
+ */
+
 var wof = wof || {};
 
 wof.edit = (function () {
@@ -5,7 +10,17 @@ wof.edit = (function () {
     var feature_layer = null;
     var alert_timeout = null;
 
-    var current_name_langs = [
+    // Perist the list of currently displayed language-based names
+    // when toggling between form and data view. This value is updated
+    // in the event handlers for tags_selected below.
+    var current_names_langs = [
+	"eng",
+    ];
+
+    // Perist the list of currently displayed language-based labels
+    // when toggling between form and data view. This value is updated
+    // in the event handlers for tags_selected below.    
+    var current_labels_langs = [
 	"eng",
     ];
     
@@ -18,7 +33,13 @@ wof.edit = (function () {
     const close_svg = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg>';
     
     var self = {
-	
+
+	/**
+	* @function init
+	* @memberof wof.edit
+	* @description ...
+        * @return {Promise} –
+        */		   	
 	init: function() {
 	    
 	    return new Promise((resolve, reject) => {
@@ -37,6 +58,14 @@ wof.edit = (function () {
 	    });
 	},
 
+	/**
+	 * @function feedback
+	 * @memberof wof.edit
+	 * @description ...
+	 * @param {string} msg -
+	 * @param {number} ttl -
+         * @return ...
+        */		   		
 	feedback: function(msg, ttl){
 
 	    if (! ttl){
@@ -46,6 +75,14 @@ wof.edit = (function () {
 	    self.alert(msg, ttl);
 	},
 
+	/**
+	 * @function alert
+	 * @memberof wof.edit
+	 * @description ...
+	 * @param {string} msg -
+	 * @param {number} ttl -
+         * @return ...
+        */		   			
 	alert: function(msg, ttl){
 
 	    console.log(msg);
@@ -98,7 +135,13 @@ wof.edit = (function () {
 		}, ttl);
 	    }
 	},
-	
+
+	/**
+	 * @function list
+	 * @memberof wof.edit
+	 * @description ...
+         * @return ...
+        */		   			
 	list: function() {
 
 	    const _self = self;
@@ -146,6 +189,13 @@ wof.edit = (function () {
 	    
 	},
 
+	/**
+	 * @function show
+	 * @memberof wof.edit
+	 * @description ...
+	 * @param {string} uri -
+         * @return ...
+        */		   				
 	show: function(uri) {
 
 	    const _self = self;
@@ -478,6 +528,13 @@ wof.edit = (function () {
 	    });
 	},
 
+	/**
+	 * @function populate_form
+	 * @memberof wof.edit
+	 * @description ...
+	 * @param {Object} form –
+         * @return ...
+        */		   				
 	populate_form: function(data){
 
 	    const form_t = document.querySelector("#edit-form");	    
@@ -490,6 +547,14 @@ wof.edit = (function () {
 	    return form;
 	},
 
+	/**
+	 * @function populate_form_wof_input
+	 * @memberof wof.edit
+	 * @description ...
+	 * @param {Object} form –
+	 * @param {Object} data –	   
+         * @return ...
+        */		   					
 	populate_form_wof_input: function(form, data){
 
 	    const _self = self;
@@ -738,6 +803,14 @@ wof.edit = (function () {
 	    
 	},
 
+	/**
+	 * @function populate_form_names
+	 * @memberof wof.edit
+	 * @description ...
+	 * @param {Object} form –
+	 * @param {Object} data –	   
+         * @return ...
+        */		   						
 	populate_form_names: function(form, data){
 
 	    const _self = self;
@@ -809,8 +882,8 @@ wof.edit = (function () {
 			const input_els = row.querySelectorAll("input");
 			const count_els = input_els.length;
 
-			if (! current_name_langs.includes(lang)){
-			    current_name_langs.push(lang);
+			if (! current_names_langs.includes(lang)){
+			    current_names_langs.push(lang);
 			}
 			
 			// START OF if there's a built-in method to do this
@@ -951,9 +1024,9 @@ wof.edit = (function () {
 
 		row.parentNode.removeChild(row);
 
-		if (current_name_langs.includes(lang)){
+		if (current_names_langs.includes(lang)){
 
-		    current_name_langs = current_name_langs.filter(function(item) {
+		    current_names_langs = current_names_langs.filter(function(item) {
 			return item !== lang;
 		    });
 		}
@@ -961,9 +1034,31 @@ wof.edit = (function () {
 	    });
 
 	    console.debug("Add current name/language tags")
-	    tags_selected.addTags(current_name_langs);
+	    tags_selected.addTags(current_names_langs);
 	},
-	
+
+	/**
+	* @function populate_form_labels
+	* @memberof wof.edit
+	* @description ...
+	* @param {Object}form - ...
+        * @param {Object}data - ...
+        * @return ...
+        */		   
+	populate_form_labels: function(form, data){
+
+	    console.debug("Add current label/language tags")
+	    // tags_selected.addTags(current_labels_langs);	    
+	},
+
+	/**
+	 * @function populate_form_concordances
+	 * @memberof wof.edit
+	 * @description ...
+	 * @param {Object} form –
+	 * @param {Object} data –	   
+         * @return ...
+        */		   						
 	populate_form_concordances: function(form, data){
 
 	    const _self = self;
@@ -1253,7 +1348,15 @@ wof.edit = (function () {
 
 	    
 	},
-	
+
+	/**
+	 * @function populate_existential_flag
+	 * @memberof wof.edit
+	 * @description ...
+	 * @param {Object} input_el –
+	 * @param {Object} data –	   
+         * @return ...
+        */		   						
 	populate_existential_flag: function(input_el, flag_v){
 
 	    // TBD: Just do this from a template?
@@ -1280,6 +1383,14 @@ wof.edit = (function () {
 	    
 	},
 
+	/**
+	 * @function update_concordance
+	 * @memberof wof.edit
+	 * @description ...
+	 * @param {string} prefix –
+	 * @param {string} v –	   
+         * @return ...
+        */		   						
 	update_concordance: function(prefix, v){
 
 	    const _self = self;
@@ -1319,7 +1430,14 @@ wof.edit = (function () {
 		});
 	    });
 	},
-	
+
+	/**
+	 * @function remove_concordance
+	 * @memberof wof.edit
+	 * @description ...
+	 * @param {string} prefix –
+         * @return ...
+        */		   							
 	remove_concordance: function(prefix){
 
 	    const _self = self;
@@ -1377,17 +1495,36 @@ wof.edit = (function () {
 		});
 	    });
 	},
-	
+
+	/**
+	 * @function start_spinner
+	 * @memberof wof.edit
+	 * @description ...
+         * @return ...
+        */		   								
 	start_spinner: function(){
 		const spinner = document.querySelector("#spinner-svg");
 		spinner.style.display = "inline-block";
 	},
 
+	/**
+	 * @function stop_spinner
+	 * @memberof wof.edit
+	 * @description ...
+         * @return ...
+        */		   									
 	stop_spinner: function(){
 	    const spinner = document.querySelector("#spinner-svg");
 	    spinner.style.display = "none";
 	},
 
+	/**
+	 * @function save_data
+	 * @memberof wof.edit
+	 * @description ...
+	 * @param {Object} data -
+         * @return {Promise} -
+        */		   										
 	save_data: function(data) {
 
 	    return new Promise((resolve, reject) => {
@@ -1407,7 +1544,14 @@ wof.edit = (function () {
 		});
 	    });
 	},
-	
+
+	/**
+	 * @function export_data
+	 * @memberof wof.edit
+	 * @description ...
+	 * @param {Object} data -
+         * @return {Promise.<string>} -
+        */		   											
 	export_data: function(data){
 
 	    return new Promise((resolve, reject) => {
@@ -1427,7 +1571,13 @@ wof.edit = (function () {
 		});
 	    });
 	},
-	
+
+	/**
+	 * @function load_data
+	 * @memberof wof.edit
+	 * @description ...
+         * @return {Promise} -
+        */		   											
 	load_data: function(){
 
 	    return new Promise((resolve, reject) => {
