@@ -5,6 +5,10 @@ wof.edit = (function () {
     var feature_layer = null;
     var alert_timeout = null;
 
+    var current_name_langs = [
+	"eng",
+    ];
+    
     const lang_spoken = ["ara", "ara_AE", "ben", "ben_IN", "ben_BD", "dan", "ell", "eng", "eng_GB", "eng_US", "fin", "fra", "ger", "ind", "ita", "jpn", "kan", "kor", "mal", "nld", "nor", "pol", "por", "por_BR", "por_PT", "ron", "rus", "spa", "spa_AR", "spa_MX", "spa_ES", "swe", "tam", "tel", "tha", "tur", "zho", "zho_CN", "zho_TW"];
 
     const lang_official = ["ara", "ara_AE", "ben", "ben_IN", "ben_BD", "dan", "ell", "eng", "eng_GB", "eng_US", "fin", "fra", "ger", "ind", "ita", "jpn", "kan", "kor", "mal", "nld", "nor", "pol", "por", "por_BR", "por_PT", "ron", "rus", "spa", "spa_AR", "spa_MX", "spa_ES", "swe", "tam", "tel", "tha", "tur", "zho", "zho_CN", "zho_TW"];
@@ -776,8 +780,8 @@ wof.edit = (function () {
 		whiteList: lang_ok,
 	    });
 
-	    // Default to English unless there are already languages being shown
-	    // and we are toggling between form and data mode...
+	    // Current name/language tags are added below after we register
+	    // the event handlers
 	    
 	    tags_selected.on("add", function(e){
 		
@@ -805,6 +809,10 @@ wof.edit = (function () {
 			const input_els = row.querySelectorAll("input");
 			const count_els = input_els.length;
 
+			if (! current_name_langs.includes(lang)){
+			    current_name_langs.push(lang);
+			}
+			
 			// START OF if there's a built-in method to do this
 			// I can't find it...
 			    
@@ -942,8 +950,18 @@ wof.edit = (function () {
 		}
 
 		row.parentNode.removeChild(row);
+
+		if (current_name_langs.includes(lang)){
+
+		    current_name_langs = current_name_langs.filter(function(item) {
+			return item !== lang;
+		    });
+		}
+		
 	    });
-	    
+
+	    console.debug("Add current name/language tags")
+	    tags_selected.addTags(current_name_langs);
 	},
 	
 	populate_form_concordances: function(form, data){
