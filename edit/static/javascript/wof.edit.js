@@ -1099,14 +1099,14 @@ wof.edit = (function () {
 
 		// Note: We are counting on Tagify.js deduping and not dispatching
 		// the same language tag twice to this event.
-
+		    
 		    try {
 			const node = t.content.cloneNode(true);
 			const row = node.querySelector(".localized-labels-row");
 			
 			row.setAttribute("id", id);
 			row.setAttribute("data-lang", lang);
-			
+		    
 			const label_el = row.querySelector(".lang-label");
 			label_el.innerText = lang;	// LOOKUP LABEL HERE
 			
@@ -1230,7 +1230,7 @@ wof.edit = (function () {
 			    });
 			    
 			}
-			
+
 			labels_group.prepend(row);
 			
 		    } catch (err) {
