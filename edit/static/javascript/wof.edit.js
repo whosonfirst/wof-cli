@@ -541,7 +541,8 @@ wof.edit = (function () {
 	    const form = form_t.content.cloneNode(true);
 
 	    self.populate_form_wof_input(form, data);
-	    self.populate_form_names(form, data);	    	    
+	    self.populate_form_names(form, data);
+	    self.populate_form_labels(form, data);	    	    	    
 	    self.populate_form_concordances(form, data);
 	    
 	    return form;
@@ -1047,8 +1048,229 @@ wof.edit = (function () {
         */		   
 	populate_form_labels: function(form, data){
 
+	    const _self = self;
+
+	    // Count languages and display
+	    
+	    const labels_group = form.querySelector("#localized-labels-group")
+	    const labels_desc = form.querySelector("#localized-labels-description");
+	    const labels_count = form.querySelector("#localized-labels-count");
+
+	    var count_labels = 0;
+	    
+	    for (var k in data.properties){
+
+		if (k.startsWith("name:")){
+		    count_labels += 1;
+		}
+	    }
+
+	    switch (count_labels){
+		case 0:
+		    break;
+		case 1:
+		    labels_count.innerText = "1 language";
+		    labels_desc.style.display = "inline-block";
+		    break;
+		default:
+		    labels_count.innerText = count_labels + " languages";
+		    labels_desc.style.display = "inline-block";
+		    break;
+	    }		    
+
+	    // Adding and removing languages
+	    
+	    const t = document.querySelector("#localized-labels-row");
+	    
+	    const labels_selected = form.querySelector("#localized-labels-selected");
+
+	    const tags_selected = new Tagify(labels_selected, {
+		whiteList: lang_ok,
+	    });
+
+	    // START OF...
+
+	    tags_selected.on("add", function(e){
+		
+		const lang = e.detail.data.value;
+		const id = "localized-labels-row-" + lang;
+		
+		console.debug("Add label(s)", lang, id);
+
+		// Note: We are counting on Tagify.js deduping and not dispatching
+		// the same language tag twice to this event.
+
+		    try {
+			const node = t.content.cloneNode(true);
+			const row = node.querySelector(".localized-labels-row");
+			
+			row.setAttribute("id", id);
+			row.setAttribute("data-lang", lang);
+			
+			const label_el = row.querySelector(".lang-label");
+			label_el.innerText = lang;	// LOOKUP LABEL HERE
+			
+			const code_el = row.querySelector(".lang-code");
+			code_el.innerText = lang;
+			
+			const input_els = row.querySelectorAll("input");
+			const count_els = input_els.length;
+
+			if (! current_labels_langs.includes(lang)){
+			    current_labels_langs.push(lang);
+			}
+			
+			// START OF if there's a built-in method to do this
+			// I can't find it...
+			    
+			const list_tags = function(tag){
+
+			    const tag_els = tag.getTagElms();
+			    const count_tags = tag_els.length;
+			    
+			    var tags = [];
+			    
+			    for (var t=0; t < count_tags; t++){
+				tags.push(tag_els[t].getAttribute("value"));
+			    }
+
+			    return tags;
+			};
+
+			// END OF if there's a built-in method to do this
+			
+			for (var i=0; i < count_els; i++){
+
+			    const el = input_els[i];
+			    const spec = el.getAttribute("data-spec");
+
+			    const el_id = "label:" + lang + "_x_" + spec;
+			    el.setAttribute("label", el_id);
+			    el.setAttribute("id", el_id);
+
+			    const el_tag = new Tagify(el);
+
+			    // Add language tags
+			    
+			    if (el_id in data.properties){
+				console.debug("Add language tags", el_id, data.properties[el_id]);
+				el_tag.addTags(data.properties[el_id]);
+			    }
+
+			    // When new language tags are added (or updated)
+
+			    const on_edit = function(e){
+				
+				const tags = list_tags(el_tag);
+				console.debug("Edit language tag", el_id, tags);
+
+				_self.start_spinner();
+				_self.load_data().then((data) => {
+
+				    data.properties[el_id] = tags;
+				    
+				    _self.save_data(data).then(() => {
+					console.debug("Saved lanaguage tags on edit", el_id, tags);
+					_self.stop_spinner();
+				    }).catch((err) => {
+					_self.stop_spinner();
+					console.error("Failed to save language tags on edit", el_id, err);
+					_self.alert("Failed to save data, " + err);
+				    });
+				    
+				}).catch((err) => {
+				    _self.stop_spinner();
+				    console.error("Failed to load data for language tags on edit", el_id, err);				    
+				    _self.alert("Failed to load data, " + err)
+				});
+			    };
+			    
+			    el_tag.on("add", on_edit);
+			    el_tag.on("change", on_edit);
+
+			    // When existing language tags are removed
+			    
+			    el_tag.on("remove", function(e){
+
+				if (! e.detail.data){
+				    return;
+				}
+
+				const tags = list_tags(el_tag);
+				console.debug("Remove language tags", el_id, tags);
+
+				_self.start_spinner();
+				_self.load_data().then((data) => {
+
+				    if (tags.length == 0){
+
+					if (el_id in data.properties){
+					    delete(data.properties[el_id]);
+					}
+					
+				    } else {
+					data.properties[el_id] = tags;
+				    }
+				    
+				    _self.save_data(data).then(() => {
+					console.debug("Updated label tags on remove", el_id, tags);
+					_self.stop_spinner();
+				    }).catch((err) => {
+					_self.stop_spinner();
+					console.error("Failed to update language tags on remove", el_id, err);
+					_self.alert("Failed to update language tags on remove, " + err);
+				    });
+				    
+				}).catch((err) => {
+				    _self.stop_spinner();
+					console.error("Failed to load language tags on remove", el_id, err);				    
+				    _self.alert("Failed to load data, " + err)
+				});
+				
+			    });
+			    
+			}
+			
+			labels_group.prepend(row);
+			
+		    } catch (err) {
+			console.error("Failed to add label(s) row for ", lang, id, err);
+		    }
+	    });
+
+	    tags_selected.on("remove", function(e){
+
+		if (!e.detail.data){
+		    return;
+		}
+
+		const lang = e.detail.data.value;
+		const id = "localized-labels-row-" + lang;
+		
+		console.debug("Remove label(s)", lang, id);
+
+		const row = document.getElementById(id);
+
+		if (! row){
+		    console.warn("Failed to locate label(s) row for language", lang, id);
+		    return;
+		}
+
+		row.parentNode.removeChild(row);
+
+		if (current_labels_langs.includes(lang)){
+
+		    current_labels_langs = current_labels_langs.filter(function(item) {
+			return item !== lang;
+		    });
+		}
+		
+	    });
+
+	    // END OF...
+	    
 	    console.debug("Add current label/language tags")
-	    // tags_selected.addTags(current_labels_langs);	    
+	    tags_selected.addTags(current_labels_langs);	    
 	},
 
 	/**

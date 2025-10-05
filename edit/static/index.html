@@ -213,24 +213,17 @@
 		<div class="form-group" id="localized-names-group">
 		    <!-- template#localized-names-row -->
 		</div>
-		
+
 		<h4>Localized Labels</h4>
 		<div class="form-group">
-		    <label for="localized-labels-selected">Filter</label>
+		    <label for="alternate-labels-selected">Filter</label>
 		    <input type="text" class="form-control" id="localized-labels-selected">
-		    <small class="form-text text-muted">This place has localized labels in 1 language. English is shown by default. Add more to the filter box to show more languages.</small>
-		    <small class="form-text text-muted">This place has localized labels in ... languages. English is shown by default. Add more to the filter box to show more languages.</small>
+		    <small class="form-text text-muted" id="localized-labels-description">This place has localized labels in <span id="localized-labels-count">no languages</span>. English is shown by default. Add more to the filter box to show more languages.</small>
 		</div>
-		<div class="form-group">
-		    <!-- template#localized-labels -->
-		    <div id="localized-labels-row-template" class="row localized-labels-row" data-lang="" style="display: none;">
-			<div class="col-md-2"><h4></h4><small>(<code></code>)</small></div>
-			<div class="col-md-10">
-			    <!-- template:localized-labels-spec -->
-			</div>
-		    </div>
+		<div class="form-group" id="localized-labels-group">
+		    <!-- template#localized-labels-row -->
 		</div>
-		
+				
 		<h4>Concordances
 		    <button type="button" id="wof-concordances-add" class="btn btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/></svg></button>
 		</h4>
@@ -277,34 +270,82 @@
             </div>
 	</template>
 
-	<template id="localized-labels">
-	    <div class="row localized-labels-row" data-lang="" style="display: none;">
-		<div class="col-md-2">
-		    <h4></h4>
-		    <small>(<code></code>)</small>
-		</div>
-		<div class="col-md-10">
-		    <!-- template#localized-label-item -->
-		</div>
-	    </div>	
-	</template>
-	<template id="localized-labels-item">
-	    <div class="form-group row">
-		<label class="col-md-2 col-form-label"></label>
-		<div class="col-md-10">
-		    <input name="" data-spec="" class="form-control use-tagify" value="" />
+	<template id="localized-labels-row">
+	    <div class="form-group">
+		<div id="localized-labels-row-template" class="row localized-labels-row" data-lang="" style="display: none;">
+		    <div class="col-md-2"><h4 class="lang-label"></h4><small>(<code class="lang-code"></code>)</small></div>
+		    <div class="col-md-10">
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">Colloquial Abbrev.</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="colloquial_abbreviation" class="form-control" value="">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">Preferred Abbrev.</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="preferred_abbreviation" class="form-control" value="">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">Preferred Disambiguation</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="preferred_disambiguation" class="form-control" value="">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">Preferred Longname</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="preferred_longname" class="form-control" value="">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">Preferred Placetype</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="preferred_placetype" class="form-control" value="">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">Preferred Shortcode</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="preferred_shortcode" class="form-control" value="">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">Variant Abbrev.</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="variant_abbreviation" class="form-control" value="">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">Variant Disambiguation</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="variant_disambiguation" class="form-control" value="">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">Variant Longname</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="variant_longname" class="form-control" value="">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">Variant Placetype</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="variant_placetype" class="form-control" value="">
+			    </div>
+			</div>
+			<div class="form-group row">
+			    <label class="col-md-2 col-form-label">Variant Shortcode</label>
+			    <div class="col-md-10">
+				<input name="" data-spec="variant_shortcode" class="form-control" value="">
+			    </div>
+			</div>
+		    </div>
 		</div>
 	    </div>
-	</template>    
-	<template id="localized-label-spec">
-	    <div class="form-group row">
-		<label class="col-md-2 col-form-label"></label>
-		<div class="col-md-10">
-		    <input name="" data-spec="" class="form-control" value="" />
-		</div>
-	    </div>
 	</template>
-
+	
 	<template id="wof-concordances-row">
 	    <div class="form-group concordance-row">
 		<div class="row">
