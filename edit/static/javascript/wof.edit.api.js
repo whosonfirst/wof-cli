@@ -1,3 +1,8 @@
+/**
+ * @namespace wof.edit.api
+ * @description API methods for editing Who's On First records
+ */
+
 var wof = wof || {};
 wof.edit = wof.edit || {};
 
@@ -5,6 +10,12 @@ wof.edit.api = (function () {
 
     var self = {
 
+	/**
+	 * @function list
+	 * @memberof wof.edit.api
+	 * @description 
+         * @return {Promise.<Object>} – 
+         */		   		
 	list: function() {
 	    return new Promise((resolve, reject) => {
 		
@@ -18,6 +29,13 @@ wof.edit.api = (function () {
 	    });
 	},
 
+	/**
+	 * @function fetch
+	 * @memberof wof.edit.api
+	 * @description
+	 * @param {string} uri 
+         * @return {Promise.<Object>} – 
+        */		   			
 	fetch: function(uri){
 	    return new Promise((resolve, reject) => {
 		
@@ -31,6 +49,14 @@ wof.edit.api = (function () {
 	    });
 	},
 
+	/**
+	 * @function save
+	 * @memberof wof.edit.api
+	 * @description
+	 * @param {string} uri
+	 * @param {Object} body   
+         * @return {Promise.<string>} – 
+        */		   				
 	save: function(uri, body) {
 
 	    return new Promise((resolve, reject) => {

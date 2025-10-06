@@ -531,9 +531,9 @@ wof.edit = (function () {
 	/**
 	 * @function populate_form
 	 * @memberof wof.edit
-	 * @description ...
-	 * @param {Object} form –
-         * @return ...
+	 * @description Populate the HTML/DOM edit form elements
+	 * @param {Object} data – The GeoJSON Feature object used to populate the form
+         * @return {null}
         */		   				
 	populate_form: function(data){
 
@@ -551,10 +551,10 @@ wof.edit = (function () {
 	/**
 	 * @function populate_form_wof_input
 	 * @memberof wof.edit
-	 * @description ...
-	 * @param {Object} form –
-	 * @param {Object} data –	   
-         * @return ...
+	 * @description Populate the HTML/DOM edit form for input elements with the "wof_input" CSS class
+	 * @param {Object} form – The HTML/DOM form element to populate.
+	 * @param {Object} data – The GeoJSON Feature object used to populate the form
+         * @return {null}
         */		   					
 	populate_form_wof_input: function(form, data){
 
@@ -805,9 +805,9 @@ wof.edit = (function () {
 	/**
 	 * @function populate_form_names
 	 * @memberof wof.edit
-	 * @description ...
-	 * @param {Object} form –
-	 * @param {Object} data –	   
+	 * @description Populate the HTML/DOM edit form for localized name input elements.
+	 * @param {Object} form – The HTML/DOM form element to populate.
+	 * @param {Object} data – The GeoJSON Feature object used to populate the form
          * @return {null}
         */		   						
 	populate_form_names: function(form, data){
@@ -1043,11 +1043,11 @@ wof.edit = (function () {
 
 	/**
 	* @function populate_form_labels
-	* @memberof wof.edit
-	* @description ...
-	* @param {Object}form - ...
-        * @param {Object}data - ...
-        * @return ...
+	 * @memberof wof.edit
+	 * @description Populate the HTML/DOM edit form for localized label input elements.
+	 * @param {Object} form – The HTML/DOM form element to populate.
+	 * @param {Object} data – The GeoJSON Feature object used to populate the form
+        * @return {null}
         */		   
 	populate_form_labels: function(form, data){
 
@@ -1285,9 +1285,9 @@ wof.edit = (function () {
 	/**
 	 * @function populate_form_concordances
 	 * @memberof wof.edit
-	 * @description ...
-	 * @param {Object} form –
-	 * @param {Object} data –	   
+	 * @description Populate the HTML/DOM edit form for wof:concordances input elements.
+	 * @param {Object} form – The HTML/DOM form element to populate.
+	 * @param {Object} data – The GeoJSON Feature object used to populate the form
          * @return ...
         */		   						
 	populate_form_concordances: function(form, data){
@@ -1305,13 +1305,6 @@ wof.edit = (function () {
 	    // because of scoping wah-wah. Could all of these be moved in to dicrete functions?
 	    // Probably, but that is tomorrow's problem right now.
 
-	    /**
-	     * @function concordances_update_func
-	     * @memberof wof.edit.populate_form_concordances
-	     * @description ...
-	     * @param {Object} e –
-             * @return {boolean}
-             */		   						
 	    const concordances_update_func = function(e){
 		const el = e.target;
 		
@@ -1576,10 +1569,10 @@ wof.edit = (function () {
 	/**
 	 * @function populate_existential_flag
 	 * @memberof wof.edit
-	 * @description ...
-	 * @param {Object} input_el –
-	 * @param {Object} data –	   
-         * @return ...
+	 * @description Populate an "existential flag" DOM element
+	 * @param {Object} input_el – The HTML/DOM input element to populate.
+	 * @param {Object} flag_v – The current value of the WOF property for input_el.	   
+         * @return {null}
         */		   						
 	populate_existential_flag: function(input_el, flag_v){
 
@@ -1610,10 +1603,10 @@ wof.edit = (function () {
 	/**
 	 * @function update_concordance
 	 * @memberof wof.edit
-	 * @description ...
-	 * @param {string} prefix –
-	 * @param {string} v –	   
-         * @return ...
+	 * @description Update the value of the (wof:)concordance matching prefix.
+	 * @param {string} prefix – The wof:concordances prefix to update.
+	 * @param {string} v – The updated value for the wof:concordances prefix.	   
+         * @return {Promise}
         */		   						
 	update_concordance: function(prefix, v){
 
@@ -1641,21 +1634,21 @@ wof.edit = (function () {
 			return;
 		    });
 
-		} catch(err) {
+		}).catch((err) => {
 		    console.error("Failed to parse raw data", err);
 		    _self.stop_spinner();
 		    
 		    reject("Failed to parse raw data, " + err);
 		    return;
-		}
-	    	    
+		});
+	    	
 	    });
 	},
 	
 	/**
 	 * @function remove_concordance
 	 * @memberof wof.edit
-	 * @description Remove the concordance matching 'prefix' from the underlying #raw HTML element data.
+	 * @description Remove the concordance matching 'prefix' from the underlying #raw HTML element data. If successful the corresponding HTML element for that prefix will be removed from the edit form DOM.
 	 * @param {string} prefix – The wof:concordances namespace and prefix to remove.
          * @return {Promise}
         */		   							
@@ -1666,54 +1659,44 @@ wof.edit = (function () {
 	    return new Promise((resolve, reject) => {
 		
 		_self.start_spinner();
-		
-		try {
-		    const row = document.querySelector("#raw");
-		    data = JSON.parse(raw.innerText);
-		} catch(err) {
-		    console.error("Failed to parse raw data", err);
-		    _self.stop_spinner();
 
-		    reject("Failed to parse raw data, " + err);		    
-		    return;
-		}
-	    	    
-		delete(data.properties["wof:concordances"][prefix]);
-		const str_data = JSON.stringify(data);
-		
-		wof_validate(str_data).then(() => {
-		    wof_format(str_data).then((fmt_rsp) => {
+		_self.load_data().then((data) => {
+
+		    delete(data.properties["wof:concordances"][prefix]);
+
+		    _self.save_data(data).then(() => {
 
 			try {
 			    const row = document.getElementById("wof-concordances-" + prefix);
 			    const parent = row.parentNode;
 			    parent.removeChild(row);
 			} catch(err) {
-			    console.error("Failed to remove row", err);
+			    console.error("Failed to remove wof:concordaces row", prefix, err);
 			    _self.stop_spinner();
 			    
 			    reject("Failed to remove row, " + err);		    
 			    return false;
 			}
 			
-			raw.innerText = fmt_rsp;
 			_self.stop_spinner();
 			
 			resolve();
 			return;
 		    }).catch((err) => {
-			console.error("Failed to format data", err);
+			console.error("Failed to save wof:concordances data", prefix, err);
 			_self.stop_spinner();
 			
-			reject("Failed to format raw data, " + err);		    
+			reject("Failed to save concordances data, " + err);		    
 			return;
 		    });
+
 		}).catch((err) => {
-		    console.error("Data validation failed", err);
+		    console.error("Failed to load data", err);
 		    _self.stop_spinner();
-		    reject("Data validation failed, " + err);
+		    
+		    reject("Failed to load data, " + err);		    
 		    return;
-		});
+		});	    	    
 	    });
 	},
 
