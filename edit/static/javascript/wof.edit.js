@@ -37,8 +37,8 @@ wof.edit = (function () {
 	/**
 	* @function init
 	* @memberof wof.edit
-	* @description ...
-        * @return {Promise} –
+	* @description Initialize the WOF edit functionality. This fetches, loads and initilized the 'wof_edit' WASM binary.
+        * @return {Promise} – 
         */		   	
 	init: function() {
 	    
@@ -61,10 +61,10 @@ wof.edit = (function () {
 	/**
 	 * @function feedback
 	 * @memberof wof.edit
-	 * @description ...
-	 * @param {string} msg -
-	 * @param {number} ttl -
-         * @return ...
+	 * @description Display a feedback message.
+	 * @param {string} msg - The feedback message to display.
+	 * @param {number} ttl - The number of milliseconds to display the message after which is will be removed. Default is 5000.
+         * @return {null}
         */		   		
 	feedback: function(msg, ttl){
 
@@ -78,14 +78,14 @@ wof.edit = (function () {
 	/**
 	 * @function alert
 	 * @memberof wof.edit
-	 * @description ...
-	 * @param {string} msg -
-	 * @param {number} ttl -
-         * @return ...
+	 * @description Display an alert message.
+	 * @param {string} msg - The message to display.
+	 * @param {number} ttl - The number of milliseconds to display the message after which is will be removed.
+         * @return {null}
         */		   			
 	alert: function(msg, ttl){
 
-	    console.log(msg);
+	    console.debug(msg);
 	    
 	    const dlg = document.createElement("dialog");
 	    dlg.setAttribute("id", "alert");
@@ -139,8 +139,8 @@ wof.edit = (function () {
 	/**
 	 * @function list
 	 * @memberof wof.edit
-	 * @description ...
-         * @return ...
+	 * @description Fetch the list of WOF records to edit and display them in a list. If the list only contains one record then the 'show' method is immediately dispatched for that record.
+         * @return {null}
         */		   			
 	list: function() {
 
@@ -192,9 +192,9 @@ wof.edit = (function () {
 	/**
 	 * @function show
 	 * @memberof wof.edit
-	 * @description ...
-	 * @param {string} uri -
-         * @return ...
+	 * @description Display the edit interface for a specific WOF record.
+	 * @param {string} uri - The URI of the WOF record to edit.
+         * @return {null}
         */		   				
 	show: function(uri) {
 
@@ -567,123 +567,121 @@ wof.edit = (function () {
 		    
 		const el = e.target;
 		const id = el.getAttribute("id");
-		
-		var change_data;
-		
-		try {
-		    const row = document.querySelector("#raw");
-		    change_data = JSON.parse(raw.innerText);
-		} catch(err) {
-		    _self.alert("Failed to parse raw data, " + err);
-		    console.error("Failed to parse raw data", err);
-		    return false;
+		const re = el.getAttribute("data-wof-validation-regex");
+
+		if ((re) && (! el.value.match(re))){
+		    console.error("Property fails validation (re) test", id);
+		    _self.alert(id + " property fails validation test");
+		    return false
 		}
 		
-		switch (id){
-		    case "wof:lang_x_spoken":
+		_self.load_data().then((change_data) => {
 
-			var tag_langs_spoken = [];
-			
-			try {			   
+		    switch (id){
+			case "wof:lang_x_spoken":
 			    
-			    const str_langs = el.value;
+			    var tag_langs_spoken = [];
 			    
-			    if (str_langs != ""){
-				tag_langs_spoken = JSON.parse(str_langs);
+			    try {			   
+				
+				const str_langs = el.value;
+				
+				if (str_langs != ""){
+				    tag_langs_spoken = JSON.parse(str_langs);
+				}
+				
+			    } catch(err) {
+				console.error("Failed to parse tag data", err);
+				_self.alert("Failed to parse tag data", err);
+				return false;
 			    }
 			    
-			} catch(err) {
-			    console.error("Failed to parse tag data", err);
-			    _self.alert("Failed to parse tag data", err);
-			    return false;
-			}
-			
-			const count_langs_spoken = tag_langs_spoken.length;
-			
-			if (count_langs_spoken == 0){
+			    const count_langs_spoken = tag_langs_spoken.length;
 			    
-			    if ("wof:lang_x_spoken" in change_data.properties){
-				delete change_data.properties["wof:lang_x_spoken"];			    
+			    if (count_langs_spoken == 0){
+				
+				if ("wof:lang_x_spoken" in change_data.properties){
+				    delete change_data.properties["wof:lang_x_spoken"];			    
+				} else {
+				    return;
+				}
+				
 			    } else {
-				return;
+				
+				var langs = [];
+				
+				for (var i=0; i < count_langs_spoken; i++){
+				    langs.push(tag_langs_spoken[i].value);
+				}
+				
+				change_data.properties["wof:lang_x_spoken"] = langs;
 			    }
 			    
-			} else {
+			    break;
 			    
-			    var langs = [];
+			case "wof:lang_x_official":
 			    
-			    for (var i=0; i < count_langs_spoken; i++){
-				langs.push(tag_langs_spoken[i].value);
+			    var tag_langs_official = [];
+			    
+			    try {
+				const str_langs = el.value;
+				
+				if (str_langs != ""){
+				    tag_langs_official = JSON.parse(str_langs);
+				}
+				
+			    } catch(err) {
+				console.error("Failed to parse tag data", err);
+				_self.alert("Failed to parse tag data", err);
+				return false;
 			    }
 			    
-			    change_data.properties["wof:lang_x_spoken"] = langs;
-			}
-			
-			break;
+			    const count_langs_official = tag_langs_official.length;
+			    
+			    if (count_langs_official == 0){
+				
+				if ("wof:lang_x_official" in change_data.properties){
+				    delete change_data.properties["wof:lang_x_official"];			    
+				} else {
+				    return;
+				}
+				
+			    } else {
+				
+				var langs = [];
+				
+				for (var i=0; i < count_langs_official; i++){
+				    langs.push(tag_langs_official[i].value);
+				}
+				
+				change_data.properties["wof:lang_x_official"] = langs;
+			    }
+			    
+			    break;			
+			default:
+			    
+			    if (el.value == ""){
+				delete change_data.properties[id];
+			    } else {
+				change_data.properties[id] = el.value;
+			    }
+			    
+			    break;
+		    }
 
-		    case "wof:lang_x_official":
-			
-			var tag_langs_official = [];
-			
-			try {
-			    const str_langs = el.value;
-			    
-			    if (str_langs != ""){
-				tag_langs_official = JSON.parse(str_langs);
-			    }
-			    
-			} catch(err) {
-			    console.error("Failed to parse tag data", err);
-			    _self.alert("Failed to parse tag data", err);
-			    return false;
-			}
-			
-			const count_langs_official = tag_langs_official.length;
-			
-			if (count_langs_official == 0){
-			    
-			    if ("wof:lang_x_official" in change_data.properties){
-				delete change_data.properties["wof:lang_x_official"];			    
-			    } else {
-				return;
-			    }
-			    
-			} else {
-			    
-			    var langs = [];
-			    
-			    for (var i=0; i < count_langs_official; i++){
-				langs.push(tag_langs_official[i].value);
-			    }
-			    
-			    change_data.properties["wof:lang_x_official"] = langs;
-			}
-			
-			break;			
-		    default:
-			
-			if (el.value == ""){
-			    delete change_data.properties[id];
-			} else {
-			    change_data.properties[id] = el.value;
-			}
-			
-			break;
-		}
-		
-		const str_data = JSON.stringify(change_data);
-		
-		wof_validate(str_data).then(() => {
-		    wof_format(str_data).then((fmt_rsp) => {
-			raw.innerText = fmt_rsp;
+		    _self.save_data(change_data).then(() => {
+			console.debug("Data saved", id);
 		    }).catch((err) => {
-			_self.alert("Failed to format response " + err);
-			console.error("Failed to format response", err);
+			    _self.alert("Failed to format response " + err);
+			    console.error("Failed to format response", err);
 		    });
+		    
 		}).catch((err) => {
-		    _self.alert("Data validation failed, " + err);			
-		    console.error("Data validation failed", err);
+		    _self.alert("Failed to load raw data, " + err);
+		    console.error("Failed to load raw data", err);
+		    return false;
 		});
+		
 	    };
 	    
 	    for (var i=0; i < count_inputs; i++){
@@ -1761,8 +1759,8 @@ wof.edit = (function () {
 	/**
 	 * @function save_data
 	 * @memberof wof.edit
-	 * @description ...
-	 * @param {Object} data -
+	 * @description Validate and format data and then store the result in the #raw HTML <pre> element
+	 * @param {Object} data - The GeoJSON Feature object data to save.
          * @return {Promise} -
         */		   										
 	save_data: function(data) {
