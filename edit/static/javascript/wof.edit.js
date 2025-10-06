@@ -810,7 +810,7 @@ wof.edit = (function () {
 	 * @description ...
 	 * @param {Object} form –
 	 * @param {Object} data –	   
-         * @return ...
+         * @return {null}
         */		   						
 	populate_form_names: function(form, data){
 
@@ -865,7 +865,7 @@ wof.edit = (function () {
 		console.debug("Add name(s)", lang, id);
 
 		// Note: We are counting on Tagify.js deduping and not dispatching
-		// the same language tag twice to this event.
+		// the same name tag twice to this event.
 
 		    try {
 			const node = t.content.cloneNode(true);
@@ -917,19 +917,24 @@ wof.edit = (function () {
 
 			    const el_tag = new Tagify(el);
 
-			    // Add language tags
+			    // Add name tags
 			    
 			    if (el_id in data.properties){
-				console.debug("Add language tags", el_id, data.properties[el_id]);
+				console.debug("Add name tags", el_id, data.properties[el_id]);
 				el_tag.addTags(data.properties[el_id]);
 			    }
 
-			    // When new language tags are added (or updated)
+			    // When new name tags are added (or updated)
 
 			    const on_edit = function(e){
 				
 				const tags = list_tags(el_tag);
-				console.debug("Edit language tag", el_id, tags);
+
+				if (tags.length == 0){
+				    return false;
+				}
+				
+				console.debug("Edit name tag", el_id, tags);
 
 				_self.start_spinner();
 				_self.load_data().then((data) => {
@@ -937,17 +942,17 @@ wof.edit = (function () {
 				    data.properties[el_id] = tags;
 				    
 				    _self.save_data(data).then(() => {
-					console.debug("Saved lanaguage tags on edit", el_id, tags);
+					console.debug("Saved name tags on edit", el_id, tags);
 					_self.stop_spinner();
 				    }).catch((err) => {
 					_self.stop_spinner();
-					console.error("Failed to save language tags on edit", el_id, err);
+					console.error("Failed to save name tags on edit", el_id, err);
 					_self.alert("Failed to save data, " + err);
 				    });
 				    
 				}).catch((err) => {
 				    _self.stop_spinner();
-				    console.error("Failed to load data for language tags on edit", el_id, err);				    
+				    console.error("Failed to load data for name tags on edit", el_id, err);				    
 				    _self.alert("Failed to load data, " + err)
 				});
 			    };
@@ -955,7 +960,7 @@ wof.edit = (function () {
 			    el_tag.on("add", on_edit);
 			    el_tag.on("change", on_edit);
 
-			    // When existing language tags are removed
+			    // When existing name tags are removed
 			    
 			    el_tag.on("remove", function(e){
 
@@ -964,7 +969,7 @@ wof.edit = (function () {
 				}
 
 				const tags = list_tags(el_tag);
-				console.debug("Remove language tags", el_id, tags);
+				console.debug("Remove name tags", el_id, tags);
 
 				_self.start_spinner();
 				_self.load_data().then((data) => {
@@ -984,13 +989,13 @@ wof.edit = (function () {
 					_self.stop_spinner();
 				    }).catch((err) => {
 					_self.stop_spinner();
-					console.error("Failed to update language tags on remove", el_id, err);
-					_self.alert("Failed to update language tags on remove, " + err);
+					console.error("Failed to update name tags on remove", el_id, err);
+					_self.alert("Failed to update name tags on remove, " + err);
 				    });
 				    
 				}).catch((err) => {
 				    _self.stop_spinner();
-					console.error("Failed to load language tags on remove", el_id, err);				    
+					console.error("Failed to load name tags on remove", el_id, err);				    
 				    _self.alert("Failed to load data, " + err)
 				});
 				
@@ -1150,7 +1155,7 @@ wof.edit = (function () {
 
 			    const el_tag = new Tagify(el);
 
-			    // Add language tags
+			    // Add label tags
 			    
 			    if (el_id in data.properties){
 				console.debug("Add language tags", el_id, data.properties[el_id]);
@@ -1162,6 +1167,11 @@ wof.edit = (function () {
 			    const on_edit = function(e){
 				
 				const tags = list_tags(el_tag);
+
+				if (tags.length == 0){
+				    return false;
+				}
+				
 				console.debug("Edit language tag", el_id, tags);
 
 				_self.start_spinner();
@@ -1170,17 +1180,17 @@ wof.edit = (function () {
 				    data.properties[el_id] = tags;
 				    
 				    _self.save_data(data).then(() => {
-					console.debug("Saved lanaguage tags on edit", el_id, tags);
+					console.debug("Saved label tags on edit", el_id, tags);
 					_self.stop_spinner();
 				    }).catch((err) => {
 					_self.stop_spinner();
-					console.error("Failed to save language tags on edit", el_id, err);
+					console.error("Failed to save label tags on edit", el_id, err);
 					_self.alert("Failed to save data, " + err);
 				    });
 				    
 				}).catch((err) => {
 				    _self.stop_spinner();
-				    console.error("Failed to load data for language tags on edit", el_id, err);				    
+				    console.error("Failed to load data for label tags on edit", el_id, err);				    
 				    _self.alert("Failed to load data, " + err)
 				});
 			    };
@@ -1197,7 +1207,7 @@ wof.edit = (function () {
 				}
 
 				const tags = list_tags(el_tag);
-				console.debug("Remove language tags", el_id, tags);
+				console.debug("Remove label tags", el_id, tags.length, tags);
 
 				_self.start_spinner();
 				_self.load_data().then((data) => {
@@ -1205,6 +1215,7 @@ wof.edit = (function () {
 				    if (tags.length == 0){
 
 					if (el_id in data.properties){
+					    console.debug("Delete label tag from properties", el_id);
 					    delete(data.properties[el_id]);
 					}
 					
@@ -1217,13 +1228,13 @@ wof.edit = (function () {
 					_self.stop_spinner();
 				    }).catch((err) => {
 					_self.stop_spinner();
-					console.error("Failed to update language tags on remove", el_id, err);
-					_self.alert("Failed to update language tags on remove, " + err);
+					console.error("Failed to update label tags on remove", el_id, err);
+					_self.alert("Failed to update label tags on remove, " + err);
 				    });
 				    
 				}).catch((err) => {
 				    _self.stop_spinner();
-					console.error("Failed to load language tags on remove", el_id, err);				    
+					console.error("Failed to load label tags on remove", el_id, err);				    
 				    _self.alert("Failed to load data, " + err)
 				});
 				
@@ -1269,7 +1280,7 @@ wof.edit = (function () {
 
 	    // END OF...
 	    
-	    console.debug("Add current label/language tags")
+	    console.debug("Add current label tags")
 	    tags_selected.addTags(current_labels_langs);	    
 	},
 
@@ -1295,7 +1306,14 @@ wof.edit = (function () {
 	    // "add" function is a "new_concordances_row" function. Again, this is all necessary
 	    // because of scoping wah-wah. Could all of these be moved in to dicrete functions?
 	    // Probably, but that is tomorrow's problem right now.
-	    
+
+	    /**
+	     * @function concordances_update_func
+	     * @memberof wof.edit.populate_form_concordances
+	     * @description ...
+	     * @param {Object} e –
+             * @return {boolean}
+             */		   						
 	    const concordances_update_func = function(e){
 		const el = e.target;
 		
@@ -1656,9 +1674,9 @@ wof.edit = (function () {
 	/**
 	 * @function remove_concordance
 	 * @memberof wof.edit
-	 * @description ...
-	 * @param {string} prefix –
-         * @return ...
+	 * @description Remove the concordance matching 'prefix' from the underlying #raw HTML element data.
+	 * @param {string} prefix – The wof:concordances namespace and prefix to remove.
+         * @return {Promise}
         */		   							
 	remove_concordance: function(prefix){
 
@@ -1721,8 +1739,8 @@ wof.edit = (function () {
 	/**
 	 * @function start_spinner
 	 * @memberof wof.edit
-	 * @description ...
-         * @return ...
+	 * @description Display the "spinner" UI element.
+         * @return {null}
         */		   								
 	start_spinner: function(){
 		const spinner = document.querySelector("#spinner-svg");
@@ -1732,8 +1750,8 @@ wof.edit = (function () {
 	/**
 	 * @function stop_spinner
 	 * @memberof wof.edit
-	 * @description ...
-         * @return ...
+	 * @description Hide the "spinner" UI element.
+         * @return {null}
         */		   									
 	stop_spinner: function(){
 	    const spinner = document.querySelector("#spinner-svg");
@@ -1770,9 +1788,9 @@ wof.edit = (function () {
 	/**
 	 * @function export_data
 	 * @memberof wof.edit
-	 * @description ...
-	 * @param {Object} data -
-         * @return {Promise.<string>} -
+	 * @description Validate and format a GeoJSON Feature object.
+	 * @param {Object} data - A GeoJSON Feature object.
+         * @return {Promise.<string>} - Returns the string representation of 'data' after it has been validated and formatted.
         */		   											
 	export_data: function(data){
 
@@ -1797,8 +1815,8 @@ wof.edit = (function () {
 	/**
 	 * @function load_data
 	 * @memberof wof.edit
-	 * @description ...
-         * @return {Promise} -
+	 * @description Returns the parsed JSON of the GeoJSON Feature data written to the #raw <pre> HTML element.
+         * @return {Promise.<Object>} - A GeoJSON Feature object.
         */		   											
 	load_data: function(){
 
