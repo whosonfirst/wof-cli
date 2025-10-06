@@ -672,8 +672,8 @@ wof.edit = (function () {
 		    _self.save_data(change_data).then(() => {
 			console.debug("Data saved", id);
 		    }).catch((err) => {
-			    _self.alert("Failed to format response " + err);
-			    console.error("Failed to format response", err);
+			_self.alert("Failed to format response " + err);
+			console.error("Failed to format response", err);
 		    });
 		    
 		}).catch((err) => {
@@ -1480,32 +1480,18 @@ wof.edit = (function () {
 
 		    var data;
 
-		    try {
-			const row = document.querySelector("#raw");
-			data = JSON.parse(raw.innerText);
-		    } catch(err) {
-			console.error("Failed to parse raw data", err);
-			_self.stop_spinner();
-			_self.alert("Failed to parse data, " + err);
-			return false;
-		    };
+		    _self.load_data().then((data) => {
 
-		    if (prefix in data.properties["wof:concordances"]){
-			_self.stop_spinner();
-			_self.alert("There is already a concordance with that prefix");
-			return false;
-		    }
-
-		    data.properties["wof:concordances"][prefix] = value;
+			if (prefix in data.properties["wof:concordances"]){
+			    _self.stop_spinner();
+			    _self.alert("There is already a concordance with that prefix");
+			    return false;
+			}
 			
-		    const str_data = JSON.stringify(data);
-		    
-		    wof_validate(str_data).then(() => {
-
-			wof_format(str_data).then((fmt_rsp) => {
+			data.properties["wof:concordances"][prefix] = value;
+			
+			_self.save_data(data).then(() => {
 			    
-			    raw.innerText = fmt_rsp;
-
 			    const row = new_concordances_row(prefix, value);
 			    concordances_el.prepend(row);		
 			    
@@ -1518,7 +1504,7 @@ wof.edit = (function () {
 			    _self.alert("Failed to format raw data, " + err);			    
 			    console.error("Failed to format data", err);
 			});
-			
+						
 		    }).catch((err) => {
 			_self.stop_spinner();			
 			_self.alert("Data validation failed, " + err);
@@ -1636,10 +1622,25 @@ wof.edit = (function () {
 	    return new Promise((resolve, reject) => {
 		
 		_self.start_spinner();
-		
-		try {
-		    const row = document.querySelector("#raw");
-		    data = JSON.parse(raw.innerText);
+
+		_self.load_data().then((data) => {
+
+		    data.properties["wof:concordances"][prefix] = v;
+		    console.debug("Update concordances", data.properties["wof:concordances"]);
+
+		    _self.save_data(data).then(() => {
+			_self.stop_spinner();
+		    
+			resolve();
+			return;
+		    }).catch((err) => {
+			console.error("Failed to format data", err);
+			_self.stop_spinner();
+			
+			reject("Failed to format raw data, " + err);
+			return;
+		    });
+
 		} catch(err) {
 		    console.error("Failed to parse raw data", err);
 		    _self.stop_spinner();
@@ -1648,27 +1649,9 @@ wof.edit = (function () {
 		    return;
 		}
 	    	    
-		data.properties["wof:concordances"][prefix] = v;
-		console.debug("Update concordances", data.properties["wof:concordances"]);
-		
-		const str_data = JSON.stringify(data);
-		
-		wof_format(str_data).then((fmt_rsp) => {
-		    raw.innerText = fmt_rsp;
-		    _self.stop_spinner();
-		    
-		    resolve();
-		    return;
-		}).catch((err) => {
-		    console.error("Failed to format data", err);
-		    _self.stop_spinner();
-		    
-		    reject("Failed to format raw data, " + err);
-		    return;
-		});
 	    });
 	},
-
+	
 	/**
 	 * @function remove_concordance
 	 * @memberof wof.edit
