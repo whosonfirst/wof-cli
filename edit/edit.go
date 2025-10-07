@@ -21,8 +21,8 @@ import (
 )
 
 type RunOptions struct {
-	URIs   []string
-	Stdout bool
+	URIs    []string
+	Verbose bool
 }
 
 type EditCommand struct {
@@ -49,13 +49,19 @@ func (c *EditCommand) Run(ctx context.Context, args []string) error {
 	uris := fs.Args()
 
 	opts := &RunOptions{
-		URIs: uris,
+		URIs:    uris,
+		Verbose: verbose,
 	}
 
 	return RunWithOptions(ctx, opts)
 }
 
 func RunWithOptions(ctx context.Context, opts *RunOptions) error {
+
+	if opts.Verbose {
+		slog.SetLogLoggerLevel(slog.LevelDebug)
+		slog.Debug("Verbose logging enabled")
+	}
 
 	logger := slog.Default()
 
@@ -66,10 +72,10 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	}
 
 	logger = logger.With("tmpdir", tmpdir)
-	logger.Info("Tmpdir created")
+	logger.Debug("Tmpdir created")
 
 	defer func() {
-		logger.Info("Remove tmpdir")
+		logger.Debug("Remove tmpdir")
 		os.RemoveAll(tmpdir)
 	}()
 
@@ -83,7 +89,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	cb := func(ctx context.Context, uri string) error {
 
-		logger.Info("Process record", "uri", uri)
+		logger.Debug("Process record", "uri", uri)
 
 		id, uri_args, err := wof_uri.ParseURI(uri)
 
@@ -126,7 +132,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		}
 
 		uri_map.Store(fname, uri)
-		logger.Info("Copy record to tmpdir root", "uri", uri, "fname", fname)
+		logger.Debug("Copy record to tmpdir root", "uri", uri, "fname", fname)
 		return nil
 	}
 
@@ -135,6 +141,11 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	if err != nil {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
+
+	// See this? This is not the way the rest of the wof-cli package works (at least
+	// not yet) but we're doing it this way so that the http/mux code (below) can be
+	// used by other projects and can just expect to write changes to a generic Writer
+	// implementation.
 
 	wr, err := writer.NewWriter()
 

@@ -92,7 +92,7 @@ func SaveHandler(data_root *os.Root, uri_map *sync.Map, wr writer.Writer) http.H
 			// Note how this is NOT using whosonfirst/go-whosonfirst-writer that
 			// will explicitly write files as 123/456/7/1234567.geojson which is
 			// not necessarily the desired effect.
-			
+
 			if err != nil {
 				logger.Error("Failed to write body", "error", err)
 				http.Error(rsp, "Internal server error", http.StatusInternalServerError)
