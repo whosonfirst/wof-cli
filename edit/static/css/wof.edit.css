@@ -13,6 +13,10 @@
 pre {
 }
 
+#list-records {
+	margin-left: 2rem;
+}
+
 #localized-names-description {
 	display: none;
 }

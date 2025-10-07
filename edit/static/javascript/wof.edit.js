@@ -41,99 +41,31 @@ wof.edit = (function () {
         * @return {Promise} – 
         */		   	
 	init: function() {
+
+	    const _self = self;
 	    
 	    return new Promise((resolve, reject) => {
 
-		const spinner = document.querySelector("#spinner-svg");
-		spinner.style.display = "inline-block";
+		_self.start_spinner();
 		
 		sfomuseum.golang.wasm.fetch("wasm/wof_edit.wasm").then((rsp) => {
-		    spinner.style.display = "none";		    
+
+		    _self.stop_spinner();		    
+
+		    const home = document.querySelector("#home-button");
+		    
+		    home.onclick = function(){
+			_self.list(true);
+			return false;
+		    };
+		    
 		    resolve();
 		}).catch((err) => {
-		    spinner.style.display = "none";		    		    
+		    _self.stop_spinner();		    		    
 		    reject("Failed to load wof_placetypes WASM binary " + err);
 		});
 		
 	    });
-	},
-
-	/**
-	 * @function feedback
-	 * @memberof wof.edit
-	 * @description Display a feedback message.
-	 * @param {string} msg - The feedback message to display.
-	 * @param {number} ttl - The number of milliseconds to display the message after which is will be removed. Default is 5000.
-         * @return {null}
-        */		   		
-	feedback: function(msg, ttl){
-
-	    if (! ttl){
-		ttl = 5000;
-	    }
-	    
-	    self.alert(msg, ttl);
-	},
-
-	/**
-	 * @function alert
-	 * @memberof wof.edit
-	 * @description Display an alert message.
-	 * @param {string} msg - The message to display.
-	 * @param {number} ttl - The number of milliseconds to display the message after which is will be removed.
-         * @return {null}
-        */		   			
-	alert: function(msg, ttl){
-
-	    console.debug(msg);
-	    
-	    const dlg = document.createElement("dialog");
-	    dlg.setAttribute("id", "alert");
-	    dlg.setAttribute("class", "alert");
-	    
-	    const close = document.createElement("div");
-	    close.setAttribute("class", "alert-close");
-	    
-	    close.innerHTML = close_svg;	    
-
-	    close.onclick = function(e){
-
-		if (alert_timeout){
-		    clearTimeout(alert_timeout);
-		}
-		
-		dlg.close()
-		document.body.removeChild(dlg);		
-	    };
-
-	    const body = document.createElement("div");
-	    body.setAttribute("class", "alert-body");
-	    
-	    body.appendChild(document.createTextNode(msg));
-	    dlg.appendChild(close);
-	    dlg.appendChild(body);
-
-	    document.body.prepend(dlg);
-	    dlg.showModal();
-	    
-	    if (ttl){
-
-		if (alert_timeout){
-		    clearTimeout(alert_timeout);
-		}
-		
-		alert_timeout = setTimeout(function(){
-
-		    const dlg = document.querySelector("#alert");
-		    console.debug("Remove dialog", dlg);
-		    
-		    if (dlg){
-			dlg.close()
-			document.body.removeChild(dlg);
-		    }
-		    
-		}, ttl);
-	    }
 	},
 
 	/**
@@ -142,7 +74,7 @@ wof.edit = (function () {
 	 * @description Fetch the list of WOF records to edit and display them in a list. If the list only contains one record then the 'show' method is immediately dispatched for that record.
          * @return {null}
         */		   			
-	list: function() {
+	list: function(force) {
 
 	    const _self = self;
 	    
@@ -150,12 +82,19 @@ wof.edit = (function () {
 		
 		const count = rsp.length;
 
-		if (count == 1){
+		if ((count == 1) && (! force)){
 		    _self.show(rsp[0]);
 		    return;
 		}
+
+		const btns = document.querySelector("#buttons");
+
+		if (btns){
+		    btns.parentNode.removeChild(btns);
+		}
 		
 		const items = document.createElement("ul");
+		items.setAttribute("id", "list-records");
 		
 		for (var i=0; i < count; i++) {
 		    
@@ -163,6 +102,7 @@ wof.edit = (function () {
 		    
 		    const link = document.createElement("a");
 		    link.setAttribute("href", uri);
+		    link.setAttribute("id", uri);
 		    link.appendChild(document.createTextNode(uri));
 		    
 		    link.onclick = function(e){
@@ -181,6 +121,27 @@ wof.edit = (function () {
 		const root = document.getElementById("canvas");
 		root.innerHTML = "";
 		root.appendChild(items);
+
+		for (var i=0; i < count; i++) {
+		    
+		    const uri = rsp[i];
+
+		    wof.edit.api.fetch(uri).then((data) => {
+			const props = data.properties;
+			const el = document.getElementById(uri);
+			el.innerHTML = "";
+			el.appendChild(document.createTextNode(props["wof:name"]));
+			el.appendChild(document.createTextNode(" ("));
+			
+			const code = document.createElement("code");
+			code.appendChild(document.createTextNode(props["wof:id"]));
+			el.appendChild(code);
+			el.appendChild(document.createTextNode(")"));
+			
+		    }).catch((err) => {
+			console.error("Failed to update label for record", uri, err);
+		    });
+		}
 		
 	    }).catch((err) => {
 		_self.alert("Failed to retrieve list of records to edit, " + err);
@@ -1802,7 +1763,84 @@ wof.edit = (function () {
 		}
 	    });
 	},
+
+	/**
+	 * @function feedback
+	 * @memberof wof.edit
+	 * @description Display a feedback message.
+	 * @param {string} msg - The feedback message to display.
+	 * @param {number} ttl - The number of milliseconds to display the message after which is will be removed. Default is 5000.
+         * @return {null}
+         */		   		
+	feedback: function(msg, ttl){
+	    
+	    if (! ttl){
+		ttl = 5000;
+	    }
+	    
+	    self.alert(msg, ttl);
+	},
 	
+	/**
+	 * @function alert
+	 * @memberof wof.edit
+	 * @description Display an alert message.
+	 * @param {string} msg - The message to display.
+	 * @param {number} ttl - The number of milliseconds to display the message after which is will be removed.
+         * @return {null}
+         */		   			
+	alert: function(msg, ttl){
+	    
+	    console.debug(msg);
+	    
+	    const dlg = document.createElement("dialog");
+	    dlg.setAttribute("id", "alert");
+	    dlg.setAttribute("class", "alert");
+	    
+	    const close = document.createElement("div");
+	    close.setAttribute("class", "alert-close");
+	    
+	    close.innerHTML = close_svg;	    
+	    
+	    close.onclick = function(e){
+		
+		if (alert_timeout){
+		    clearTimeout(alert_timeout);
+		}
+		
+		dlg.close()
+		document.body.removeChild(dlg);		
+	    };
+	    
+	    const body = document.createElement("div");
+	    body.setAttribute("class", "alert-body");
+	    
+	    body.appendChild(document.createTextNode(msg));
+	    dlg.appendChild(close);
+	    dlg.appendChild(body);
+	    
+	    document.body.prepend(dlg);
+	    dlg.showModal();
+	    
+	    if (ttl){
+		
+		if (alert_timeout){
+		    clearTimeout(alert_timeout);
+		}
+		
+		alert_timeout = setTimeout(function(){
+		    
+		    const dlg = document.querySelector("#alert");
+		    console.debug("Remove dialog", dlg);
+		    
+		    if (dlg){
+			dlg.close()
+			document.body.removeChild(dlg);
+		    }
+		    
+		}, ttl);
+	    }
+	},
     };
     
     return self;
