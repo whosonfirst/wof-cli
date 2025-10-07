@@ -14,6 +14,7 @@ import (
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
+	"github.com/whosonfirst/wof/writer"
 )
 
 type RunOptions struct {
@@ -132,8 +133,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
 
-	wr, _ := NewEditWriter(ctx, "")
-	
+	wr, _ := writer.NewWriter()
+
 	// START OF make this a function
 	// that takes (??) and return a http.ServeMux
 

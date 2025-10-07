@@ -15,7 +15,7 @@ import (
 	"github.com/whosonfirst/go-whosonfirst-validate"
 	"github.com/whosonfirst/wof/edit/static"
 	// "github.com/whosonfirst/wof/writer"
-	"github.com/whosonfirst/go-writer/v3"	
+	"github.com/whosonfirst/go-writer/v3"
 )
 
 func staticHandler() http.Handler {
@@ -156,7 +156,7 @@ func apiSaveHandler(data_root *os.Root, uri_map *sync.Map, wr writer.Writer) htt
 			}
 
 			_, err = wr.Write(ctx, uri, bytes.NewReader(new_body))
-			
+
 			// Note how this is NOT using whosonfirst/go-whosonfirst-writer that
 			// will explicitly write files as 123/456/7/1234567.geojson which is
 			// not necessarily the desired effect. This is also not using go-writer
@@ -172,7 +172,7 @@ func apiSaveHandler(data_root *os.Root, uri_map *sync.Map, wr writer.Writer) htt
 			}
 
 			// Now write back to the temporary directory with the files being edited
-			
+
 			err = data_root.WriteFile(fname, new_body, 0644)
 
 			if err != nil {
