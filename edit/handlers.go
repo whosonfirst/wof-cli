@@ -1,6 +1,7 @@
 package edit
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/fs"
 	"log/slog"
@@ -13,7 +14,8 @@ import (
 	"github.com/whosonfirst/go-whosonfirst-export/v3"
 	"github.com/whosonfirst/go-whosonfirst-validate"
 	"github.com/whosonfirst/wof/edit/static"
-	"github.com/whosonfirst/wof/writer"
+	// "github.com/whosonfirst/wof/writer"
+	"github.com/whosonfirst/go-writer/v3"	
 )
 
 func staticHandler() http.Handler {
@@ -78,7 +80,7 @@ func apiListHandler(data_root *os.Root) http.Handler {
 	return http.HandlerFunc(fn)
 }
 
-func apiSaveHandler(data_root *os.Root, uri_map *sync.Map) http.Handler {
+func apiSaveHandler(data_root *os.Root, uri_map *sync.Map, wr writer.Writer) http.Handler {
 
 	fn := func(rsp http.ResponseWriter, req *http.Request) {
 
@@ -153,13 +155,15 @@ func apiSaveHandler(data_root *os.Root, uri_map *sync.Map) http.Handler {
 				return
 			}
 
+			_, err = wr.Write(ctx, uri, bytes.NewReader(new_body))
+			
 			// Note how this is NOT using whosonfirst/go-whosonfirst-writer that
 			// will explicitly write files as 123/456/7/1234567.geojson which is
 			// not necessarily the desired effect. This is also not using go-writer
 			// since nothing else does and right now the semantics around writing
 			// files from the tool are encapsulated in wof-cli/writer.
 
-			err = writer.Write(ctx, uri, new_body)
+			// err = writer.Write(ctx, uri, new_body)
 
 			if err != nil {
 				logger.Error("Failed to write body", "error", err)
@@ -167,6 +171,8 @@ func apiSaveHandler(data_root *os.Root, uri_map *sync.Map) http.Handler {
 				return
 			}
 
+			// Now write back to the temporary directory with the files being edited
+			
 			err = data_root.WriteFile(fname, new_body, 0644)
 
 			if err != nil {

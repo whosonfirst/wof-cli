@@ -132,6 +132,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
 
+	wr, _ := NewEditWriter(ctx, "")
+	
 	// START OF make this a function
 	// that takes (??) and return a http.ServeMux
 
@@ -140,7 +142,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	list_handler := apiListHandler(root)
 	mux.Handle("/api/list", list_handler)
 
-	save_handler := apiSaveHandler(root, uri_map)
+	save_handler := apiSaveHandler(root, uri_map, wr)
 	mux.Handle("/api/save/", save_handler)
 
 	data_handler := dataHandler(root)
