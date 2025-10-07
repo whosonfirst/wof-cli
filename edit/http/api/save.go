@@ -1,93 +1,25 @@
-package edit
+package api
 
 import (
 	"bytes"
-	"encoding/json"
-	"io/fs"
-	"log/slog"
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 
+	"github.com/aaronland/go-http/v3/slog"
 	"github.com/whosonfirst/go-whosonfirst-export/v3"
 	"github.com/whosonfirst/go-whosonfirst-validate"
-	"github.com/whosonfirst/wof/edit/static"
-	// "github.com/whosonfirst/wof/writer"
 	"github.com/whosonfirst/go-writer/v3"
 )
 
-func staticHandler() http.Handler {
-	http_fs := http.FS(static.FS)
-	return http.FileServer(http_fs)
-}
-
-func dataHandler(data_root *os.Root) http.Handler {
-	http_fs := http.FS(data_root.FS())
-	return http.FileServer(http_fs)
-}
-
-func apiListHandler(data_root *os.Root) http.Handler {
-
-	once := sync.OnceValues(func() ([]string, error) {
-
-		paths := make([]string, 0)
-
-		err := fs.WalkDir(data_root.FS(), ".", func(path string, d fs.DirEntry, err error) error {
-
-			if err != nil {
-				return err
-			}
-
-			if strings.HasPrefix(path, ".") {
-				return nil
-			}
-
-			paths = append(paths, path)
-			return nil
-		})
-
-		return paths, err
-	})
-
-	fn := func(rsp http.ResponseWriter, req *http.Request) {
-
-		logger := slog.Default()
-		logger = logger.With("uri", req.URL.Path)
-
-		paths, err := once()
-
-		if err != nil {
-			logger.Error("Failed to derive paths", "error", err)
-			http.Error(rsp, "Internal server error", http.StatusInternalServerError)
-			return
-		}
-
-		rsp.Header().Set("Content-type", "application/json")
-
-		enc := json.NewEncoder(rsp)
-		err = enc.Encode(paths)
-
-		if err != nil {
-			logger.Error("Failed to encode paths", "error", err)
-			http.Error(rsp, "Internal server error", http.StatusInternalServerError)
-			return
-		}
-
-	}
-
-	return http.HandlerFunc(fn)
-}
-
-func apiSaveHandler(data_root *os.Root, uri_map *sync.Map, wr writer.Writer) http.Handler {
+func SaveHandler(data_root *os.Root, uri_map *sync.Map, wr writer.Writer) http.Handler {
 
 	fn := func(rsp http.ResponseWriter, req *http.Request) {
 
 		ctx := req.Context()
 
-		logger := slog.Default()
-		logger = logger.With("uri", req.URL.Path)
+		logger := slog.LoggerWithRequest(req, nil)
 
 		if req.Method != http.MethodPost {
 			http.Error(rsp, "Method not allowed", http.StatusMethodNotAllowed)
@@ -159,12 +91,8 @@ func apiSaveHandler(data_root *os.Root, uri_map *sync.Map, wr writer.Writer) htt
 
 			// Note how this is NOT using whosonfirst/go-whosonfirst-writer that
 			// will explicitly write files as 123/456/7/1234567.geojson which is
-			// not necessarily the desired effect. This is also not using go-writer
-			// since nothing else does and right now the semantics around writing
-			// files from the tool are encapsulated in wof-cli/writer.
-
-			// err = writer.Write(ctx, uri, new_body)
-
+			// not necessarily the desired effect.
+			
 			if err != nil {
 				logger.Error("Failed to write body", "error", err)
 				http.Error(rsp, "Internal server error", http.StatusInternalServerError)

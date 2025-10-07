@@ -3,6 +3,7 @@ module github.com/whosonfirst/wof
 go 1.25.0
 
 require (
+	github.com/aaronland/go-http/v3 v3.2.0
 	github.com/aaronland/go-json-query v0.1.6
 	github.com/aaronland/go-roster v1.0.0
 	github.com/natefinch/atomic v1.0.1
@@ -187,8 +188,8 @@ require (
 	github.com/sfomuseum/go-www-show/v2 v2.0.0 // indirect
 	github.com/skeema/knownhosts v1.3.1 // indirect
 	github.com/spiffe/go-spiffe/v2 v2.5.0 // indirect
-	github.com/tdewolff/minify/v2 v2.20.32 // indirect
-	github.com/tdewolff/parse/v2 v2.7.14 // indirect
+	github.com/tdewolff/minify/v2 v2.24.2 // indirect
+	github.com/tdewolff/parse/v2 v2.8.3 // indirect
 	github.com/tidwall/geoindex v1.4.4 // indirect
 	github.com/tidwall/geojson v1.4.5 // indirect
 	github.com/tidwall/match v1.1.1 // indirect

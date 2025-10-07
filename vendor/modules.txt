@@ -160,6 +160,9 @@ github.com/aaronland/go-http-rewrite
 # github.com/aaronland/go-http-static v0.0.3
 ## explicit; go 1.18
 github.com/aaronland/go-http-static
+# github.com/aaronland/go-http/v3 v3.2.0
+## explicit; go 1.25.0
+github.com/aaronland/go-http/v3/slog
 # github.com/aaronland/go-json-query v0.1.6
 ## explicit; go 1.22
 github.com/aaronland/go-json-query
@@ -935,13 +938,13 @@ github.com/spiffe/go-spiffe/v2/internal/jwtutil
 github.com/spiffe/go-spiffe/v2/internal/pemutil
 github.com/spiffe/go-spiffe/v2/internal/x509util
 github.com/spiffe/go-spiffe/v2/spiffeid
-# github.com/tdewolff/minify/v2 v2.20.32
-## explicit; go 1.18
+# github.com/tdewolff/minify/v2 v2.24.2
+## explicit; go 1.17
 github.com/tdewolff/minify/v2
 github.com/tdewolff/minify/v2/css
 github.com/tdewolff/minify/v2/js
-# github.com/tdewolff/parse/v2 v2.7.14
-## explicit; go 1.13
+# github.com/tdewolff/parse/v2 v2.8.3
+## explicit; go 1.11
 github.com/tdewolff/parse/v2
 github.com/tdewolff/parse/v2/buffer
 github.com/tdewolff/parse/v2/css

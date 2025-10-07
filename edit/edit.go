@@ -12,6 +12,9 @@ import (
 	"github.com/sfomuseum/go-www-show"
 	wof_uri "github.com/whosonfirst/go-whosonfirst-uri"
 	"github.com/whosonfirst/wof"
+	"github.com/whosonfirst/wof/edit/http/api"
+	"github.com/whosonfirst/wof/edit/http/www"
+	"github.com/whosonfirst/wof/edit/static"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
 	"github.com/whosonfirst/wof/writer"
@@ -133,27 +136,30 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
 
-	wr, _ := writer.NewWriter()
+	wr, err := writer.NewWriter()
 
-	// START OF make this a function
-	// that takes (??) and return a http.ServeMux
+	if err != nil {
+		return fmt.Errorf("Failed to create new writer, %w", err)
+	}
+
+	// START OF make this a function... maybe?
 
 	mux := http.NewServeMux()
 
-	list_handler := apiListHandler(root)
+	list_handler := api.ListHandler(root)
 	mux.Handle("/api/list", list_handler)
 
-	save_handler := apiSaveHandler(root, uri_map, wr)
+	save_handler := api.SaveHandler(root, uri_map, wr)
 	mux.Handle("/api/save/", save_handler)
 
-	data_handler := dataHandler(root)
+	data_handler := www.DataHandler(root)
 	data_handler = http.StripPrefix("/data/", data_handler)
 	mux.Handle("/data/", data_handler)
 
-	static_handler := staticHandler()
+	static_handler := www.StaticHandler(static.FS)
 	mux.Handle("/", static_handler)
 
-	// END OF make this a function
+	// END OF make this a function... maybe?
 
 	browser, err := show.NewBrowser(ctx, "web://")
 
