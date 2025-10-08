@@ -154,7 +154,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	if err != nil {
 		return fmt.Errorf("Failed to create new writer, %w", err)
 	}
-
+	
 	// START OF make this a function... maybe?
 
 	mux := http.NewServeMux()
