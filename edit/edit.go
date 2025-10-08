@@ -65,7 +65,6 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	// START OF copy all the records to a temporary directory which
 	// will then be used to serve an os.Root instance from the web server
-
 	tmpdir, err := os.MkdirTemp("", "wof-edit")
 
 	if err != nil {
