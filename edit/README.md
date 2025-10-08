@@ -37,9 +37,23 @@ Clicking on one of the links will display that WOF record in the "form" view for
 
 ![](docs/wof-cli-edit-form.png)
 
+_You can return to the "list" view by clicking on `WOF Editor` header._
+
 The form view is a limited set of common WOF properties which most often need to be edited. This view is modeled after the interface in the [iandees/wof-editor](https://github.com/iandees/wof-editor) package. If you want to edit the raw GeoJSON for the record itself click the `Data view` button in the navigation tool bar. This will display the record in an editable `<pre>` element like this:
 
 ![](docs/wof-cli-edit-data.png)
+
+_The `Format` and `Validate` buttons are only enabled in "data" view. Data validation and formatting happens automatically in "form" view whenever a property is updated._
+
+## Notes (and caveats)
+
+Changes made in the `wof edit` tool are not written to disk (or STDOUT) until the `Save` button is pressed.
+
+It is not possible to edit geometries yet. While there is nothing to prevent you from editing geometries in the raw "data" view those changes will not be reflected until the document being edited is saved and reloaded.
+
+There is a noticeable delay at startup while the WASM binary (used for data formatting, validation and other functionality) is initialized. This is not ideal and future work will focus on speeding it up. For the time being it is an accepted inconvenience.
+
+Currently the tool is hard-coded to use (base) map tiles from OpenStreetMap. Future releases will support map tiles from the Protomaps API or a local Protomaps database file.
 
 ## WASM
 
