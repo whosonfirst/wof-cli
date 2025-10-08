@@ -35,9 +35,7 @@ func init() {
 }
 
 func NewEditCommand(ctx context.Context, cmd string) (wof.Command, error) {
-
 	c := &EditCommand{}
-
 	return c, nil
 }
 
@@ -64,6 +62,9 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	}
 
 	logger := slog.Default()
+
+	// START OF copy all the records to a temporary directory which
+	// will then be used to serve an os.Root instance from the web server
 
 	tmpdir, err := os.MkdirTemp("", "wof-edit")
 
@@ -142,6 +143,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
 
+	// END OF copy all the records to a temporary directory
+
 	// See this? This is not the way the rest of the wof-cli package works (at least
 	// not yet) but we're doing it this way so that the http/mux code (below) can be
 	// used by other projects and can just expect to write changes to a generic Writer
@@ -157,6 +160,11 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	mux := http.NewServeMux()
 
+	// See the way we are passing root (and sometimes uri_map)? At some point it would
+	// be nice to wrap these in a whosonfirst/go-reader.Reader implementation such that
+	// the API layer only knows anout "readers" and "writers" independent of the application
+	// specific implementation.
+
 	list_handler := api.ListHandler(root)
 	mux.Handle("/api/list", list_handler)
 
@@ -166,6 +174,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	data_handler := www.DataHandler(root)
 	data_handler = http.StripPrefix("/data/", data_handler)
 	mux.Handle("/data/", data_handler)
+
+	// The actual web application (HTML + CSS + JavaScript)
 
 	static_handler := www.StaticHandler(static.FS)
 	mux.Handle("/", static_handler)

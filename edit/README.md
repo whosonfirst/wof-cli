@@ -9,6 +9,8 @@ $> ./bin/wof edit -h
 Launch a local web server running on a random port hosting a web application for editing one or more Who's On First records.
 Usage:
 	 ./bin/wof path(N) path(N)
+  -verbose
+    	Enable verbose (debug) logging.
 ```
 
 The `wof edit` command is modeled after the [iandees/wof-editor](https://github.com/iandees/wof-editor) package with the following changes:

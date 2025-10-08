@@ -55,6 +55,8 @@ $> ./bin/wof edit -h
 Launch a local web server running on a random port hosting a web application for editing one or more Who's On First records.
 Usage:
 	 ./bin/wof path(N) path(N)
+  -verbose
+    	Enable verbose (debug) logging.
 ```
 
 Examples can be found in [edit/README.md](edit/README.md#examples)
