@@ -55,7 +55,41 @@ There is a noticeable delay at startup while the WASM binary (used for data form
 
 Currently the tool is hard-coded to use (base) map tiles from OpenStreetMap. Future releases will support map tiles from the Protomaps API or a local Protomaps database file.
 
-## WASM
+## Under the hood
+
+The `wof edit` tool is a simple web application consisting of three parts:
+
+1. A simple HTML + JavaScript + CSS application which provides the interface and interaction components.
+2. A WebAssembly (WASM) binary to provide data formatting, validation and other editing-related methods in the client.
+3. A simple web server to host the first two components and to expose a minimalist API for listing, retrieving and updating WOF documents.
+
+The goal is to define modular components which can be used in a mix-and-match style across applications or programming languages. For example, although these tools are written in Go the hope is the API layer is sufficiently easy to reimplement in a different programming environment which would allow for it to simply "drop in" the HTML and WASM components without any additional changes.
+
+The source code for the web application, including the WASM binary, can be viewed in the [edit/static](static) folder.
+
+The source code for building the WASM binary can be viewed in the [cmd/wof-edit-wasm](../cmd/wof-edit-wasm) folder.
+
+The source code for the API methods can be viewed in the [edit/http](http) folder.
+
+### API
+
+The API, as referenced by the web application, consists of the following methods.
+
+#### GET /data/{id}
+
+Return the GeoJSON-encoded `Feature` record matching `{id}`. The semantics of how `{id}` is interpreted and where that data is retrieved from are left as implementation-specific details.
+
+#### GET /api/list
+
+Return a JSON-encoded list of record identifiers (or URIs) exposed by the API. These URIs should be able to be retrieved using the `/data/{id}` endpoint.
+
+#### POST /api/save/{id}
+
+This API method accepts GeoJSON-encoded `Feature` record, as the body of the request, and saves it to `{id}`. The semantics of how `{id}` is interpreted and where that data is saved to are left as implementation-specific details.
+
+If you are writing a custom implementation you should take care to both validate and format the data server-side (even though will have been done client-side by the WASM-provided methods).
+
+### WASM
 
 The `wof edit` tool is bundled with a pre-built WASM binary for performing edit-related functions. If you need or want to rebuild the binary the easiest way to do that is to run the `wasmjs` Makefile target from the root of the `wof-cli` project. For example:
 
