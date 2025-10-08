@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<!-- This document is modeled after the edit form defined in: https://github.com/iandees/wof-editor -->
+<html>
+    <head>
+	<title>Who's On First Editor</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="MobileOptimized" content="width">
+	<meta name="HandheldFriendly" content="true">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/leaflet.css" />
+	<link rel="stylesheet" type="text/css" href="css/tagify.css" />			
+	<link rel="stylesheet" type="text/css" href="css/wof.edit.css" />
+    </head>
+    <body>
+	<nav class="navbar navbar-expand-lg" id="navbar">
+	    <a class="navbar-brand" href="#" id="home-button">WOF Editor</a>
+
+	    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#666" class="bi bi-arrow-clockwise" viewBox="0 0 16 16" id="spinner-svg"><g id="spinner"><path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/><path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/></g></svg>		    
+	    
+	    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	    </button>
+	    
+	    <div class="collapse navbar-collapse" id="navbar-content">
+		<ul class="navbar-nav mr-auto">
+		</ul>
+	    </div>
+	</nav>
+	
+	<div id="canvas" class="row">
+	</div>
+
+	<template id="edit-form">
+
+	    <form class="needs-validation" novalidate action="" method="POST">
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/name.json -->
+		<div class="form-group">
+		    <label for="wof-name">Name</label>&nbsp;<small>(<code>wof:name</code>)</small>
+		    <input type="text" class="form-control wof-input" name="wof:name" id="wof:name" data-wof-validation-regex="^.{1,}$" value="">
+		    <small id="wof-name-help" class="form-text text-muted">An English UTF-7 transliterated representation of the name. (Some features have UTF-8 names.)</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/placetype.json -->
+		<div class="form-group">
+		    <label for="wof-placetype">Placetype</label>&nbsp;<small>(<code>wof:placetype</code>)</small>
+		    <!-- <input type="text" class="form-control wof-input" name="wof:placetype" id="wof:placetype" disabled value=""> -->
+		    <select class="form-select wof-input" name="wof:placetype" id="wof:placetype">
+			<option value=""></option>
+		    </select>
+		    <small id="wof-placetype-help" class="form-text text-muted">What WOF calls a record's administrative division type.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/placetype_alt.json -->
+		<div class="form-group">
+		    <label for="wof-placetype_alt">Alternate Placetypes</label>&nbsp;<small>(<code>wof:placetype_alt</code>)</small>
+		    <input type="text" class="form-control wof-input" name="wof:placetype_alt" id="wof:placetype_alt" data-wof-type="list" value="">
+		    <small id="wof-placetype_alt-help" class="form-text text-muted">A single placetype denoting alternate representations of a place (exclusive of the placetype value).</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/shortcode.json -->
+		<div class="form-group">
+		    <label for="wof-shortcode">Shortcode</label>&nbsp;<small>(<code>wof:shortcode</code>)</small>
+		    <input type="text" class="form-control wof-input" name="wof:shortcode" id="wof:shortcode" data-wof-validation-regex="^[A-Za-z0-9]{2,3}$" value="">
+		    <small id="wof-shortcode-help" class="form-text text-muted">A two or three character alphabetic code, preferring three characters for country, two characters for region, and either two or three characters for county.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/mz/is_current.json -->
+		<div class="form-group">
+		    <label for="mz-is_current">Is Current</label>&nbsp;<small>(<code>mz:is_current</code>)</small>
+		    <!--<input type="text" class="form-control wof-input" name="mz:is_current" id="mz:is_current" data-wof-validation-regex="^(-1|0|1)$" value="">-->
+		    <select class="form-select wof-input" name="mz:is_current" id="mz:is_current"></select>
+		    <small id="mz-is_current-help" class="form-text text-muted">Defaults to unknown (<code>-1</code>) when status is not known, set to true (<code>1</code>) when we know a place is active, and false (<code>0</code>) if it's closed.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/mz/is_funky.json -->
+		<div class="form-group">
+		    <label for="mz-is_funky">Disabled</label>&nbsp;<small>(<code>mz:is_funky</code>)</small>
+		    <!--<input type="text" class="form-control wof-input" name="mz:is_funky" id="mz:is_funky" data-wof-validation-regex="^(-1|0|1)$" value=""> -->
+		    <select class="form-select wof-input" name="mz:is_funky" id="mz:is_funky">
+			<option value=""></option>
+		    </select>		    
+		    <small id="mz-is_funky-help" class="form-text text-muted">Used when Who's On First suspects the record is bad or inappropriate but additional confirmation is needed before the feature is deprecated. Records with a 1 value are recommended to be hidden from map display and search unless explicitly asked for by name.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/mz/hierarchy_label.json -->
+		<div class="form-group">
+		    <label for="mz-hierarchy_label">Include in Hierarchy Label</label>&nbsp;<small>(<code>mz:hierarchy_label</code>)</small>
+		    <input type="text" class="form-control wof-input" name="mz:hierarchy_label" id="mz:hierarchy_label" data-wof-validation-regex="^(-1|0|1)$" value="">
+		    <small id="mz-hierarchy_label-help" class="form-text text-muted">Used when generating place labels in geocoding software, like Pelias; this property defaults to True unless it is set to 0 manually. When Pelias decorates an address string, the hierarchy_label property is used to determine what is included in that address string.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/edtf/cessation.json -->
+		<div class="form-group">
+		    <label for="edtf-cessation">Cessation</label>&nbsp;<small>(<code>edtf:cessation</code>)</small>
+		    <input type="text" class="form-control wof-input" name="edtf:cessation" id="edtf:cessation" value="">
+		    <small id="edtf-cessation-help" class="form-text text-muted">Indicates when a place stopped being a going concern. The semantics for something ceasing may vary from placetype to placetype. For example, a venue may cease operations or a country may split in to multiple countries. Supports EDTF date notation like: 2000, 2000-01, 2000-01-01 and approximate dates like ~2000. Defaults to uuuu when unknown.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/edtf/deprecated.json -->
+		<div class="form-group">
+		    <label for="edtf-deprecated">Deprecated</label>&nbsp;<small>(<code>edtf:deprecated</code>)</small>
+		    <input type="text" class="form-control wof-input" name="edtf:deprecated" id="edtf:deprecated" value="">
+		    <small id="edtf-deprecated-help" class="form-text text-muted">Indicates the date when a place was determined to be invalid (was never a going concern). Supports EDTF date notation like: 2000, 2000-01, 2000-01-01 and approximate dates like ~2000. Defaults to "" when unknown.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/edtf/inception.json -->
+		<div class="form-group">
+		    <label for="edtf-inception">Inception</label>&nbsp;<small>(<code>edtf:inception</code>)</small>
+		    <input type="text" class="form-control wof-input" name="edtf:inception" id="edtf:inception" value="">
+		    <small id="edtf-inception-help" class="form-text text-muted">Indicates the date when a place was first created or established. Supports EDTF date notation like: 2000, 2000-01, 2000-01-01 and approximate dates like ~2000. Defaults to "" when unknown.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/edtf/superseded.json -->
+		<div class="form-group">
+		    <label for="edtf-superseded">Superseded</label>&nbsp;<small>(<code>edtf:superseded</code>)</small>
+		    <input type="text" class="form-control wof-input" name="edtf:superseded" id="edtf:superseded" value="">
+		    <small id="edtf-superseded-help" class="form-text text-muted">Indicates the date when a record was superseded by another record. Supports EDTF date notation like: 2000, 2000-01, 2000-01-01 and approximate dates like ~2000. Defaults to "" when unknown.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/population.json -->
+		<div class="form-group">
+		    <label for="wof-population">Population</label>&nbsp;<small>(<code>wof:population</code>)</small>
+		    <input type="number" class="form-control wof-input" name="wof:population" id="wof:population" data-wof-validation-regex="^\d+$" value="">
+		    <small id="wof-population-help" class="form-text text-muted">An integer value to represent the most current, known population of a place.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/mz/min_zoom.json -->
+		<div class="form-group">
+		    <label for="mz-min_zoom">Min Zoom</label>&nbsp;<small>(<code>mz:min_zoom</code>)</small>
+		    <input type="number" class="form-control wof-input" name="mz:min_zoom" id="mz:min_zoom" data-wof-validation-regex="^\d+\.?\d*$" value="">
+		    <small id="mz-min_zoom-help" class="form-text text-muted">Float values (though in practice mosts are integer values) that match to web map zoom schema. Common range is 0.0 to 18.0, though they can be greater.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/mz/max_zoom.json -->
+		<div class="form-group">
+		    <label for="mz-max_zoom">Max Zoom</label>&nbsp;<small>(<code>mz:max_zoom</code>)</small>
+		    <input type="number" class="form-control wof-input" name="mz:max_zoom" id="mz:max_zoom" data-wof-validation-regex="^\d+\.?\d*$" value="">
+		    <small id="mz-max_zoom-help" class="form-text text-muted">Float values (though in practice mosts are integer values) that match to web map zoom schema. Common range is 0.0 to 18.0, though they can be greater.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/lbl/min_zoom.json -->
+		<div class="form-group">
+		    <label for="lbl-min_zoom">Label Min Zoom</label>&nbsp;<small>(<code>lbl:min_zoom</code>)</small>
+		    <input type="number" class="form-control wof-input" name="lbl:min_zoom" id="lbl:min_zoom" data-wof-validation-regex="^\d+\.?\d*$" value="">
+		    <small id="lbl-min_zoom-help" class="form-text text-muted">When the feature's label should first appear. Float values (though in practice mosts are integer values) that match to web map zoom schema. Common range is 0.0 to 18.0, though they can be greater.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/lbl/max_zoom.json -->
+		<div class="form-group">
+		    <label for="lbl-max_zoom">Label Max Zoom</label>&nbsp;<small>(<code>lbl:max_zoom</code>)</small>
+		    <input type="number" class="form-control wof-input" name="lbl:max_zoom" id="lbl:maz_zoom" data-wof-validation-regex="^\d+\.?\d*$" value="">
+		    <small id="lbl-max_zoom-help" class="form-text text-muted">When the feature's label should be removed (or switched to a different representation like exterior ring labels). Float values (though in practice mosts are integer values) that match to web map zoom schema. Common range is 0.0 to 18.0, though they can be greater.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/lang_x_spoken.json -->
+		<div class="form-group">
+		    <label for="wof-lang_x_spoken">Spoken Languages</label>&nbsp;<small>(<code>wof:lang_x_spoken</code>)</small>
+		    <input type="text" class="form-control wof-input" name="wof:lang_x_spoken" id="wof:lang_x_spoken" data-wof-type="list" pattern="^[a-z]{3}$" value="" placeholder="">
+		    <small id="wof-lang_x_spoken-help" class="form-text text-muted">One or more ISO-639-3 language identifiers. These represent the languages, inclusive of official languages, spoken in the location of the corresponding WOF record.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/lang_x_official.json -->
+		<div class="form-group">
+		    <label for="wof-lang_x_official">Official Languages</label>&nbsp;<small>(<code>wof:lang_x_official</code>)</small>
+		    <input type="text" class="form-control wof-input" name="wof:lang_x_official" id="wof:lang_x_official" data-wof-type="list" pattern="^[a-z]{3}$" value="" placeholder="">
+		    <small id="wof-lang_x_official-help" class="form-text text-muted">One or more ISO-639-3 language identifiers. These represent the officially recognized languages of the location of the corresponding WOF record.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/wof/country.json -->
+		<div class="form-group">
+		    <label for="wof-country">Country Code</label>&nbsp;<small>(<code>wof:country</code>)</small>
+		    <input type="text" disabled class="form-control wof-input" name="wof:country" id="wof:country" data-wof-validation-regex="^[A-Za-z]{2}$" value="">
+		    <small id="wof-country-help" class="form-text text-muted">A two-letter country code from ISO 3166.</small>
+		</div>
+		
+		<!-- https://github.com/whosonfirst/whosonfirst-properties/blob/master/properties/iso/country.json -->
+		<div class="form-group">
+		    <label for="iso-country">ISO Country Code</label>&nbsp;<small>(<code>iso:country</code>)</small>
+		    <input type="text" disabled class="form-control wof-input" name="iso:country" id="iso:country" data-wof-validation-regex="^[A-Za-z]{2}$" value="">
+		    <small id="iso-country-help" class="form-text text-muted">The two-letter country code from ISO 3166-1.</small>
+		</div>
+		
+		<h4>Localized Names</h4>
+		<div class="form-group">
+		    <label for="alternate-names-selected">Filter</label>
+		    <input type="text" class="form-control" id="localized-names-selected">
+		    <small class="form-text text-muted" id="localized-names-description">This place has localized names in <span id="localized-names-count">no languages</span>. English is shown by default. Add more to the filter box to show more languages.</small>
+		</div>
+		<div class="form-group" id="localized-names-group">
+		    <!-- template#localized-names-row -->
+		</div>
+
+		<h4>Localized Labels</h4>
+		<div class="form-group">
+		    <label for="alternate-labels-selected">Filter</label>
+		    <input type="text" class="form-control" id="localized-labels-selected">
+		    <small class="form-text text-muted" id="localized-labels-description">This place has localized labels in <span id="localized-labels-count">no languages</span>. English is shown by default. Add more to the filter box to show more languages.</small>
+		</div>
+		<div class="form-group" id="localized-labels-group">
+		    <!-- template#localized-labels-row -->
+		</div>
+				
+		<h4>Concordances
+		    <button type="button" id="wof-concordances-add" class="btn btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/></svg></button>
+		</h4>
+		<div class="form-group" id="wof-concordances">
+		</div>	    
+	    </form>
+	</template>
+
+	<template id="localized-names-row">
+	    <div class="row localized-names-row" id="" data-lang="" style="">
+		<div class="col-md-2"><h4 class="lang-name"></h4><small>(<code class="lang-code"></code>)</small></div>
+		<div class="col-md-10">
+                    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Colloquial</label>
+			<div class="col-md-10">
+			    <input name="name:LANG_x_colloquial" data-spec="colloquial" class="form-control use-tagify" value="[]">
+			</div>
+                    </div>
+                    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Historical</label>
+			<div class="col-md-10">
+			    <input name="name:LANG_x_historical" data-spec="historical" class="form-control use-tagify" value="[]">
+			</div>
+                    </div>
+                    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Preferred</label>
+			<div class="col-md-10">
+			    <input name="name:LANG_x_preferred" data-spec="preferred" class="form-control use-tagify" value="[]">
+			</div>
+                    </div>
+                    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Unknown</label>
+			<div class="col-md-10">
+			    <input name="name:LANG_x_unknown" data-spec="unknown" class="form-control use-tagify" value="[]">
+			</div>
+                    </div>
+                    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Variant</label>
+			<div class="col-md-10">
+			    <input name="name:LANG_x_variant" data-spec="variant" class="form-control use-tagify" value="[]">
+			</div>
+                    </div>
+		</div>
+            </div>
+	</template>
+
+	<template id="localized-labels-row">
+	    <div id="localized-labels-row-template" class="row localized-labels-row" data-lang="">
+		<div class="col-md-2"><h4 class="lang-label"></h4><small>(<code class="lang-code"></code>)</small></div>
+		<div class="col-md-10">
+		    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Colloquial Abbrev.</label>
+			<div class="col-md-10">
+			    <input name="" data-spec="colloquial_abbreviation" class="form-control" value="">
+			</div>
+		    </div>
+		    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Preferred Abbrev.</label>
+			<div class="col-md-10">
+			    <input name="" data-spec="preferred_abbreviation" class="form-control" value="">
+			</div>
+		    </div>
+		    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Preferred Disambiguation</label>
+			<div class="col-md-10">
+			    <input name="" data-spec="preferred_disambiguation" class="form-control" value="">
+			</div>
+		    </div>
+		    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Preferred Longname</label>
+			<div class="col-md-10">
+			    <input name="" data-spec="preferred_longname" class="form-control" value="">
+			</div>
+		    </div>
+		    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Preferred Placetype</label>
+			<div class="col-md-10">
+			    <input name="" data-spec="preferred_placetype" class="form-control" value="">
+			</div>
+		    </div>
+		    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Preferred Shortcode</label>
+			<div class="col-md-10">
+			    <input name="" data-spec="preferred_shortcode" class="form-control" value="">
+			</div>
+		    </div>
+		    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Variant Abbrev.</label>
+			<div class="col-md-10">
+			    <input name="" data-spec="variant_abbreviation" class="form-control" value="">
+			</div>
+		    </div>
+		    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Variant Disambiguation</label>
+			<div class="col-md-10">
+			    <input name="" data-spec="variant_disambiguation" class="form-control" value="">
+			</div>
+		    </div>
+		    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Variant Longname</label>
+			<div class="col-md-10">
+			    <input name="" data-spec="variant_longname" class="form-control" value="">
+			</div>
+		    </div>
+		    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Variant Placetype</label>
+			<div class="col-md-10">
+			    <input name="" data-spec="variant_placetype" class="form-control" value="">
+			</div>
+		    </div>
+		    <div class="form-group row">
+			<label class="col-md-2 col-form-label">Variant Shortcode</label>
+			<div class="col-md-10">
+			    <input name="" data-spec="variant_shortcode" class="form-control" value="">
+			</div>
+		    </div>
+		</div>
+	    </div>
+	</template>
+	
+	<template id="wof-concordances-row">
+	    <div class="form-group concordance-row">
+		<div class="row">
+		    <label class="col-sm-4 col-form-label">
+			<button class="btn btn-small concordance-rm"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/></svg></button>
+			<span class="label"></span><small>(<code class="prefix"></code>)</small>
+		    </label>
+		    <div class="col-sm-8">
+			<input type="text" class="form-control" name="" value="" />
+		    </div>
+		</div>
+	    </div>	
+	</template>
+
+	<template id="new-concordances-row">
+	    <div id="new-concordance-row" class="form-group concordance-row">
+		<div class="row">
+		    <div class="col-sm-4">
+			<input type="text" class="form-control" name="new-wof-concordances-name" id="new-wof-concordances-name" placeholder="" />
+		    </div>
+		    <div class="col-sm-8">
+			<input type="text" class="form-control" name="new-wof-concordances-value" id="new-wof-concordances-value" placeholder="" />
+		    </div>
+		</div>
+	    </div>
+	</template>
+	    
+    </body>
+    <script type="text/javascript" src="javascript/bootstrap.bundle.js"></script>    
+    <script type="text/javascript" src="javascript/leaflet.js"></script>
+    <script type="text/javascript" src="javascript/tagify.js"></script>    
+    <script type="text/javascript" src="javascript/whosonfirst.bundle.min.js"></script>    
+    <script type="text/javascript" src="javascript/sfomuseum.golang.wasm.bundle.js"></script>
+    <script type="text/javascript" src="javascript/wof.edit.js"></script>
+    <script type="text/javascript" src="javascript/wof.edit.api.js"></script>                
+    <script type="text/javascript" src="javascript/wof.edit.init.js"></script
+</html>

@@ -10,6 +10,9 @@ import (
 	"github.com/tdewolff/parse/v2/buffer"
 )
 
+var NestedStmtLimit = 1000
+var NestedExprLimit = 1000
+
 type Options struct {
 	WhileToFor bool
 	Inline     bool
@@ -202,12 +205,22 @@ func (p *Parser) parseModule() (module BlockStmt) {
 				// could be an import call expression
 				left := &LiteralExpr{ImportToken, []byte("import")}
 				p.exprLevel++
-				suffix := p.parseExpressionSuffix(left, OpExpr, OpCall)
+				expr := p.parseExpressionSuffix(left, OpExpr, OpCall)
 				p.exprLevel--
-				module.List = append(module.List, &ExprStmt{suffix})
+				module.List = append(module.List, &ExprStmt{expr})
 				if !p.prevLT && p.tt == SemicolonToken {
 					p.next()
 				}
+			} else if p.tt == DotToken {
+				p.next()
+				if !p.consume("import.meta expression", MetaToken) {
+					return module
+				}
+				left := &ImportMetaExpr{}
+				p.exprLevel++
+				expr := p.parseExpressionSuffix(left, OpExpr, OpMember)
+				p.exprLevel--
+				module.List = append(module.List, &ExprStmt{expr})
 			} else {
 				importStmt := p.parseImportStmt()
 				module.List = append(module.List, &importStmt)
@@ -223,7 +236,7 @@ func (p *Parser) parseModule() (module BlockStmt) {
 
 func (p *Parser) parseStmt(allowDeclaration bool) (stmt IStmt) {
 	p.stmtLevel++
-	if 1000 < p.stmtLevel {
+	if NestedStmtLimit < p.stmtLevel {
 		p.failMessage("too many nested statements")
 		return nil
 	}
@@ -259,6 +272,9 @@ func (p *Parser) parseStmt(allowDeclaration bool) (stmt IStmt) {
 				p.fail("let declaration")
 				return
 			}
+		} else if p.tt == OpenBracketToken {
+			p.failMessage("unexpected let [ in single-statement context")
+			return
 		} else {
 			// expression
 			stmt = &ExprStmt{p.parseIdentifierExpression(OpExpr, let)}
@@ -520,13 +536,13 @@ func (p *Parser) parseStmt(allowDeclaration bool) (stmt IStmt) {
 		}
 		stmt = p.parseFuncDecl()
 	case AsyncToken: // async function
-		if !allowDeclaration {
-			p.fail("statement")
-			return
-		}
 		async := p.data
 		p.next()
 		if p.tt == FunctionToken && !p.prevLT {
+			if !allowDeclaration {
+				p.fail("statement")
+				return
+			}
 			stmt = p.parseAsyncFuncDecl()
 		} else {
 			// expression
@@ -690,7 +706,7 @@ func (p *Parser) parseImportStmt() (importStmt ImportStmt) {
 				p.fail("import statement", IdentifierToken)
 				return
 			}
-			importStmt.List = []Alias{Alias{star, p.data}}
+			importStmt.List = []Alias{{star, p.data}}
 			p.next()
 		} else if expectClause && p.tt == OpenBraceToken {
 			p.next()
@@ -763,10 +779,10 @@ func (p *Parser) parseExportStmt() (exportStmt ExportStmt) {
 					p.fail("export statement", IdentifierToken, StringToken)
 					return
 				}
-				exportStmt.List = []Alias{Alias{star, p.data}}
+				exportStmt.List = []Alias{{star, p.data}}
 				p.next()
 			} else {
-				exportStmt.List = []Alias{Alias{nil, star}}
+				exportStmt.List = []Alias{{nil, star}}
 			}
 			if p.tt != FromToken {
 				p.fail("export statement", FromToken)
@@ -977,10 +993,10 @@ func (p *Parser) parseFunc(async, expr bool) (funcDecl *FuncDecl) {
 	}
 	funcDecl.Params = p.parseFuncParams("function declaration")
 
-	prevAllowDirectivePrologue, prevExprLevel := p.allowDirectivePrologue, p.exprLevel
-	p.allowDirectivePrologue, p.exprLevel = true, 0
+	prevAllowDirectivePrologue := p.allowDirectivePrologue
+	p.allowDirectivePrologue = true
 	funcDecl.Body.List = p.parseStmtList("function declaration")
-	p.allowDirectivePrologue, p.exprLevel = prevAllowDirectivePrologue, prevExprLevel
+	p.allowDirectivePrologue = prevAllowDirectivePrologue
 
 	p.await, p.yield, p.retrn = prevAwait, prevYield, prevRetrn
 	p.exitScope(parent)
@@ -1125,10 +1141,10 @@ func (p *Parser) parseClassElement() ClassElement {
 
 	method.Params = p.parseFuncParams("method definition")
 
-	prevAllowDirectivePrologue, prevExprLevel := p.allowDirectivePrologue, p.exprLevel
-	p.allowDirectivePrologue, p.exprLevel = true, 0
+	prevAllowDirectivePrologue := p.allowDirectivePrologue
+	p.allowDirectivePrologue = true
 	method.Body.List = p.parseStmtList("method function")
-	p.allowDirectivePrologue, p.exprLevel = prevAllowDirectivePrologue, prevExprLevel
+	p.allowDirectivePrologue = prevAllowDirectivePrologue
 
 	p.await, p.yield, p.retrn = prevAwait, prevYield, prevRetrn
 	p.exitScope(parent)
@@ -1563,10 +1579,10 @@ func (p *Parser) parseArrowFuncBody() (list []IStmt) {
 		prevIn, prevRetrn := p.in, p.retrn
 		p.in, p.retrn = true, true
 
-		prevAllowDirectivePrologue, prevExprLevel := p.allowDirectivePrologue, p.exprLevel
-		p.allowDirectivePrologue, p.exprLevel = true, 0
+		prevAllowDirectivePrologue := p.allowDirectivePrologue
+		p.allowDirectivePrologue = true
 		list = p.parseStmtList("arrow function")
-		p.allowDirectivePrologue, p.exprLevel = prevAllowDirectivePrologue, prevExprLevel
+		p.allowDirectivePrologue = prevAllowDirectivePrologue
 
 		p.in, p.retrn = prevIn, prevRetrn
 	} else {
@@ -1610,7 +1626,7 @@ func (p *Parser) parseAsyncExpression(prec OpPrec, async []byte) IExpr {
 // parseExpression parses an expression that has a precedence of prec or higher.
 func (p *Parser) parseExpression(prec OpPrec) IExpr {
 	p.exprLevel++
-	if 1000 < p.exprLevel {
+	if NestedExprLimit < p.exprLevel {
 		p.failMessage("too many nested expressions")
 		return nil
 	}
