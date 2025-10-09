@@ -9,8 +9,14 @@ $> ./bin/wof edit -h
 Launch a local web server running on a random port hosting a web application for editing one or more Who's On First records.
 Usage:
 	 ./bin/wof path(N) path(N)
+  -ensure-relative-path
+    	Boolean flag signaling that each URI should be expanded to its fully-quality WOF-style relative path. This flag is only processed if the -reader-uri flag is not-empty.
+  -reader-uri string
+    	An optional whosonfirst/go-reader/v2.Reader URI used to read WOF records from alternate sources. If defined then the -writer-uri flag must also be populated.
   -verbose
     	Enable verbose (debug) logging.
+  -writer-uri string
+    	An optional whosonfirst/go-writer/v3.Writer URI used to write records to alternate sources. If defined then the -reader-uri flag must also be populated.
 ```
 
 The `wof edit` command is modeled after the [iandees/wof-editor](https://github.com/iandees/wof-editor) package with the following changes:
@@ -46,6 +52,39 @@ The form view is a limited set of common WOF properties which most often need to
 ![](docs/wof-cli-edit-data.png)
 
 _The `Format` and `Validate` buttons are only enabled in "data" view. Data validation and formatting happens automatically in "form" view whenever a property is updated._
+
+#### Reading and writing from alternates source and targets
+
+```
+$> ./bin/wof edit \
+	-reader-uri https://data.whosonfirst.org \
+	-writer-uri stdout:// \
+	102527513
+```
+
+```
+$> ./bin/wof edit \
+	-reader-uri 'github://sfomuseum-data/sfomuseum-data-whosonfirst?branch=main&prefix=data' \
+	-writer-uri stdout:// \
+	-ensure-relative-path \
+	102527513.geojson
+```
+
+```
+$> ./bin/wof edit \
+	-reader-uri 'findingaid://https/static.sfomuseum.org/findingaid?template=https://raw.githubusercontent.com/sfomuseum-data/{repo}/main/data/' \
+	-writer-uri \
+	-ensure-relative-path \
+	102527513
+```
+
+```
+$> ./bin/wof edit \
+	-reader-uri 'findingaid://https/data.whosonfirst.org/findingaid?template=https://raw.githubusercontent.com/whosonfirst-data/{repo}/master/data/' \
+	-writer-uri stdout:// \
+	-ensure-relative-path \
+	102527513
+```
 
 ## Notes (and caveats)
 

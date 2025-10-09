@@ -22,9 +22,9 @@ import (
 	"github.com/whosonfirst/wof/edit/http/api"
 	"github.com/whosonfirst/wof/edit/http/www"
 	"github.com/whosonfirst/wof/edit/static"
-	_ "github.com/whosonfirst/wof/reader"
+	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
-	_ "github.com/whosonfirst/wof/writer"
+	"github.com/whosonfirst/wof/writer"
 )
 
 type RunOptions struct {
@@ -70,6 +70,19 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	logger := slog.Default()
 
+	// MAKE ME A FLAG...
+	foo := false
+
+	if foo {
+
+		if reader_uri != "" {
+			return fmt.Errorf("Can not... because -reader-uri is not-empty.")
+		}
+
+		reader_uri = "findingaid://https/data.whosonfirst.org/findingaid?template=https://raw.githubusercontent.com/whosonfirst-data/{repo}/master/data/"
+		ensure_rel_path = true
+	}
+
 	// START OF copy all the records to a temporary directory which
 	// will then be used to serve an os.Root instance from the web server
 	tmpdir, err := os.MkdirTemp("", "wof-edit")
@@ -83,7 +96,11 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	defer func() {
 		logger.Debug("Remove tmpdir")
-		os.RemoveAll(tmpdir)
+		err := os.RemoveAll(tmpdir)
+
+		if err != nil {
+			logger.Error("Failed to remove tmpdir on program exit", "error", err)
+		}
 	}()
 
 	root, err := os.OpenRoot(tmpdir)
@@ -92,23 +109,78 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to open root, %w", err)
 	}
 
-	rdr, err := go_reader.NewReader(ctx, reader_uri)
+	// START OF can we update all the tools in wof-cli to use this
+	// (wrapped in a function or something)
 
-	if err != nil {
-		return fmt.Errorf("Failed to create reader, %w", err)
+	// START OF hoop-jumping around readers and writers
+
+	// The "tl;dr" is that everything else in the wof-cli package
+	// uses the internal "reader" and "writer" package to process
+	// files on the local filesystem or STDIN/STDIN without any
+	// additional syntax. The reality of the "edit" tool is that
+	// people may want to simply read documents from alternate sources
+	// (like data.whosonfirst.org) and/or write them directly back
+	// to a GitHub PR so this is the kind of thing we need to do.
+	// The internal "writer" package already implements the go-writer
+	// interface but the "reader" package does not (yet) implement
+	// the go-reader interface. That may happen shortly but for now
+	// this is how things are handled.
+
+	var rdr go_reader.Reader
+	var wtr go_writer.Writer
+
+	if reader_uri != "" {
+
+		if writer_uri == "" {
+			return fmt.Errorf("-writer-uri must be specified if -reader-uri is not-empty")
+		}
+
+		rdr, err = go_reader.NewReader(ctx, reader_uri)
+
+		if err != nil {
+			return fmt.Errorf("Failed to create reader, %w", err)
+		}
 	}
 
-	wtr, err := go_writer.NewWriter(ctx, writer_uri)
+	if writer_uri != "" {
 
-	if err != nil {
-		return fmt.Errorf("Failed to create writer, %w", err)
+		if reader_uri == "" {
+			return fmt.Errorf("-reader-uri must be specified if -writer-uri is not-empty")
+		}
+
+		wtr, err = go_writer.NewWriter(ctx, writer_uri)
+
+		if err != nil {
+			return fmt.Errorf("Failed to create writer, %w", err)
+		}
+
+	} else {
+
+		wtr, err = writer.NewWriter()
+
+		if err != nil {
+			return fmt.Errorf("Failed to create writer, %w", err)
+		}
 	}
+
+	defer func() {
+
+		err := wtr.Close(ctx)
+
+		if err != nil {
+			logger.Error("Failed to close writer on exit", "error", err)
+		}
+	}()
+
+	// (NOT QUITE) END OF hoop-jumping around readers and writers
 
 	uri_map := new(sync.Map)
 
 	cb := func(ctx context.Context, uri string) error {
 
-		logger.Debug("Process record", "uri", uri)
+		logger := slog.Default()
+		logger = logger.With("uri", uri)
+		logger.Debug("Process record")
 
 		id, uri_args, err := wof_uri.ParseURI(uri)
 
@@ -122,15 +194,37 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 			return fmt.Errorf("Failed to create fname from URI, %w", err)
 		}
 
-		r, err := rdr.Read(ctx, uri)
+		// START OF MORE hoop-jumping around readers and writers
+		// See note above wrt/ hoop-jumping. If the internal "reader"
+		// package implemented the go-reader interface then we could
+		// get rid of some of this code.
 
-		if err != nil {
-			return err
-		}
+		var uri_r io.ReadCloser
 
-		defer r.Close()
+		if rdr != nil {
 
-		/*
+			if ensure_rel_path {
+
+				rel_path, err := wof_uri.Id2RelPath(id, uri_args)
+
+				if err != nil {
+					return fmt.Errorf("Failed to derive relative path for %s, %w", uri, err)
+				}
+
+				uri = rel_path
+			}
+
+			logger.Debug("Read URI", "uri", uri)
+			uri_r, err = rdr.Read(ctx, uri)
+
+			if err != nil {
+				return err
+			}
+
+			defer uri_r.Close()
+
+		} else {
+
 			r, is_stdin, err := reader.ReadCloserFromURI(ctx, uri)
 
 			if err != nil {
@@ -141,26 +235,25 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 				defer r.Close()
 			}
 
-			fname, err := wof_uri.Id2Fname(id, uri_args)
+			uri_r = r
+		}
 
-			if err != nil {
-				return fmt.Errorf("Failed to create fname from URI, %w", err)
-			}
-		*/
+		// END OF MORE hoop-jumping around readers and writers
+		// END OF hoop-jumping around readers and writers
 
-		wr, err := root.OpenFile(fname, os.O_RDWR|os.O_CREATE, 0644)
+		uri_wr, err := root.OpenFile(fname, os.O_RDWR|os.O_CREATE, 0644)
 
 		if err != nil {
 			return fmt.Errorf("Failed to open %s in root, %w", fname, err)
 		}
 
-		_, err = io.Copy(wr, r)
+		_, err = io.Copy(uri_wr, uri_r)
 
 		if err != nil {
 			return fmt.Errorf("Failed to copy %s to root, %w", uri, err)
 		}
 
-		err = wr.Close()
+		err = uri_wr.Close()
 
 		if err != nil {
 			return fmt.Errorf("Failed to close %s after writing, %w", uri, err)
@@ -177,6 +270,9 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to run, %w", err)
 	}
 
+	// END OF can we update all the tools in wof-cli to use this
+	// (modulo the copying files around part...
+
 	// END OF copy all the records to a temporary directory
 
 	// See this? This is not the way the rest of the wof-cli package works (at least
@@ -185,6 +281,10 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	// implementation.
 
 	// START OF make this a function... maybe?
+	// Remember (because I've forgotten at least once already) that "root" and
+	// "uri_map" are local clones of the data being edited, independent of its
+	// source, and "wtr" is the tool we use to write that data to a target which may
+	// or may not be the same as the source.
 
 	mux := http.NewServeMux()
 
