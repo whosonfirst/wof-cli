@@ -2,28 +2,28 @@ package edit
 
 import (
 	"context"
-	"io"
 	"fmt"
+	"io"
 	"os"
-	"sync"
 	"path/filepath"
-	
+	"sync"
+
 	"github.com/whosonfirst/go-reader/v2"
 )
 
 type editReader struct {
 	reader.Reader
 	uri_map *sync.Map
-	root *os.Root
+	root    *os.Root
 }
 
 // Read will open and return an empty `io.ReadSeekCloser` for any value of 'path'.
 func (r *editReader) Read(ctx context.Context, path string) (io.ReadSeekCloser, error) {
 
 	fname := filepath.Base(path)
-	
+
 	_, exists := r.uri_map.Load(fname)
-	
+
 	if !exists {
 		return nil, fmt.Errorf("Not found")
 	}
@@ -35,9 +35,9 @@ func (r *editReader) Read(ctx context.Context, path string) (io.ReadSeekCloser, 
 func (r *editReader) Exists(ctx context.Context, path string) (bool, error) {
 
 	fname := filepath.Base(path)
-	
+
 	_, exists := r.uri_map.Load(fname)
-	
+
 	if !exists {
 		return false, nil
 	}
@@ -55,6 +55,3 @@ func (r *editReader) Exists(ctx context.Context, path string) (bool, error) {
 func (r *editReader) ReaderURI(ctx context.Context, path string) string {
 	return path
 }
-
-
-

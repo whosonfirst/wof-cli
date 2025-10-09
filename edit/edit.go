@@ -7,15 +7,17 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"path/filepath"
 	"sync"
 
 	"github.com/sfomuseum/go-www-show"
+	go_reader "github.com/whosonfirst/go-reader/v2"
 	wof_uri "github.com/whosonfirst/go-whosonfirst-uri"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/edit/http/api"
 	"github.com/whosonfirst/wof/edit/http/www"
 	"github.com/whosonfirst/wof/edit/static"
-	"github.com/whosonfirst/wof/reader"
+	_ "github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
 	"github.com/whosonfirst/wof/writer"
 )
@@ -85,6 +87,12 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to open root, %w", err)
 	}
 
+	rd, err := go_reader.NewReader(ctx, "https://data.whosonfirst.org")
+
+	if err != nil {
+		return fmt.Errorf("Failed to create reader, %w", err)
+	}
+
 	uri_map := new(sync.Map)
 
 	cb := func(ctx context.Context, uri string) error {
@@ -97,21 +105,39 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 			return fmt.Errorf("Failed to parse '%s', %w", uri, err)
 		}
 
-		r, is_stdin, err := reader.ReadCloserFromURI(ctx, uri)
+		rel_path, err := wof_uri.Id2RelPath(id, uri_args)
 
 		if err != nil {
-			return fmt.Errorf("Failed to open '%s' for reading, %w", uri, err)
+			return err
 		}
 
-		if !is_stdin {
-			defer r.Close()
-		}
+		fname := filepath.Base(rel_path)
 
-		fname, err := wof_uri.Id2Fname(id, uri_args)
+		r, err := rd.Read(ctx, rel_path)
 
 		if err != nil {
-			return fmt.Errorf("Failed to create fname from URI, %w", err)
+			return err
 		}
+
+		defer r.Close()
+
+		/*
+			r, is_stdin, err := reader.ReadCloserFromURI(ctx, uri)
+
+			if err != nil {
+				return fmt.Errorf("Failed to open '%s' for reading, %w", uri, err)
+			}
+
+			if !is_stdin {
+				defer r.Close()
+			}
+
+			fname, err := wof_uri.Id2Fname(id, uri_args)
+
+			if err != nil {
+				return fmt.Errorf("Failed to create fname from URI, %w", err)
+			}
+		*/
 
 		wr, err := root.OpenFile(fname, os.O_RDWR|os.O_CREATE, 0644)
 
@@ -154,7 +180,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	if err != nil {
 		return fmt.Errorf("Failed to create new writer, %w", err)
 	}
-	
+
 	// START OF make this a function... maybe?
 
 	mux := http.NewServeMux()
