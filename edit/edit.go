@@ -7,19 +7,24 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
-	"path/filepath"
+	_ "path/filepath"
 	"sync"
+
+	_ "github.com/whosonfirst/go-reader-findingaid/v2"
+	_ "github.com/whosonfirst/go-reader-github/v2"
+	_ "github.com/whosonfirst/go-writer-github/v3"
 
 	"github.com/sfomuseum/go-www-show"
 	go_reader "github.com/whosonfirst/go-reader/v2"
 	wof_uri "github.com/whosonfirst/go-whosonfirst-uri"
+	go_writer "github.com/whosonfirst/go-writer/v3"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/edit/http/api"
 	"github.com/whosonfirst/wof/edit/http/www"
 	"github.com/whosonfirst/wof/edit/static"
 	_ "github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
-	"github.com/whosonfirst/wof/writer"
+	_ "github.com/whosonfirst/wof/writer"
 )
 
 type RunOptions struct {
@@ -87,10 +92,16 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		return fmt.Errorf("Failed to open root, %w", err)
 	}
 
-	rd, err := go_reader.NewReader(ctx, "https://data.whosonfirst.org")
+	rdr, err := go_reader.NewReader(ctx, reader_uri)
 
 	if err != nil {
 		return fmt.Errorf("Failed to create reader, %w", err)
+	}
+
+	wtr, err := go_writer.NewWriter(ctx, writer_uri)
+
+	if err != nil {
+		return fmt.Errorf("Failed to create writer, %w", err)
 	}
 
 	uri_map := new(sync.Map)
@@ -105,15 +116,13 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 			return fmt.Errorf("Failed to parse '%s', %w", uri, err)
 		}
 
-		rel_path, err := wof_uri.Id2RelPath(id, uri_args)
+		fname, err := wof_uri.Id2Fname(id, uri_args)
 
 		if err != nil {
-			return err
+			return fmt.Errorf("Failed to create fname from URI, %w", err)
 		}
 
-		fname := filepath.Base(rel_path)
-
-		r, err := rd.Read(ctx, rel_path)
+		r, err := rdr.Read(ctx, uri)
 
 		if err != nil {
 			return err
@@ -175,25 +184,14 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	// used by other projects and can just expect to write changes to a generic Writer
 	// implementation.
 
-	wr, err := writer.NewWriter()
-
-	if err != nil {
-		return fmt.Errorf("Failed to create new writer, %w", err)
-	}
-
 	// START OF make this a function... maybe?
 
 	mux := http.NewServeMux()
 
-	// See the way we are passing root (and sometimes uri_map)? At some point it would
-	// be nice to wrap these in a whosonfirst/go-reader.Reader implementation such that
-	// the API layer only knows anout "readers" and "writers" independent of the application
-	// specific implementation.
-
 	list_handler := api.ListHandler(root)
 	mux.Handle("/api/list", list_handler)
 
-	save_handler := api.SaveHandler(root, uri_map, wr)
+	save_handler := api.SaveHandler(root, uri_map, wtr)
 	mux.Handle("/api/save/", save_handler)
 
 	data_handler := www.DataHandler(root)

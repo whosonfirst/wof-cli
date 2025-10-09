@@ -8,12 +8,17 @@ import (
 	"github.com/sfomuseum/go-flags/flagset"
 )
 
+var reader_uri string
+var writer_uri string
+
 var verbose bool
 
 func DefaultFlagSet() *flag.FlagSet {
 
 	fs := flagset.NewFlagSet("edit")
 
+	fs.StringVar(&reader_uri, "reader-uri", "fs:///", "...")
+	fs.StringVar(&writer_uri, "writer-uri", "fs:///", "...")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")
 
 	fs.Usage = func() {
