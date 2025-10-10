@@ -16,7 +16,6 @@ import (
 	"github.com/sfomuseum/go-www-show"
 	go_reader "github.com/whosonfirst/go-reader/v2"
 	wof_uri "github.com/whosonfirst/go-whosonfirst-uri"
-	// go_writer "github.com/whosonfirst/go-writer/v3"
 	gh_writer "github.com/whosonfirst/go-writer-github/v3"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/edit/http/api"
@@ -26,6 +25,9 @@ import (
 	"github.com/whosonfirst/wof/uris"
 	edit_writer "github.com/whosonfirst/wof/writer"
 )
+
+const WOF_FINDINGAID_READER_URI string = "wof-findingaid://"
+const WOF_PR_WRITER_URI string = "wof-pr://"
 
 type RunOptions struct {
 	URIs    []string
@@ -70,26 +72,18 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	logger := slog.Default()
 
-	// MAKE ME A FLAG...
-	foo := false
+	if reader_uri == WOF_FINDINGAID_READER_URI {
 
-	if foo {
-
-		if reader_uri != "" {
-			return fmt.Errorf("Can not... because -reader-uri is not-empty.")
-		}
+		logger.Debug("Automatically configuring data.whosonfirst.org reader URI")
 
 		reader_uri = "findingaid://https/data.whosonfirst.org/findingaid?template=https://raw.githubusercontent.com/whosonfirst-data/{repo}/master/data/"
 		ensure_rel_path = true
 	}
 
-	// https://github.com/whosonfirst/go-writer-github?tab=readme-ov-file#githubapi-pr
+	if writer_uri == WOF_PR_WRITER_URI {
 
-	var pr_access_token string
-
-	pr := false
-
-	if pr {
+		// read from runtimevar?
+		var pr_access_token string
 
 		wr_q := new(url.Values)
 		wr_q.Set("access_token", pr_access_token)
@@ -167,9 +161,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		}
 	}
 
-	if writer_uri != "" {
-
-		writer_uri = edit_writer.WRITER_SCHEME
+	if writer_uri == "" {
+		writer_uri = fmt.Sprintf("%s://", edit_writer.WRITER_SCHEME)
 	}
 
 	// (NOT QUITE) END OF hoop-jumping around readers and writers
@@ -291,6 +284,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	list_handler := api.ListHandler(root)
 	mux.Handle("/api/list", list_handler)
 
+	slog.Info("Derbug", "writer uri", writer_uri)
 	save_handler := api.SaveHandler(root, uri_map, writer_uri)
 	mux.Handle("/api/save/", save_handler)
 

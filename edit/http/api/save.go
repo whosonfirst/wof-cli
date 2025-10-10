@@ -161,8 +161,9 @@ func SaveHandler(data_root *os.Root, uri_map *sync.Map, writer_uri string) http.
 
 			q.Set("pr-description", fmt.Sprintf("Updating %s using wof-cli edit", fname))
 
-			u.Path = repo			
+			u.Path = repo
 			u.RawQuery = q.Encode()
+
 			writer_uri = u.String()
 		}
 
@@ -174,11 +175,9 @@ func SaveHandler(data_root *os.Root, uri_map *sync.Map, writer_uri string) http.
 			return
 		}
 
-		_, err = wr.Write(ctx, uri, bytes.NewReader(new_body))
+		logger.Debug("Write record", "uri", uri)
 
-		// Note how this is NOT using whosonfirst/go-whosonfirst-writer that
-		// will explicitly write files as 123/456/7/1234567.geojson which is
-		// not necessarily the desired effect.
+		_, err = wr.Write(ctx, uri, bytes.NewReader(new_body))
 
 		if err != nil {
 			logger.Error("Failed to write body", "error", err)
