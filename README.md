@@ -27,6 +27,7 @@ Valid commands are:
 * open
 * pip
 * property
+* rebuild-hierarchy
 * remove-property
 * repos
 * show
@@ -215,6 +216,31 @@ Usage:
 ```
 
 Examples can be found in [property/README.md](property/README.md#examples)
+
+#### wof rebuild-hierarchy
+
+```
+Rebuild the wof:hierarchy property one or more Who's On First records.
+
+```
+$> ./bin/wof rebuild-hierarchy -h
+Rebuild the wof:hierarchy property one or more Who's On First records.
+Usage:
+	./bin/wof [options] path(N) path(N)
+Valid options are:
+  -exporter-uri string
+    	A valid whosonfirst/go-whosonfirst-export/v3.Exporter URI. (default "whosonfirst://")
+  -iterator-uri string
+    	A valid whosonfirst/go-whosonfirst-iterate/v3.Iterator URI. (default "repo://")
+  -parent-id value
+    	One or more explicit parent IDs to use for deriving hierarchies. The default is to use each record's wof:parent_id value.
+  -parent-reader-uri string
+    	A valid whosonfirst/go-reader/v2.Reader URI. (default "https://data.whosonfirst.org")
+  -verbose
+    	Enable verbose (debug) logging
+  -writer-uri string
+    	A valid whosonfirst/go-writer/v3.Writer URI. (default "null://")
+```	
 
 #### wof remove-property
 
