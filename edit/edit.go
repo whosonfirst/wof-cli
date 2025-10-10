@@ -97,7 +97,9 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		}
 
 		pr_access_token = strings.TrimSpace(pr_access_token)
-			
+
+		// Remember: Anything with "{...}" strings gets rewritten on the fly in http/api/save.go
+		
 		wr_q := url.Values{}
 		wr_q.Set("access_token", pr_access_token)
 		wr_q.Set("prefix", "data")
@@ -297,7 +299,6 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	list_handler := api.ListHandler(root)
 	mux.Handle("/api/list", list_handler)
 
-	slog.Info("Derbug", "writer uri", writer_uri)
 	save_handler := api.SaveHandler(root, uri_map, writer_uri)
 	mux.Handle("/api/save/", save_handler)
 
