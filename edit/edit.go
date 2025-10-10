@@ -9,10 +9,12 @@ import (
 	"net/url"
 	"os"
 	"sync"
-
+	"strings"
+	
 	_ "github.com/whosonfirst/go-reader-findingaid/v2"
 	_ "github.com/whosonfirst/go-reader-github/v2"
 
+	"github.com/aaronland/gocloud/runtimevar"
 	"github.com/sfomuseum/go-www-show"
 	go_reader "github.com/whosonfirst/go-reader/v2"
 	wof_uri "github.com/whosonfirst/go-whosonfirst-uri"
@@ -80,12 +82,23 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		ensure_rel_path = true
 	}
 
-	if writer_uri == WOF_PR_WRITER_URI {
+	if strings.HasPrefix(writer_uri, WOF_PR_WRITER_URI) {
 
-		// read from runtimevar?
-		var pr_access_token string
+		logger.Debug("Automatically configuring whosonfirst-data Github API PR writer URI")
+		
+		if access_token_uri == "" {
+			return fmt.Errorf("-gh-access-token-uri may not be empty if -writer-uri flag is '%s'", WOF_PR_WRITER_URI)
+		}
 
-		wr_q := new(url.Values)
+		pr_access_token, err := runtimevar.StringVar(ctx, access_token_uri)
+
+		if err != nil {
+			return fmt.Errorf("Failed to derive access token for use with %s writer, %w", WOF_PR_WRITER_URI, err)
+		}
+
+		pr_access_token = strings.TrimSpace(pr_access_token)
+			
+		wr_q := url.Values{}
 		wr_q.Set("access_token", pr_access_token)
 		wr_q.Set("prefix", "data")
 		wr_q.Set("pr-branch", "wof-cli-edit-{UUID}")
@@ -93,7 +106,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		wr_q.Set("pr-description", "Updating {URI} using wof-cli edit")
 		wr_q.Set("pr-ensure-repo", "true")
 
-		wr_u := new(url.URL)
+		wr_u := url.URL{}
 		wr_u.Scheme = gh_writer.GITHUBAPI_PR_SCHEME
 		wr_u.Host = "whosonfirst-data"
 		wr_u.Path = "{REPO}"

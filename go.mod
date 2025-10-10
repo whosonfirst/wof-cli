@@ -6,6 +6,7 @@ require (
 	github.com/aaronland/go-http/v3 v3.2.0
 	github.com/aaronland/go-json-query v0.1.6
 	github.com/aaronland/go-roster v1.0.0
+	github.com/aaronland/gocloud v1.0.1
 	github.com/google/uuid v1.6.0
 	github.com/natefinch/atomic v1.0.1
 	github.com/paulmach/orb v0.12.0
@@ -40,7 +41,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-writer/v3 v3.1.7
 	github.com/whosonfirst/go-writer-featurecollection/v3 v3.0.2
 	github.com/whosonfirst/go-writer-geoparquet/v3 v3.1.2
-	github.com/whosonfirst/go-writer-github/v3 v3.1.1
+	github.com/whosonfirst/go-writer-github/v3 v3.1.2
 	github.com/whosonfirst/go-writer-jsonl/v3 v3.0.2
 	github.com/whosonfirst/go-writer/v3 v3.1.1
 )
@@ -79,7 +80,6 @@ require (
 	github.com/aaronland/go-uid-artisanal v0.0.5 // indirect
 	github.com/aaronland/go-uid-proxy v0.4.1 // indirect
 	github.com/aaronland/go-uid-whosonfirst v0.0.7 // indirect
-	github.com/aaronland/gocloud v1.0.1 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/apache/arrow/go/v16 v16.1.0 // indirect
 	github.com/apache/thrift v0.19.0 // indirect
@@ -230,7 +230,7 @@ require (
 	golang.org/x/exp v0.0.0-20250620022241-b7579e27df2b // indirect
 	golang.org/x/mod v0.26.0 // indirect
 	golang.org/x/net v0.43.0 // indirect
-	golang.org/x/oauth2 v0.31.0 // indirect
+	golang.org/x/oauth2 v0.32.0 // indirect
 	golang.org/x/sync v0.16.0 // indirect
 	golang.org/x/sys v0.35.0 // indirect
 	golang.org/x/term v0.34.0 // indirect

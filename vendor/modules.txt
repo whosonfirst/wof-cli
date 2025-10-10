@@ -1109,7 +1109,7 @@ github.com/whosonfirst/go-writer-featurecollection/v3
 # github.com/whosonfirst/go-writer-geoparquet/v3 v3.1.2
 ## explicit; go 1.24
 github.com/whosonfirst/go-writer-geoparquet/v3
-# github.com/whosonfirst/go-writer-github/v3 v3.1.1
+# github.com/whosonfirst/go-writer-github/v3 v3.1.2
 ## explicit; go 1.25.0
 github.com/whosonfirst/go-writer-github/v3
 # github.com/whosonfirst/go-writer-jsonl/v3 v3.0.2
@@ -1275,7 +1275,7 @@ golang.org/x/net/internal/socks
 golang.org/x/net/internal/timeseries
 golang.org/x/net/proxy
 golang.org/x/net/trace
-# golang.org/x/oauth2 v0.31.0
+# golang.org/x/oauth2 v0.32.0
 ## explicit; go 1.24.0
 golang.org/x/oauth2
 golang.org/x/oauth2/authhandler

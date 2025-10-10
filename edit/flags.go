@@ -11,6 +11,8 @@ import (
 var reader_uri string
 var writer_uri string
 
+var access_token_uri string
+
 var ensure_rel_path bool
 
 var verbose bool
@@ -24,6 +26,7 @@ func DefaultFlagSet() *flag.FlagSet {
 
 	fs.BoolVar(&ensure_rel_path, "ensure-relative-path", false, "Boolean flag signaling that each URI should be expanded to its fully-quality WOF-style relative path. This flag is only processed if the -reader-uri flag is not-empty.")
 
+	fs.StringVar(&access_token_uri, "gh-access-token-uri", "", "...")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")
 
 	fs.Usage = func() {
