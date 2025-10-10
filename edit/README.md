@@ -86,6 +86,41 @@ $> ./bin/wof edit \
 	102527513
 ```
 
+#### Reading and writing from Who's On First (.org) specific source and targets
+
+The `wof-cli edit` command ships with two "shortcut" reader and writer URIs, one for reading the most recent data for WOF records directly from the GitHub repository they are stored in and one for writing changes to a record as pull request again the GitHub repository they are stored in.
+
+##### wof-findingaid://
+
+The `wof-findingaid://` reader URI is just syntactic sugar to automatically assign the `findingaid://https/data.whosonfirst.org/findingaid...` reader-uri and ensure-relative-path flags.
+
+```
+$> ./bin/wof edit \
+	-verbose \
+	-reader-uri wof-findingaid:// \
+	-writer-uri stdout:// \
+	102527513
+```
+
+_Remember that when you specify a custom `-reader-uri` flag you must also specify a corresponding `-writer-uri` flag. In this example all changes are written to STDOUT._
+
+##### wof-pr://
+
+The `wof-pr://` writer URI is also just syntactic sugar to automatically assign a `githubapi-pr://` writer-uri (and ensure-relative-path) flag. Under the hood this is using [whosonfirst/go-writer-github](https://github.com/whosonfirst/go-writer-github?tab=readme-ov-file#githubapi-pr) package to build and submit a PR when a WOF document is saved.
+
+```
+$> ./bin/wof edit \
+	-verbose \
+	-reader-uri wof-findingaid:// \
+	-writer-uri wof-pr:// \
+	-gh-access-token-uri file:///usr/local/data/gh_token \
+	102527513
+```
+
+By default the `githubapi-pr://` writer URI requires a lot of configuration options. Most of these are handled automatically by the `wof-cli edit` tool but you still need to specify a valid GitHub API token for submitting the PR.
+
+These access tokens are expected to be defined as valid [gocloud.dev/runtimevar](https://gocloud.dev/howto/runtimevar/) URIs (in order that the tokens themselves don't need to be exposed on the command line or in process lists). The `wof-cli edit` tool uses the [aaronland/gocloud/runtimevar](https://github.com/aaronland/gocloud/tree/main/runtimevar) package to derive string values from `runtimevar` URIs. Please consult the documentation for those packages for details.
+
 ## Notes (and caveats)
 
 Changes made in the `wof edit` tool are not written to disk (or STDOUT) until the `Save` button is pressed.
