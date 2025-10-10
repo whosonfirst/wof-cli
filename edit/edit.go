@@ -82,7 +82,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		ensure_rel_path = true
 	}
 
-	if strings.HasPrefix(writer_uri, WOF_PR_WRITER_URI) {
+	if writer_uri == WOF_PR_WRITER_URI {
 
 		logger.Debug("Automatically configuring whosonfirst-data Github API PR writer URI")
 		
