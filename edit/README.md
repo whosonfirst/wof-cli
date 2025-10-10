@@ -25,8 +25,6 @@ The `wof edit` command is modeled after the [iandees/wof-editor](https://github.
 
 * It provides a user-interface for editing the raw GeoJSON of a Who's On First record.
 
-* It does NOT submit changes as pull requests against a [whosonfirst-data](https://github.com/whosonfirst-data) repository. Changes are only written to local file that a record's data was originally read from (or to STDOUT if the record was read from STDIN).
-
 ### Examples
 
 ```
