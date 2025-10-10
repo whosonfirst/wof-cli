@@ -6,6 +6,7 @@ require (
 	github.com/aaronland/go-http/v3 v3.2.0
 	github.com/aaronland/go-json-query v0.1.6
 	github.com/aaronland/go-roster v1.0.0
+	github.com/google/uuid v1.6.0
 	github.com/natefinch/atomic v1.0.1
 	github.com/paulmach/orb v0.12.0
 	github.com/sfomuseum/go-csvdict/v2 v2.0.1
@@ -142,7 +143,6 @@ require (
 	github.com/google/go-github/v74 v74.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/google/wire v0.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.6 // indirect
 	github.com/googleapis/gax-go/v2 v2.15.0 // indirect

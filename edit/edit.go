@@ -6,25 +6,25 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"net/url"
 	"os"
-	_ "path/filepath"
 	"sync"
 
 	_ "github.com/whosonfirst/go-reader-findingaid/v2"
 	_ "github.com/whosonfirst/go-reader-github/v2"
-	_ "github.com/whosonfirst/go-writer-github/v3"
 
 	"github.com/sfomuseum/go-www-show"
 	go_reader "github.com/whosonfirst/go-reader/v2"
 	wof_uri "github.com/whosonfirst/go-whosonfirst-uri"
-	go_writer "github.com/whosonfirst/go-writer/v3"
+	// go_writer "github.com/whosonfirst/go-writer/v3"
+	gh_writer "github.com/whosonfirst/go-writer-github/v3"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/edit/http/api"
 	"github.com/whosonfirst/wof/edit/http/www"
 	"github.com/whosonfirst/wof/edit/static"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
-	"github.com/whosonfirst/wof/writer"
+	edit_writer "github.com/whosonfirst/wof/writer"
 )
 
 type RunOptions struct {
@@ -83,6 +83,32 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		ensure_rel_path = true
 	}
 
+	// https://github.com/whosonfirst/go-writer-github?tab=readme-ov-file#githubapi-pr
+
+	var pr_access_token string
+
+	pr := false
+
+	if pr {
+
+		wr_q := new(url.Values)
+		wr_q.Set("access_token", pr_access_token)
+		wr_q.Set("prefix", "data")
+		wr_q.Set("pr-branch", "wof-cli-edit-{UUID}")
+		wr_q.Set("pr-title", "Update {PLACETYPE} {NAME}")
+		wr_q.Set("pr-description", "Updating {URI} using wof-cli edit")
+		wr_q.Set("pr-ensure-repo", "true")
+
+		wr_u := new(url.URL)
+		wr_u.Scheme = gh_writer.GITHUBAPI_PR_SCHEME
+		wr_u.Host = "whosonfirst-data"
+		wr_u.Path = "{REPO}"
+		wr_u.RawQuery = wr_q.Encode()
+
+		writer_uri = wr_u.String()
+		ensure_rel_path = true
+	}
+
 	// START OF copy all the records to a temporary directory which
 	// will then be used to serve an os.Root instance from the web server
 	tmpdir, err := os.MkdirTemp("", "wof-edit")
@@ -127,7 +153,6 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	// this is how things are handled.
 
 	var rdr go_reader.Reader
-	var wtr go_writer.Writer
 
 	if reader_uri != "" {
 
@@ -144,33 +169,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	if writer_uri != "" {
 
-		if reader_uri == "" {
-			return fmt.Errorf("-reader-uri must be specified if -writer-uri is not-empty")
-		}
-
-		wtr, err = go_writer.NewWriter(ctx, writer_uri)
-
-		if err != nil {
-			return fmt.Errorf("Failed to create writer, %w", err)
-		}
-
-	} else {
-
-		wtr, err = writer.NewWriter()
-
-		if err != nil {
-			return fmt.Errorf("Failed to create writer, %w", err)
-		}
+		writer_uri = edit_writer.WRITER_SCHEME
 	}
-
-	defer func() {
-
-		err := wtr.Close(ctx)
-
-		if err != nil {
-			logger.Error("Failed to close writer on exit", "error", err)
-		}
-	}()
 
 	// (NOT QUITE) END OF hoop-jumping around readers and writers
 
@@ -291,7 +291,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	list_handler := api.ListHandler(root)
 	mux.Handle("/api/list", list_handler)
 
-	save_handler := api.SaveHandler(root, uri_map, wtr)
+	save_handler := api.SaveHandler(root, uri_map, writer_uri)
 	mux.Handle("/api/save/", save_handler)
 
 	data_handler := www.DataHandler(root)
