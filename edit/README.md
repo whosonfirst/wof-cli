@@ -11,6 +11,8 @@ Usage:
 	 ./bin/wof path(N) path(N)
   -ensure-relative-path
     	Boolean flag signaling that each URI should be expanded to its fully-quality WOF-style relative path. This flag is only processed if the -reader-uri flag is not-empty.
+  -gh-access-token-uri string
+    	A valid GitHub API access token. This is only necessary if -writer-uri is "wof-pr://".
   -reader-uri string
     	An optional whosonfirst/go-reader/v2.Reader URI used to read WOF records from alternate sources. If defined then the -writer-uri flag must also be populated.
   -verbose
@@ -72,14 +74,6 @@ $> ./bin/wof edit \
 $> ./bin/wof edit \
 	-reader-uri 'findingaid://https/static.sfomuseum.org/findingaid?template=https://raw.githubusercontent.com/sfomuseum-data/{repo}/main/data/' \
 	-writer-uri \
-	-ensure-relative-path \
-	102527513
-```
-
-```
-$> ./bin/wof edit \
-	-reader-uri 'findingaid://https/data.whosonfirst.org/findingaid?template=https://raw.githubusercontent.com/whosonfirst-data/{repo}/master/data/' \
-	-writer-uri stdout:// \
 	-ensure-relative-path \
 	102527513
 ```

@@ -26,7 +26,7 @@ func DefaultFlagSet() *flag.FlagSet {
 
 	fs.BoolVar(&ensure_rel_path, "ensure-relative-path", false, "Boolean flag signaling that each URI should be expanded to its fully-quality WOF-style relative path. This flag is only processed if the -reader-uri flag is not-empty.")
 
-	fs.StringVar(&access_token_uri, "gh-access-token-uri", "", "...")
+	fs.StringVar(&access_token_uri, "gh-access-token-uri", "", "A valid GitHub API access token. This is only necessary if -writer-uri is \"wof-pr://\".")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")
 
 	fs.Usage = func() {
