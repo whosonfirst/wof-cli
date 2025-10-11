@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"sync"
 	"strings"
-	
+	"sync"
+
 	_ "github.com/whosonfirst/go-reader-findingaid/v2"
 	_ "github.com/whosonfirst/go-reader-github/v2"
 
@@ -85,7 +85,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	if writer_uri == WOF_PR_WRITER_URI {
 
 		logger.Debug("Automatically configuring whosonfirst-data Github API PR writer URI")
-		
+
 		if access_token_uri == "" {
 			return fmt.Errorf("-gh-access-token-uri may not be empty if -writer-uri flag is '%s'", WOF_PR_WRITER_URI)
 		}
@@ -99,7 +99,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		pr_access_token = strings.TrimSpace(pr_access_token)
 
 		// Remember: Anything with "{...}" strings gets rewritten on the fly in http/api/save.go
-		
+
 		wr_q := url.Values{}
 		wr_q.Set("access_token", pr_access_token)
 		wr_q.Set("prefix", "data")

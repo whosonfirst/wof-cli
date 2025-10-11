@@ -92,9 +92,13 @@ $> ./bin/wof edit \
 
 Support for the following reader and writer implementations is enabled by default:
 
+##### Readers
+
 * Everything exported by the [whosonfirst/go-reader](https://github.com/whosonfirst/go-reader) package
 * Readers exported by the [whosonfirst/go-reader-github](https://github.com/whosonfirst/go-reader-github) package for reading WOF records from GitHub HTTP and API endpoints.
 * Readers exported by the [whosonfirst/go-reader-findingaid](https://github.com/whosonfirst/go-reader-findingaid) package for reading WOF records from a source derived on the fly based on their `wof:repo` properties.
+
+##### Writers
 
 * Everything exported by the [whosonfirst/go-writer](https://github.com/whosonfirst/go-writer?tab=readme-ov-file#writers) package
 * Writers exported by the [whosonfirst/go-reader-github](https://github.com/whosonfirst/go-writer-github) package for writing WOF records to GitHub, as either push or pull requests, using the GitHub API.
