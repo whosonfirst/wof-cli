@@ -55,28 +55,49 @@ _The `Format` and `Validate` buttons are only enabled in "data" view. Data valid
 
 #### Reading and writing from alternates source and targets
 
+By default, the `wof edit` command reads and writes files from, and to, the local disk or STDIN/STDOUT. It is possible to specify alternate sources and targets for reading and writing documents using the `-reader-uri` and `-writer-uri` flags.
+
+_Note that if either the `-reader-uri` or `-writer-uri` flag is defined the both must be defined or the edit tool will throw an error._
+
+The `-reader-uri` and `-writer-uri` flags define URIs for instantiating instances of the [whosonfirst/go-reader](https://github.com/whosonfirst/go-reader) and [whosonfirst/go-writer](https://github.com/whosonfirst/go-writer) interfaces respectively. For example to read WOF records from the `https://data.whosonfirst.org` enpoint and write changes to STDOUT:
+
 ```
 $> ./bin/wof edit \
 	-reader-uri https://data.whosonfirst.org \
 	-writer-uri stdout:// \
-	102527513
+	102/527/513/102527513.geojson
 ```
+
+Or to read a WOF from a specific GitHub repository (and write changes to STDOUT):
 
 ```
 $> ./bin/wof edit \
 	-reader-uri 'github://sfomuseum-data/sfomuseum-data-whosonfirst?branch=main&prefix=data' \
 	-writer-uri stdout:// \
 	-ensure-relative-path \
-	102527513.geojson
+	102527513
 ```
+
+Note the use of the `-ensure-relative-path` flag. This will parse and URIs passed in (for example "102527513") and derive it's fully qualified relative URI ("102/527/513/102527513.geojson") before trying to read any data.
+
+It is also possible to read a record directly from GitHub deriving its exact repository on the fly using a ["findingaid" reader implementation](https://github.com/whosonfirst/go-reader-findingaid). For example, reading WOF data derived from the SFO Museum findingaid and writing changes to the local `/tmp` directory:
 
 ```
 $> ./bin/wof edit \
 	-reader-uri 'findingaid://https/static.sfomuseum.org/findingaid?template=https://raw.githubusercontent.com/sfomuseum-data/{repo}/main/data/' \
-	-writer-uri \
+	-writer-uri fs:///tmp \
 	-ensure-relative-path \
 	102527513
 ```
+
+Support for the following reader and writer implementations is enabled by default:
+
+* Everything exported by the [whosonfirst/go-reader](https://github.com/whosonfirst/go-reader) package
+* Readers exported by the [whosonfirst/go-reader-github](https://github.com/whosonfirst/go-reader-github) package for reading WOF records from GitHub HTTP and API endpoints.
+* Readers exported by the [whosonfirst/go-reader-findingaid](https://github.com/whosonfirst/go-reader-findingaid) package for reading WOF records from a source derived on the fly based on their `wof:repo` properties.
+
+* Everything exported by the [whosonfirst/go-writer](https://github.com/whosonfirst/go-writer?tab=readme-ov-file#writers) package
+* Writers exported by the [whosonfirst/go-reader-github](https://github.com/whosonfirst/go-writer-github) package for writing WOF records to GitHub, as either push or pull requests, using the GitHub API.
 
 #### Reading and writing from Who's On First (.org) specific source and targets
 
