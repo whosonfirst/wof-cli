@@ -23,7 +23,7 @@ import (
 	"github.com/whosonfirst/wof/edit/http/api"
 	"github.com/whosonfirst/wof/edit/http/www"
 	"github.com/whosonfirst/wof/edit/static"
-	"github.com/whosonfirst/wof/reader"
+	edit_reader "github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"
 	edit_writer "github.com/whosonfirst/wof/writer"
 )
@@ -74,6 +74,8 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	logger := slog.Default()
 
+	// START OF canned "WOF" readers and writers
+
 	if reader_uri == WOF_FINDINGAID_READER_URI {
 
 		logger.Debug("Automatically configuring data.whosonfirst.org reader URI")
@@ -118,6 +120,38 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		ensure_rel_path = true
 	}
 
+	// END OF canned "WOF" readers and writers
+
+	if reader_uri != "" {
+
+		if writer_uri == "" {
+			return fmt.Errorf("-writer-uri must be specified if -reader-uri is not-empty")
+		}
+	}
+
+	if writer_uri != "" {
+
+		if reader_uri == "" {
+			return fmt.Errorf("-reader-uri must be specified if -writer-uri is not-empty")
+		}
+	}
+
+	if writer_uri == "" {
+		writer_uri = fmt.Sprintf("%s://", edit_writer.WRITER_SCHEME)
+	}
+
+	if reader_uri == "" {
+		reader_uri = fmt.Sprintf("%s://", edit_reader.READER_SCHEME)
+	}
+
+	rdr, err := go_reader.NewReader(ctx, reader_uri)
+
+	if err != nil {
+		return fmt.Errorf("Failed to create reader, %w", err)
+	}
+
+	// Remember: The whosonfirst/go-writer instance is created at runtime fly by the http/api/save handler.
+
 	// START OF copy all the records to a temporary directory which
 	// will then be used to serve an os.Root instance from the web server
 	tmpdir, err := os.MkdirTemp("", "wof-edit")
@@ -147,41 +181,6 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	// START OF can we update all the tools in wof-cli to use this
 	// (wrapped in a function or something)
 
-	// START OF hoop-jumping around readers and writers
-
-	// The "tl;dr" is that everything else in the wof-cli package
-	// uses the internal "reader" and "writer" package to process
-	// files on the local filesystem or STDIN/STDIN without any
-	// additional syntax. The reality of the "edit" tool is that
-	// people may want to simply read documents from alternate sources
-	// (like data.whosonfirst.org) and/or write them directly back
-	// to a GitHub PR so this is the kind of thing we need to do.
-	// The internal "writer" package already implements the go-writer
-	// interface but the "reader" package does not (yet) implement
-	// the go-reader interface. That may happen shortly but for now
-	// this is how things are handled.
-
-	var rdr go_reader.Reader
-
-	if reader_uri != "" {
-
-		if writer_uri == "" {
-			return fmt.Errorf("-writer-uri must be specified if -reader-uri is not-empty")
-		}
-
-		rdr, err = go_reader.NewReader(ctx, reader_uri)
-
-		if err != nil {
-			return fmt.Errorf("Failed to create reader, %w", err)
-		}
-	}
-
-	if writer_uri == "" {
-		writer_uri = fmt.Sprintf("%s://", edit_writer.WRITER_SCHEME)
-	}
-
-	// (NOT QUITE) END OF hoop-jumping around readers and writers
-
 	uri_map := new(sync.Map)
 
 	cb := func(ctx context.Context, uri string) error {
@@ -202,52 +201,23 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 			return fmt.Errorf("Failed to create fname from URI, %w", err)
 		}
 
-		// START OF MORE hoop-jumping around readers and writers
-		// See note above wrt/ hoop-jumping. If the internal "reader"
-		// package implemented the go-reader interface then we could
-		// get rid of some of this code.
+		if ensure_rel_path {
 
-		var uri_r io.ReadCloser
-
-		if rdr != nil {
-
-			if ensure_rel_path {
-
-				rel_path, err := wof_uri.Id2RelPath(id, uri_args)
-
-				if err != nil {
-					return fmt.Errorf("Failed to derive relative path for %s, %w", uri, err)
-				}
-
-				uri = rel_path
-			}
-
-			logger.Debug("Read URI", "uri", uri)
-			uri_r, err = rdr.Read(ctx, uri)
+			rel_path, err := wof_uri.Id2RelPath(id, uri_args)
 
 			if err != nil {
-				return err
+				return fmt.Errorf("Failed to derive relative path for %s, %w", uri, err)
 			}
 
-			defer uri_r.Close()
-
-		} else {
-
-			r, is_stdin, err := reader.ReadCloserFromURI(ctx, uri)
-
-			if err != nil {
-				return fmt.Errorf("Failed to open '%s' for reading, %w", uri, err)
-			}
-
-			if !is_stdin {
-				defer r.Close()
-			}
-
-			uri_r = r
+			uri = rel_path
 		}
 
-		// END OF MORE hoop-jumping around readers and writers
-		// END OF hoop-jumping around readers and writers
+		logger.Debug("Read URI", "uri", uri)
+		uri_r, err := rdr.Read(ctx, uri)
+
+		if err != nil {
+			return err
+		}
 
 		uri_wr, err := root.OpenFile(fname, os.O_RDWR|os.O_CREATE, 0644)
 
