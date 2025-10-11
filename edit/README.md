@@ -9,8 +9,16 @@ $> ./bin/wof edit -h
 Launch a local web server running on a random port hosting a web application for editing one or more Who's On First records.
 Usage:
 	 ./bin/wof path(N) path(N)
+  -ensure-relative-path
+    	Boolean flag signaling that each URI should be expanded to its fully-quality WOF-style relative path. This flag is only processed if the -reader-uri flag is not-empty.
+  -gh-access-token-uri string
+    	A valid GitHub API access token. This is only necessary if -writer-uri is "wof-pr://".
+  -reader-uri string
+    	An optional whosonfirst/go-reader/v2.Reader URI used to read WOF records from alternate sources. If defined then the -writer-uri flag must also be populated.
   -verbose
     	Enable verbose (debug) logging.
+  -writer-uri string
+    	An optional whosonfirst/go-writer/v3.Writer URI used to write records to alternate sources. If defined then the -reader-uri flag must also be populated.
 ```
 
 The `wof edit` command is modeled after the [iandees/wof-editor](https://github.com/iandees/wof-editor) package with the following changes:
@@ -18,8 +26,6 @@ The `wof edit` command is modeled after the [iandees/wof-editor](https://github.
 * It uses a local WebAssembly (WASM) binary to expose methods for data formatting, data validation and Who's On First placetype-related functionality.
 
 * It provides a user-interface for editing the raw GeoJSON of a Who's On First record.
-
-* It does NOT submit changes as pull requests against a [whosonfirst-data](https://github.com/whosonfirst-data) repository. Changes are only written to local file that a record's data was originally read from (or to STDOUT if the record was read from STDIN).
 
 ### Examples
 
@@ -46,6 +52,91 @@ The form view is a limited set of common WOF properties which most often need to
 ![](docs/wof-cli-edit-data.png)
 
 _The `Format` and `Validate` buttons are only enabled in "data" view. Data validation and formatting happens automatically in "form" view whenever a property is updated._
+
+#### Reading and writing from alternates source and targets
+
+By default, the `wof edit` command reads and writes files from, and to, the local disk or STDIN/STDOUT. It is possible to specify alternate sources and targets for reading and writing documents using the `-reader-uri` and `-writer-uri` flags.
+
+_Note that if either the `-reader-uri` or `-writer-uri` flag is defined the both must be defined or the edit tool will throw an error._
+
+The `-reader-uri` and `-writer-uri` flags define URIs for instantiating instances of the [whosonfirst/go-reader](https://github.com/whosonfirst/go-reader) and [whosonfirst/go-writer](https://github.com/whosonfirst/go-writer) interfaces respectively. For example to read WOF records from the `https://data.whosonfirst.org` enpoint and write changes to STDOUT:
+
+```
+$> ./bin/wof edit \
+	-reader-uri https://data.whosonfirst.org \
+	-writer-uri stdout:// \
+	102/527/513/102527513.geojson
+```
+
+Or to read a WOF from a specific GitHub repository (and write changes to STDOUT):
+
+```
+$> ./bin/wof edit \
+	-reader-uri 'github://sfomuseum-data/sfomuseum-data-whosonfirst?branch=main&prefix=data' \
+	-writer-uri stdout:// \
+	-ensure-relative-path \
+	102527513
+```
+
+Note the use of the `-ensure-relative-path` flag. This will parse and URIs passed in (for example "102527513") and derive it's fully qualified relative URI ("102/527/513/102527513.geojson") before trying to read any data.
+
+It is also possible to read a record directly from GitHub deriving its exact repository on the fly using a ["findingaid" reader implementation](https://github.com/whosonfirst/go-reader-findingaid). For example, reading WOF data derived from the SFO Museum findingaid and writing changes to the local `/tmp` directory:
+
+```
+$> ./bin/wof edit \
+	-reader-uri 'findingaid://https/static.sfomuseum.org/findingaid?template=https://raw.githubusercontent.com/sfomuseum-data/{repo}/main/data/' \
+	-writer-uri fs:///tmp \
+	-ensure-relative-path \
+	102527513
+```
+
+Support for the following reader and writer implementations is enabled by default:
+
+##### Readers
+
+* Everything exported by the [whosonfirst/go-reader](https://github.com/whosonfirst/go-reader) package
+* Readers exported by the [whosonfirst/go-reader-github](https://github.com/whosonfirst/go-reader-github) package for reading WOF records from GitHub HTTP and API endpoints.
+* Readers exported by the [whosonfirst/go-reader-findingaid](https://github.com/whosonfirst/go-reader-findingaid) package for reading WOF records from a source derived on the fly based on their `wof:repo` properties.
+
+##### Writers
+
+* Everything exported by the [whosonfirst/go-writer](https://github.com/whosonfirst/go-writer?tab=readme-ov-file#writers) package
+* Writers exported by the [whosonfirst/go-reader-github](https://github.com/whosonfirst/go-writer-github) package for writing WOF records to GitHub, as either push or pull requests, using the GitHub API.
+
+#### Reading and writing from Who's On First (.org) specific source and targets
+
+The `wof-cli edit` command ships with two "shortcut" reader and writer URIs, one for reading the most recent data for WOF records directly from the GitHub repository they are stored in and one for writing changes to a record as pull request again the GitHub repository they are stored in.
+
+##### wof-findingaid://
+
+The `wof-findingaid://` reader URI is just syntactic sugar to automatically assign the `findingaid://https/data.whosonfirst.org/findingaid...` reader-uri and ensure-relative-path flags.
+
+```
+$> ./bin/wof edit \
+	-verbose \
+	-reader-uri wof-findingaid:// \
+	-writer-uri stdout:// \
+	102527513
+```
+
+_Remember that when you specify a custom `-reader-uri` flag you must also specify a corresponding `-writer-uri` flag. In this example all changes are written to STDOUT._
+
+##### wof-pr://
+
+The `wof-pr://` writer URI is also just syntactic sugar to automatically assign a `githubapi-pr://` writer-uri (and ensure-relative-path) flag. Under the hood this is using [whosonfirst/go-writer-github](https://github.com/whosonfirst/go-writer-github?tab=readme-ov-file#githubapi-pr) package to build and submit a PR when a WOF document is saved.
+
+```
+$> ./bin/wof edit \
+	-verbose \
+	-reader-uri wof-findingaid:// \
+	-writer-uri wof-pr:// \
+	-gh-access-token-uri file:///usr/local/data/gh_token \
+	102527513
+```
+
+By default the `githubapi-pr://` writer URI requires a lot of configuration options. Most of these are handled automatically by the `wof-cli edit` tool but you still need to specify a valid GitHub API token for submitting the PR.
+
+These access tokens are expected to be defined as valid [gocloud.dev/runtimevar](https://gocloud.dev/howto/runtimevar/) URIs (in order that the tokens themselves don't need to be exposed on the command line or in process lists). The `wof-cli edit` tool uses the [aaronland/gocloud/runtimevar](https://github.com/aaronland/gocloud/tree/main/runtimevar) package to derive string values from `runtimevar` URIs. Please consult the documentation for those packages for details.
 
 ## Notes (and caveats)
 

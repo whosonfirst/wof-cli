@@ -304,7 +304,21 @@ wof.edit = (function () {
 		const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
 		osm.addTo(map);
 
-		feature_layer = L.geoJSON(data);
+		const pt_style = wof.edit.leaflet.style('geom_centroid');
+		
+		const pt_args = {
+		    style: pt_style,
+		};
+		
+		const pt_handler = wof.edit.leaflet.point(pt_args);
+		const layer_style = wof.edit.leaflet.style('consensus_polygon');
+		
+		const layer_args = {
+		    style: layer_style,
+		    pointToLayer: pt_handler,
+		};
+		
+		feature_layer = L.geoJSON(data, layer_args);
 		feature_layer.addTo(map);
 
 		// Set up button interactions

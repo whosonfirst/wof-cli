@@ -12,7 +12,17 @@ import (
 	wof_writer "github.com/whosonfirst/go-writer/v3"
 )
 
+const WRITER_SCHEME string = "wof-cli"
 const STDOUT string = "-"
+
+func init() {
+	ctx := context.Background()
+	err := wof_writer.RegisterWriter(ctx, WRITER_SCHEME, NewWriter)
+
+	if err != nil {
+		panic(err)
+	}
+}
 
 // Write writes the data in 'body' to 'uri'.
 func Write(ctx context.Context, uri string, body []byte) error {
@@ -44,7 +54,7 @@ type Writer struct {
 }
 
 // NewWriter returns a `Writer` instance implementing the `whosonfirst/go-writer/v3.Writer` interface.
-func NewWriter() (wof_writer.Writer, error) {
+func NewWriter(ctx context.Context, uri string) (wof_writer.Writer, error) {
 	wr := &Writer{}
 	return wr, nil
 }
