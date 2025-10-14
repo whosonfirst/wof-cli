@@ -300,6 +300,17 @@ wof.edit = (function () {
 		
 		const map = L.map(map_id);
 		map.fitBounds(bounds);
+
+		// https://geoman.io/docs/leaflet
+		
+		map.pm.addControls({  
+		    position: 'topleft',
+		    drawCircle: false,
+		    drawCircleMarker: false,
+		    drawText: false,
+		    rotateMode: false,
+		    
+		});
 		
 		const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
 		osm.addTo(map);
