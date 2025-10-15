@@ -311,6 +311,18 @@ wof.edit = (function () {
 		    rotateMode: false,
 		    
 		});
+
+		map.on("pm:drawend", function(e){
+		    console.log("draw end");
+		});
+		
+		map.on('pm:remove', function (e) {
+		    console.log("remove");	     
+		});
+		
+		map.on('pm:globaleditmodetoggled', (e) => {
+		    console.log("remove (edit mode)");	     
+		});
 		
 		const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
 		osm.addTo(map);
