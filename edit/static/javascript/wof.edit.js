@@ -7,8 +7,9 @@ var wof = wof || {};
 
 wof.edit = (function () {
 
-    var feature_layer = null;
-    var alert_timeout = null;
+    var map;
+    var feature_layer;
+    var alert_timeout;
 
     // Perist the list of currently displayed language-based names
     // when toggling between form and data view. This value is updated
@@ -298,7 +299,7 @@ wof.edit = (function () {
 		
 		const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);
 		
-		const map = L.map(map_id);
+		map = L.map(map_id);
 		map.fitBounds(bounds);
 
 		// https://geoman.io/docs/leaflet
@@ -328,27 +329,12 @@ wof.edit = (function () {
 		});
 
 		//
-		
+
 		const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
 		osm.addTo(map);
-
-		const pt_style = wof.edit.leaflet.style('geom_centroid');
 		
-		const pt_args = {
-		    style: pt_style,
-		};
+		self.add_feature_layer(data);
 		
-		const pt_handler = wof.edit.leaflet.point(pt_args);
-		const layer_style = wof.edit.leaflet.style('consensus_polygon');
-		
-		const layer_args = {
-		    style: layer_style,
-		    pointToLayer: pt_handler,
-		};
-		
-		feature_layer = L.geoJSON(data, layer_args);
-		feature_layer.addTo(map);
-
 		// Set up button interactions
 
 		form_btn.onclick = function(){
@@ -495,7 +481,8 @@ wof.edit = (function () {
 				const str_data = JSON.stringify(data);
 
 				wof_format(str_data).then((fmt_rsp) => {
-				    spinner.style.display = "none";		    				    
+				    spinner.style.display = "none";
+				    _self.add_feature_layer(data);				    
 				    _self.feedback("Data saved", 2000);				    
 				    raw.innerText = fmt_rsp;
 				}).catch((err) => {
@@ -531,6 +518,39 @@ wof.edit = (function () {
 	    });
 	},
 
+	/**
+	 * @function add_feature_layer
+	 * @memberof wof.edit
+	 * @description Draw (or redraw) the GeoJSON Feature layer on the map
+	 * @param {Object} data – The GeoJSON Feature object used to populate the feature layer with
+         * @return {null}
+        */		   					
+	add_feature_layer: function(data){
+
+	    if (feature_layer){
+		console.debug("Remove feature layer");
+		map.removeLayer(feature_layer);
+	    }
+	    
+	    const pt_style = wof.edit.leaflet.style('geom_centroid');
+	    
+	    const pt_args = {
+		style: pt_style,
+	    };
+	    
+	    const pt_handler = wof.edit.leaflet.point(pt_args);
+	    const layer_style = wof.edit.leaflet.style('consensus_polygon');
+	    
+	    const layer_args = {
+		style: layer_style,
+		pointToLayer: pt_handler,
+	    };
+
+	    console.debug("Add feature layer");	    
+	    feature_layer = L.geoJSON(data, layer_args);
+	    feature_layer.addTo(map);	    
+	},
+	
 	/**
 	 * @function populate_form
 	 * @memberof wof.edit
@@ -1734,6 +1754,8 @@ wof.edit = (function () {
         */		   										
 	save_data: function(data) {
 
+	    const _self = self;
+	    
 	    return new Promise((resolve, reject) => {
 
 		const raw = document.querySelector("#raw");
