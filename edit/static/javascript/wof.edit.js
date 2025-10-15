@@ -314,15 +314,20 @@ wof.edit = (function () {
 
 		map.on("pm:drawend", function(e){
 		    console.log("draw end");
+		    _self.update_geometry(map);		   
 		});
 		
 		map.on('pm:remove', function (e) {
-		    console.log("remove");	     
+		    console.log("remove");
+		    _self.update_geometry(map);		   		    
 		});
 		
 		map.on('pm:globaleditmodetoggled', (e) => {
-		    console.log("remove (edit mode)");	     
+		    console.log("remove (edit mode)");
+		    _self.update_geometry(map);		   		    
 		});
+
+		//
 		
 		const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
 		osm.addTo(map);
@@ -1802,6 +1807,71 @@ wof.edit = (function () {
 	},
 
 	/**
+	 * @function save_geometry
+	 * @memberof wof.edit
+	 * @description Write updated GeoJSON geometry back to its parent Feature element
+	 * @param {Object} geom – A GeoJSON Feature geometry
+         * @return {null}
+        */		   					
+	save_geometry: function(geom){
+
+	    const _self = self;
+	    
+	    self.load_data().then((data) => {
+
+		data.geometry = geom;
+		
+		_self.save_data(data).then(() => {
+		    console.debug("Geometry updated");
+		    return;
+		}).catch((err) => {
+		    console.error("Failed to save updated geometry", err);
+		    _self.alert("Failed to save updated geometry, " + err);
+		});
+		
+	    }).catch((err) => {
+		console.error("Failed to load data for updating geometry", err);		
+		self.alert("Failed to load data for updating geometry, " + err);
+	    });
+	    
+	},
+
+	/**
+	 * @function update_geometry
+	 * @memberof wof.edit
+	 * @description Derive an update geometry from Leaflet/geoman features and update the parent Feature element with that geometry.
+	 * @param {Object} map – A Leaflet L.Map instance
+         * @return {null}
+        */		   						
+	update_geometry: function(map){
+	    
+	    const feature_group = map.pm.getGeomanLayers(true);
+	    const feature_collection = feature_group.toGeoJSON();
+
+	    const features = feature_collection.features;
+	    const count = features.length;
+
+	    const _self = self;
+
+	    switch (count) {
+		case 0:
+		    _self.alert("Geometry can no be empty.");
+		    break;
+		case 1:
+
+		    const geom = features[0].geometry;
+		    _self.save_geometry(geom);
+		    break;
+		    
+		default:
+		    // merge geometries here...
+
+		    // _self.save_geometry(geom);
+		    break;
+	    }
+	},
+	
+	/**
 	 * @function feedback
 	 * @memberof wof.edit
 	 * @description Display a feedback message.
@@ -1877,7 +1947,8 @@ wof.edit = (function () {
 		    
 		}, ttl);
 	    }
-	},
+	},	    
+	
     };
     
     return self;
