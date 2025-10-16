@@ -307,7 +307,8 @@ wof.edit = (function () {
 		map.pm.addControls({  
 		    position: 'topleft',
 		    drawCircle: false,
-		    drawCircleMarker: false,
+		    drawMarker: false,		// don't draw default image-based markers		    
+		    drawCircleMarker: true,	// draw circle-based markers instead
 		    drawText: false,
 		    rotateMode: false,
 		    
@@ -1887,7 +1888,10 @@ wof.edit = (function () {
 		    
 		default:
 		    // merge geometries here...
-
+		    // based on the controls (above) we can have
+		    // points
+		    // line strings
+		    // polygons
 		    // _self.save_geometry(geom);
 		    break;
 	    }
