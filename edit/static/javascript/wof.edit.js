@@ -309,6 +309,8 @@ wof.edit = (function () {
 		    drawCircle: false,
 		    drawMarker: false,		// don't draw default image-based markers		    
 		    drawCircleMarker: true,	// draw circle-based markers instead
+		    drawPolyline: false,	// there have never been polylines in WOF (or at least I don't think so)
+		    drawRectangle: false,	// disabling (in favour of polygons) for the sake of less UI/chrome
 		    drawText: false,
 		    rotateMode: false,
 		    
@@ -1874,6 +1876,10 @@ wof.edit = (function () {
 	    const features = feature_collection.features;
 	    const count = features.length;
 
+	    console.debug("Update geometry, feature count", count);
+	    
+	    var geom;
+	    
 	    const _self = self;
 
 	    switch (count) {
@@ -1882,7 +1888,7 @@ wof.edit = (function () {
 		    break;
 		case 1:
 
-		    const geom = features[0].geometry;
+		    geom = features[0].geometry;
 		    _self.save_geometry(geom);
 		    break;
 		    
@@ -1890,9 +1896,100 @@ wof.edit = (function () {
 		    // merge geometries here...
 		    // based on the controls (above) we can have
 		    // points
-		    // line strings
 		    // polygons
-		    // _self.save_geometry(geom);
+
+		    var point_geoms = [];
+		    var poly_geoms = [];
+
+		    for (var i=0; i < count; i++){
+
+			const geom = features[i].geometry;
+
+			switch (geom.type){
+			    case "Polygon":
+				poly_geoms.push(geom.coordinates);
+				break;
+			    case "MultiPolygon":
+
+				const count_polys = geom.coordinates.length;
+
+				for (var j=0; j < count_polys; j++){
+				    poly_geoms.push(geom.coordinates[j]);
+				}
+
+				break;
+				
+			    case "Point":
+				point_geoms.push(geom.coordinates);
+				break;
+			    case "MultiPoint":
+
+				const count_points = geom.coordinates.length;
+
+				for (var j=0; j < count_points; j++){
+				    point_geoms.push(geom.coordinates[j]);
+				}
+
+				break;
+				
+			    default:
+				_self.alert("Unhandled geometry type, " + geom.type);
+				return false;
+			}
+		    }
+
+		    var geom_points;
+		    var geom_polys;
+		    
+		    const count_points = point_geoms.length;		    
+		    const count_polys = poly_geoms.length;
+
+		    console.debug("Merged feature count", "points", count_points, "polygons", count_polys);
+		    
+		    switch (count_points) {
+			case 1:
+			    geom_points = {
+				type: "Point",
+				coordindates: point_geoms[0]
+			    };
+			    break;
+			default:
+			    geom_points = {
+				type: "MultiPoint",
+				coordindates: point_geoms
+			    };
+		    }
+
+		    switch (count_polys) {
+			case 1:
+			    geom_polys = {
+				type: "Polygon",
+				coordindates: point_geoms[0]
+			    };
+			    break;
+			default:
+			    geom_polys = {
+				type: "MultiPolygon",
+				coordindates: point_geoms
+			    };
+		    }
+
+		    if ((count_points) && (count_polys)){
+			geom = {
+			    type: "MultiGeometry",
+			    "geometries": [
+				geom_points,
+				geom_polys,
+			    ]
+			};
+		    } else if (count_points){
+			geom = geom_points;
+		    } else {
+			geom = geom_polys;
+		    }
+				
+		    console.debug("Save geometry", geom.type);
+		    _self.save_geometry(geom);
 		    break;
 	    }
 	},
