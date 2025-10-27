@@ -22,7 +22,7 @@ require (
 	github.com/whosonfirst/go-reader-findingaid/v2 v2.1.1
 	github.com/whosonfirst/go-reader-github/v2 v2.0.1
 	github.com/whosonfirst/go-reader/v2 v2.1.0
-	github.com/whosonfirst/go-whosonfirst-export/v3 v3.2.0
+	github.com/whosonfirst/go-whosonfirst-export/v3 v3.3.0
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.29
 	github.com/whosonfirst/go-whosonfirst-format v1.1.0
 	github.com/whosonfirst/go-whosonfirst-github v0.9.2

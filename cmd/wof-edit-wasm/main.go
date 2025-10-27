@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	prep_func := export_wasm.PrepareFeatureFunc()
+	prep_func := export_wasm.PrepareWithoutTimestampsFunc()
 	defer prep_func.Release()
 
 	js.Global().Set("wof_prepare_feature", prep_func)
