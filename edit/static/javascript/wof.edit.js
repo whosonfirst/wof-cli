@@ -296,10 +296,10 @@ wof.edit = (function () {
 		})
 		
 		// Set up map
-		
-		const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);
-		
+			
 		map = L.map(map_id);
+
+		const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);		
 		map.fitBounds(bounds);
 
 		// https://geoman.io/docs/leaflet
@@ -317,17 +317,14 @@ wof.edit = (function () {
 		});
 
 		map.on("pm:drawend", function(e){
-		    console.log("draw end");
 		    _self.update_geometry(map);		   
 		});
 		
 		map.on('pm:remove', function (e) {
-		    console.log("remove");
-		    _self.update_geometry(map);		   		    
+		    _self.update_geometry(map);
 		});
 		
 		map.on('pm:globaleditmodetoggled', (e) => {
-		    console.log("remove (edit mode)");
 		    _self.update_geometry(map);		   		    
 		});
 
@@ -336,7 +333,7 @@ wof.edit = (function () {
 		const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
 		osm.addTo(map);
 		
-		self.add_feature_layer(data);
+		self.draw_feature_geometry(data);
 		
 		// Set up button interactions
 
@@ -403,6 +400,8 @@ wof.edit = (function () {
 		    
 		    wof_format(str_data).then((fmt_rsp) => {
 			raw.innerText = fmt_rsp;
+			const new_data = JSON.parse(fmt_rsp);
+			_self.draw_feature_geometry(new_data);
 			save_btn.removeAttribute("disabled");
 		    }).catch((err) => {
 			_self.alert("Failed to format raw data, " + err);
@@ -427,11 +426,12 @@ wof.edit = (function () {
 		    const str_data = JSON.stringify(data);
 		    
 		    wof_validate(str_data).then(() => {
-			console.log("OK")
 			save_btn.removeAttribute("disabled");
 
 			wof_format(str_data).then((fmt_rsp) => {
-			    raw.innerText = fmt_rsp;			    
+			    raw.innerText = fmt_rsp;
+			    const new_data = JSON.parse(fmt_rsp);
+			    _self.draw_feature_geometry(new_data);			
 			}).catch((err) => {
 			    _self.alert("Failed to format raw data, " + err);			    
 			    console.error("Failed to format data", err);
@@ -485,7 +485,7 @@ wof.edit = (function () {
 
 				wof_format(str_data).then((fmt_rsp) => {
 				    spinner.style.display = "none";
-				    _self.add_feature_layer(data);				    
+				    _self.draw_feature_geometry(data);				    
 				    _self.feedback("Data saved", 2000);				    
 				    raw.innerText = fmt_rsp;
 				}).catch((err) => {
@@ -522,13 +522,13 @@ wof.edit = (function () {
 	},
 
 	/**
-	 * @function add_feature_layer
+	 * @function draw_feature_geometry
 	 * @memberof wof.edit
 	 * @description Draw (or redraw) the GeoJSON Feature layer on the map
 	 * @param {Object} data – The GeoJSON Feature object used to populate the feature layer with
          * @return {null}
         */		   					
-	add_feature_layer: function(data){
+	draw_feature_geometry: function(data){
 
 	    if (feature_layer){
 		console.debug("Remove feature layer");
@@ -551,7 +551,11 @@ wof.edit = (function () {
 
 	    console.debug("Add feature layer");	    
 	    feature_layer = L.geoJSON(data, layer_args);
-	    feature_layer.addTo(map);	    
+	    feature_layer.addTo(map);
+
+	    const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);
+	    console.debug("Fit map to bounds", bounds, data);
+	    map.fitBounds(bounds);	    
 	},
 	
 	/**

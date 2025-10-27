@@ -18,6 +18,7 @@ require (
 	github.com/sfomuseum/iso8601duration v1.1.0
 	github.com/tidwall/gjson v1.18.0
 	github.com/tidwall/sjson v1.2.5
+	github.com/whosonfirst/go-ioutil v1.0.2
 	github.com/whosonfirst/go-reader-findingaid/v2 v2.1.1
 	github.com/whosonfirst/go-reader-github/v2 v2.0.1
 	github.com/whosonfirst/go-reader/v2 v2.1.0
@@ -199,7 +200,6 @@ require (
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/rtree v1.3.1 // indirect
 	github.com/webview/webview_go v0.0.0-20240831120633-6173450d4dd6 // indirect
-	github.com/whosonfirst/go-ioutil v1.0.2 // indirect
 	github.com/whosonfirst/go-rfc-5646 v0.1.0 // indirect
 	github.com/whosonfirst/go-sanitize v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-database v0.1.0 // indirect

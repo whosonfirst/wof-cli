@@ -194,6 +194,12 @@ GOOS=js GOARCH=wasm \
 		cmd/wof-edit-wasm/main.go
 ```
 
+## Dates
+
+Who's On First uses the Library of Congress' [Extended Date/Time Format](https://www.loc.gov/standards/datetime/) syntax for encoding dates. The syntax for unknown or "open" dates was changes in 2019 after initial values had been assigned to many WOF records.
+
+The `wof-cli edit` tool will, when possible, update those values when a record is loaded. Those values will not be persisted unless and until that record is explictly saved.
+
 ## See also
 
 * https://github.com/iandees/wof-editor
