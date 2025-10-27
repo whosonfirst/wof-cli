@@ -397,17 +397,22 @@ wof.edit = (function () {
 		    }
 		    
 		    const str_data = JSON.stringify(data);
-		    
+
+		    // Remember: All we're doing here is _formatting_ the data and
+		    // not validating it. That might become confusing enough that it
+		    // becomes necessary to remove this feature. TBD.
+			
 		    wof_format(str_data).then((fmt_rsp) => {
 			raw.innerText = fmt_rsp;
 			const new_data = JSON.parse(fmt_rsp);
-			_self.draw_feature_geometry(new_data);
+			// _self.draw_feature_geometry(new_data);
 			save_btn.removeAttribute("disabled");
 		    }).catch((err) => {
 			_self.alert("Failed to format raw data, " + err);
 			console.error("Failed to format data", err)
 			save_btn.setAttribute("disabled", "disabled");
 		    });
+			
 		};
 
 		validate_btn.onclick = function() {
@@ -422,25 +427,14 @@ wof.edit = (function () {
 			save_btn.setAttribute("disabled", "disabled");			
 			return;
 		    }
-		    
-		    const str_data = JSON.stringify(data);
-		    
-		    wof_validate(str_data).then(() => {
-			save_btn.removeAttribute("disabled");
 
-			wof_format(str_data).then((fmt_rsp) => {
-			    raw.innerText = fmt_rsp;
-			    const new_data = JSON.parse(fmt_rsp);
-			    _self.draw_feature_geometry(new_data);			
-			}).catch((err) => {
-			    _self.alert("Failed to format raw data, " + err);			    
-			    console.error("Failed to format data", err);
-			    save_btn.setAttribute("disabled", "disabled");						    
-			});
-			
+		    _self.export_data(data).then((fmt_rsp) => {
+			raw.innerText = fmt_rsp;
+			const new_data = JSON.parse(fmt_rsp);
+			_self.draw_feature_geometry(new_data);						
 		    }).catch((err) => {
 			_self.alert("Data validation failed, " + err);
-			console.error("Failed to validate data", err);
+			console.error("Failed to validate (export) data", err);
 			save_btn.setAttribute("disabled", "disabled");						
 		    });		    
 		};
@@ -1793,14 +1787,25 @@ wof.edit = (function () {
 	    return new Promise((resolve, reject) => {
 		
 	    	const str_data = JSON.stringify(data);
-		
+
+		// Basic sanity checking
 		wof_validate(str_data).then(() => {
-		    wof_format(str_data).then((fmt_rsp) => {
-			resolve(fmt_rsp);
+
+		    // Prep various things like derived geometries and relations
+		    wof_prepare_feature(str_data).then((str_prepped) => {
+
+			// Make pretty
+			wof_format(str_prepped).then((fmt_rsp) => {
+			    resolve(fmt_rsp);
+			}).catch((err) => {
+			    console.error("Data formatting failed", str_data, err);			
+			    reject("Data formatting failed, " + err);
+			});
+			
 		    }).catch((err) => {
-			console.error("Data formatting failed", str_data, err);			
-			reject("Data formatting failed, " + err);
+			console.error("Data prepping failed", data, err);
 		    });
+		    
 		}).catch((err) => {
 		    console.error("Data validation failed", data, err);
 		    reject("Data validation failed, " + err);

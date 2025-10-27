@@ -8,11 +8,17 @@ import (
 	placetypes "github.com/whosonfirst/go-whosonfirst-placetypes/wasm"
 	format "github.com/whosonfirst/go-whosonfirst-format/wasm"
 	"github.com/whosonfirst/go-whosonfirst-validate"			
-	validate_wasm "github.com/whosonfirst/go-whosonfirst-validate/wasm"		
+	validate_wasm "github.com/whosonfirst/go-whosonfirst-validate/wasm"
+	export_wasm "github.com/whosonfirst/go-whosonfirst-export/v3/wasm"			
 )
 
 func main() {
 
+	prep_func := export_wasm.PrepareFeatureFunc()
+	defer prep_func.Release()
+
+	js.Global().Set("wof_prepare_feature", prep_func)
+	
 	placetypes_func := placetypes.PlacetypesFunc()
 	defer placetypes_func.Release()
 
