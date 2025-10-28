@@ -298,7 +298,8 @@ wof.edit = (function () {
 		// Set up map
 			
 		map = L.map(map_id);
-
+		map.setMaxZoom(22);
+		
 		const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);		
 		map.fitBounds(bounds);
 

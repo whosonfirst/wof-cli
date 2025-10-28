@@ -67,6 +67,8 @@ Or by manually editing a record's geometry in the "data" view:
 
 When manually editing geometries their coordinate values will be updated in the graphical interface when the record in question is saved or validated, but not formatted. The application does _NOT_ provide any facilities for automatically updating parent or hierarchy information because it still lacks built-in point-in-polygon functionality. Support for that functionality is on the list but I haven't quite figured out how best to implement it yet.
 
+_As of this writing map tiles default to [OpenStreetMap](https://openstreetmap.org) which has a maximum zoom level of 18. The map itself has a maximum zoom level of 22 to account for detailed geometries but this, in turn, means that map tiles are not visible between zoom levels 19-22. Once support for the use of [Protomaps](https://protomaps.com) map tiles is enable this problem should go away._
+
 #### Reading and writing from alternates source and targets
 
 By default, the `wof edit` command reads and writes files from, and to, the local disk or STDIN/STDOUT. It is possible to specify alternate sources and targets for reading and writing documents using the `-reader-uri` and `-writer-uri` flags.
