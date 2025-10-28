@@ -57,9 +57,15 @@ _The `Format` and `Validate` buttons are only enabled in "data" view. Data valid
 
 #### Geometries
 
+It is also possible to edit geometries for individual records using the graphical controls placed on the left-hand side of the map:
+
 ![](docs/wof-cli-edit-form-geom.png)
 
+Or by manually editing a record's geometry in the "data" view:
+
 ![](docs/wof-cli-edit-data-geom.png)
+
+When manually editing geometries their coordinate values will be updated in the graphical interface when the record in question is saved or validated, but not formatted. The application does _NOT_ provide any facilities for automatically updating parent or hierarchy information because it still lacks built-in point-in-polygon functionality. Support for that functionality is on the list but I haven't quite figured out how best to implement it yet.
 
 #### Reading and writing from alternates source and targets
 
