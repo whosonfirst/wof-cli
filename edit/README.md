@@ -27,6 +27,8 @@ The `wof edit` command is modeled after the [iandees/wof-editor](https://github.
 
 * It provides a user-interface for editing the raw GeoJSON of a Who's On First record.
 
+* It enables the editing of GeoJSON `Feature` geometries from both the graphical user and raw data interfaces. The application does _NOT_ provide any facilities for automatically updating parent or hierarchy information because it still lacks built-in point-in-polygon functionality. Support for that functionality is on the list but I haven't quite figured out how best to implement it yet.
+
 ### Examples
 
 ```
@@ -52,6 +54,20 @@ The form view is a limited set of common WOF properties which most often need to
 ![](docs/wof-cli-edit-data.png)
 
 _The `Format` and `Validate` buttons are only enabled in "data" view. Data validation and formatting happens automatically in "form" view whenever a property is updated._
+
+#### Geometries
+
+It is also possible to edit geometries for individual records using the graphical controls placed on the left-hand side of the map:
+
+![](docs/wof-cli-edit-form-geom.png)
+
+Or by manually editing a record's geometry in the "data" view:
+
+![](docs/wof-cli-edit-data-geom.png)
+
+When manually editing geometries their coordinate values will be updated in the graphical interface when the record in question is saved or validated, but not formatted. The application does _NOT_ provide any facilities for automatically updating parent or hierarchy information because it still lacks built-in point-in-polygon functionality. Support for that functionality is on the list but I haven't quite figured out how best to implement it yet.
+
+_As of this writing map tiles default to [OpenStreetMap](https://openstreetmap.org) which has a maximum zoom level of 18. The map itself has a maximum zoom level of 22 to account for detailed geometries but this, in turn, means that map tiles are not visible between zoom levels 19-22. Once support for the use of [Protomaps](https://protomaps.com) map tiles is enable this problem should go away._
 
 #### Reading and writing from alternates source and targets
 
@@ -142,8 +158,6 @@ These access tokens are expected to be defined as valid [gocloud.dev/runtimevar]
 
 Changes made in the `wof edit` tool are not written to disk (or STDOUT) until the `Save` button is pressed.
 
-It is not possible to edit geometries yet. While there is nothing to prevent you from editing geometries in the raw "data" view those changes will not be reflected until the document being edited is saved and reloaded.
-
 There is a noticeable delay at startup while the WASM binary (used for data formatting, validation and other functionality) is initialized. This is not ideal and future work will focus on speeding it up. For the time being it is an accepted inconvenience.
 
 Currently the tool is hard-coded to use (base) map tiles from OpenStreetMap. Future releases will support map tiles from the Protomaps API or a local Protomaps database file.
@@ -193,6 +207,12 @@ GOOS=js GOARCH=wasm \
 		-o edit/static/wasm/wof_edit.wasm \
 		cmd/wof-edit-wasm/main.go
 ```
+
+## Dates
+
+Who's On First uses the Library of Congress' [Extended Date/Time Format](https://www.loc.gov/standards/datetime/) syntax for encoding dates. The syntax for unknown or "open" dates was changes in 2019 after initial values had been assigned to many WOF records.
+
+The `wof-cli edit` tool will, when possible, update those values when a record is loaded. Those values will not be persisted unless and until that record is explictly saved.
 
 ## See also
 

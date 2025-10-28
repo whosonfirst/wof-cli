@@ -460,8 +460,8 @@ github.com/whosonfirst/go-sanitize v0.1.0 h1:ygSqCnakwdzH/m8UEa15zXGDsoo5/JJeRkg
 github.com/whosonfirst/go-sanitize v0.1.0/go.mod h1:p/emgbafMM0p5iVAz2XWwecYPl06Tw4Jos9rhTKIrt8=
 github.com/whosonfirst/go-whosonfirst-database v0.1.0 h1:yNJ4tkrDLx9BCVPlEKUYymKVwCaZbZ1jvawfK0pKExo=
 github.com/whosonfirst/go-whosonfirst-database v0.1.0/go.mod h1:OZNsKAege1EKhbOSAQ7bNdZ1BMqnCARGA/qS1AUIodE=
-github.com/whosonfirst/go-whosonfirst-export/v3 v3.2.0 h1:VA2RCkfE9lTLRx6XpCTnJi0KQnwgjXWEDdO7pvUnldk=
-github.com/whosonfirst/go-whosonfirst-export/v3 v3.2.0/go.mod h1:4HfRg9JBxyV/v9lDt80VBfiDUwukQfkeuOUgz5OCJ9U=
+github.com/whosonfirst/go-whosonfirst-export/v3 v3.3.0 h1:xEcFpTW0S4D3Fky7M0eZsBELI7EXcbTsXndSFnC5otk=
+github.com/whosonfirst/go-whosonfirst-export/v3 v3.3.0/go.mod h1:9tMsYWzDmaj3202tZVcIUJNSFGv5gUgGgK3EiJuOr1o=
 github.com/whosonfirst/go-whosonfirst-feature v0.0.29 h1:Sy5qE+dR3U6CYEJjDuflsjWM9x4ico4+F++xeTQQSHs=
 github.com/whosonfirst/go-whosonfirst-feature v0.0.29/go.mod h1:sJl2dhA5l10Maukks4Kx6X6JwqtKD1NKLNJrmRkFOfE=
 github.com/whosonfirst/go-whosonfirst-findingaid/v2 v2.11.0 h1:e+FO6kXz9ZjdkM/VusZhdkdEPNBUstXSYj/RhMHf8SI=

@@ -7,8 +7,9 @@ var wof = wof || {};
 
 wof.edit = (function () {
 
-    var feature_layer = null;
-    var alert_timeout = null;
+    var map;
+    var feature_layer;
+    var alert_timeout;
 
     // Perist the list of currently displayed language-based names
     // when toggling between form and data view. This value is updated
@@ -295,32 +296,46 @@ wof.edit = (function () {
 		})
 		
 		// Set up map
+			
+		map = L.map(map_id);
+		map.setMaxZoom(22);
 		
-		const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);
-		
-		const map = L.map(map_id);
+		const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);		
 		map.fitBounds(bounds);
+
+		// https://geoman.io/docs/leaflet
 		
+		map.pm.addControls({  
+		    position: 'topleft',
+		    drawCircle: false,
+		    drawMarker: false,		// don't draw default image-based markers		    
+		    drawCircleMarker: true,	// draw circle-based markers instead
+		    drawPolyline: false,	// there have never been polylines in WOF (or at least I don't think so)
+		    drawRectangle: false,	// disabling (in favour of polygons) for the sake of less UI/chrome
+		    drawText: false,
+		    rotateMode: false,
+		    
+		});
+
+		map.on("pm:drawend", function(e){
+		    _self.update_geometry(map);		   
+		});
+		
+		map.on('pm:remove', function (e) {
+		    _self.update_geometry(map);
+		});
+		
+		map.on('pm:globaleditmodetoggled', (e) => {
+		    _self.update_geometry(map);		   		    
+		});
+
+		//
+
 		const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
 		osm.addTo(map);
-
-		const pt_style = wof.edit.leaflet.style('geom_centroid');
 		
-		const pt_args = {
-		    style: pt_style,
-		};
+		self.draw_feature_geometry(data);
 		
-		const pt_handler = wof.edit.leaflet.point(pt_args);
-		const layer_style = wof.edit.leaflet.style('consensus_polygon');
-		
-		const layer_args = {
-		    style: layer_style,
-		    pointToLayer: pt_handler,
-		};
-		
-		feature_layer = L.geoJSON(data, layer_args);
-		feature_layer.addTo(map);
-
 		// Set up button interactions
 
 		form_btn.onclick = function(){
@@ -383,15 +398,22 @@ wof.edit = (function () {
 		    }
 		    
 		    const str_data = JSON.stringify(data);
-		    
+
+		    // Remember: All we're doing here is _formatting_ the data and
+		    // not validating it. That might become confusing enough that it
+		    // becomes necessary to remove this feature. TBD.
+			
 		    wof_format(str_data).then((fmt_rsp) => {
 			raw.innerText = fmt_rsp;
+			const new_data = JSON.parse(fmt_rsp);
+			// _self.draw_feature_geometry(new_data);
 			save_btn.removeAttribute("disabled");
 		    }).catch((err) => {
 			_self.alert("Failed to format raw data, " + err);
 			console.error("Failed to format data", err)
 			save_btn.setAttribute("disabled", "disabled");
 		    });
+			
 		};
 
 		validate_btn.onclick = function() {
@@ -406,24 +428,14 @@ wof.edit = (function () {
 			save_btn.setAttribute("disabled", "disabled");			
 			return;
 		    }
-		    
-		    const str_data = JSON.stringify(data);
-		    
-		    wof_validate(str_data).then(() => {
-			console.log("OK")
-			save_btn.removeAttribute("disabled");
 
-			wof_format(str_data).then((fmt_rsp) => {
-			    raw.innerText = fmt_rsp;			    
-			}).catch((err) => {
-			    _self.alert("Failed to format raw data, " + err);			    
-			    console.error("Failed to format data", err);
-			    save_btn.setAttribute("disabled", "disabled");						    
-			});
-			
+		    _self.export_data(data).then((fmt_rsp) => {
+			raw.innerText = fmt_rsp;
+			const new_data = JSON.parse(fmt_rsp);
+			_self.draw_feature_geometry(new_data);						
 		    }).catch((err) => {
 			_self.alert("Data validation failed, " + err);
-			console.error("Failed to validate data", err);
+			console.error("Failed to validate (export) data", err);
 			save_btn.setAttribute("disabled", "disabled");						
 		    });		    
 		};
@@ -467,7 +479,8 @@ wof.edit = (function () {
 				const str_data = JSON.stringify(data);
 
 				wof_format(str_data).then((fmt_rsp) => {
-				    spinner.style.display = "none";		    				    
+				    spinner.style.display = "none";
+				    _self.draw_feature_geometry(data);				    
 				    _self.feedback("Data saved", 2000);				    
 				    raw.innerText = fmt_rsp;
 				}).catch((err) => {
@@ -503,6 +516,43 @@ wof.edit = (function () {
 	    });
 	},
 
+	/**
+	 * @function draw_feature_geometry
+	 * @memberof wof.edit
+	 * @description Draw (or redraw) the GeoJSON Feature layer on the map
+	 * @param {Object} data – The GeoJSON Feature object used to populate the feature layer with
+         * @return {null}
+        */		   					
+	draw_feature_geometry: function(data){
+
+	    if (feature_layer){
+		console.debug("Remove feature layer");
+		map.removeLayer(feature_layer);
+	    }
+	    
+	    const pt_style = wof.edit.leaflet.style('geom_centroid');
+	    
+	    const pt_args = {
+		style: pt_style,
+	    };
+	    
+	    const pt_handler = wof.edit.leaflet.point(pt_args);
+	    const layer_style = wof.edit.leaflet.style('consensus_polygon');
+	    
+	    const layer_args = {
+		style: layer_style,
+		pointToLayer: pt_handler,
+	    };
+
+	    console.debug("Add feature layer");	    
+	    feature_layer = L.geoJSON(data, layer_args);
+	    feature_layer.addTo(map);
+
+	    const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);
+	    console.debug("Fit map to bounds", bounds, data);
+	    map.fitBounds(bounds);	    
+	},
+	
 	/**
 	 * @function populate_form
 	 * @memberof wof.edit
@@ -1706,6 +1756,8 @@ wof.edit = (function () {
         */		   										
 	save_data: function(data) {
 
+	    const _self = self;
+	    
 	    return new Promise((resolve, reject) => {
 
 		const raw = document.querySelector("#raw");
@@ -1736,14 +1788,25 @@ wof.edit = (function () {
 	    return new Promise((resolve, reject) => {
 		
 	    	const str_data = JSON.stringify(data);
-		
+
+		// Basic sanity checking
 		wof_validate(str_data).then(() => {
-		    wof_format(str_data).then((fmt_rsp) => {
-			resolve(fmt_rsp);
+
+		    // Prep various things like derived geometries and relations
+		    wof_prepare_feature(str_data).then((str_prepped) => {
+
+			// Make pretty
+			wof_format(str_prepped).then((fmt_rsp) => {
+			    resolve(fmt_rsp);
+			}).catch((err) => {
+			    console.error("Data formatting failed", str_data, err);			
+			    reject("Data formatting failed, " + err);
+			});
+			
 		    }).catch((err) => {
-			console.error("Data formatting failed", str_data, err);			
-			reject("Data formatting failed, " + err);
+			console.error("Data prepping failed", data, err);
 		    });
+		    
 		}).catch((err) => {
 		    console.error("Data validation failed", data, err);
 		    reject("Data validation failed, " + err);
@@ -1778,6 +1841,169 @@ wof.edit = (function () {
 	    });
 	},
 
+	/**
+	 * @function save_geometry
+	 * @memberof wof.edit
+	 * @description Write updated GeoJSON geometry back to its parent Feature element
+	 * @param {Object} geom – A GeoJSON Feature geometry
+         * @return {null}
+        */		   					
+	save_geometry: function(geom){
+
+	    const _self = self;
+	    
+	    self.load_data().then((data) => {
+
+		data.geometry = geom;
+		
+		_self.save_data(data).then(() => {
+		    console.debug("Geometry updated");
+		    return;
+		}).catch((err) => {
+		    console.error("Failed to save updated geometry", err);
+		    _self.alert("Failed to save updated geometry, " + err);
+		});
+		
+	    }).catch((err) => {
+		console.error("Failed to load data for updating geometry", err);		
+		self.alert("Failed to load data for updating geometry, " + err);
+	    });
+	    
+	},
+
+	/**
+	 * @function update_geometry
+	 * @memberof wof.edit
+	 * @description Derive an update geometry from Leaflet/geoman features and update the parent Feature element with that geometry.
+	 * @param {Object} map – A Leaflet L.Map instance
+         * @return {null}
+        */		   						
+	update_geometry: function(map){
+	    
+	    const feature_group = map.pm.getGeomanLayers(true);
+	    const feature_collection = feature_group.toGeoJSON();
+
+	    const features = feature_collection.features;
+	    const count = features.length;
+
+	    console.debug("Update geometry, feature count", count);
+	    
+	    var geom;
+	    
+	    const _self = self;
+
+	    switch (count) {
+		case 0:
+		    _self.alert("Geometry can no be empty.");
+		    break;
+		case 1:
+
+		    geom = features[0].geometry;
+		    _self.save_geometry(geom);
+		    break;
+		    
+		default:
+		    // merge geometries here...
+		    // based on the controls (above) we can have
+		    // points
+		    // polygons
+
+		    var point_geoms = [];
+		    var poly_geoms = [];
+
+		    for (var i=0; i < count; i++){
+
+			const geom = features[i].geometry;
+
+			switch (geom.type){
+			    case "Polygon":
+				poly_geoms.push(geom.coordinates);
+				break;
+			    case "MultiPolygon":
+
+				const count_polys = geom.coordinates.length;
+
+				for (var j=0; j < count_polys; j++){
+				    poly_geoms.push(geom.coordinates[j]);
+				}
+
+				break;
+				
+			    case "Point":
+				point_geoms.push(geom.coordinates);
+				break;
+			    case "MultiPoint":
+
+				const count_points = geom.coordinates.length;
+
+				for (var j=0; j < count_points; j++){
+				    point_geoms.push(geom.coordinates[j]);
+				}
+
+				break;
+				
+			    default:
+				_self.alert("Unhandled geometry type, " + geom.type);
+				return false;
+			}
+		    }
+
+		    var geom_points;
+		    var geom_polys;
+		    
+		    const count_points = point_geoms.length;		    
+		    const count_polys = poly_geoms.length;
+
+		    console.debug("Merged feature count", "points", count_points, "polygons", count_polys);
+		    
+		    switch (count_points) {
+			case 1:
+			    geom_points = {
+				type: "Point",
+				coordindates: point_geoms[0]
+			    };
+			    break;
+			default:
+			    geom_points = {
+				type: "MultiPoint",
+				coordindates: point_geoms
+			    };
+		    }
+
+		    switch (count_polys) {
+			case 1:
+			    geom_polys = {
+				type: "Polygon",
+				coordindates: point_geoms[0]
+			    };
+			    break;
+			default:
+			    geom_polys = {
+				type: "MultiPolygon",
+				coordindates: point_geoms
+			    };
+		    }
+
+		    if ((count_points) && (count_polys)){
+			geom = {
+			    type: "MultiGeometry",
+			    "geometries": [
+				geom_points,
+				geom_polys,
+			    ]
+			};
+		    } else if (count_points){
+			geom = geom_points;
+		    } else {
+			geom = geom_polys;
+		    }
+				
+		    console.debug("Save geometry", geom.type);
+		    _self.save_geometry(geom);
+		    break;
+	    }
+	},
+	
 	/**
 	 * @function feedback
 	 * @memberof wof.edit
@@ -1854,7 +2080,8 @@ wof.edit = (function () {
 		    
 		}, ttl);
 	    }
-	},
+	},	    
+	
     };
     
     return self;

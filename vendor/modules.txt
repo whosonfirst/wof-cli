@@ -1001,10 +1001,11 @@ github.com/whosonfirst/go-sanitize
 # github.com/whosonfirst/go-whosonfirst-database v0.1.0
 ## explicit; go 1.25.0
 github.com/whosonfirst/go-whosonfirst-database/sql/tables
-# github.com/whosonfirst/go-whosonfirst-export/v3 v3.2.0
+# github.com/whosonfirst/go-whosonfirst-export/v3 v3.3.0
 ## explicit; go 1.24
 github.com/whosonfirst/go-whosonfirst-export/v3
 github.com/whosonfirst/go-whosonfirst-export/v3/properties
+github.com/whosonfirst/go-whosonfirst-export/v3/wasm
 # github.com/whosonfirst/go-whosonfirst-feature v0.0.29
 ## explicit; go 1.22
 github.com/whosonfirst/go-whosonfirst-feature
