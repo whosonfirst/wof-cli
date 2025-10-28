@@ -27,6 +27,8 @@ The `wof edit` command is modeled after the [iandees/wof-editor](https://github.
 
 * It provides a user-interface for editing the raw GeoJSON of a Who's On First record.
 
+* It enables the editing of GeoJSON `Feature` geometries from both the graphical user and raw data interfaces. The application does _NOT_ provide any facilities for automatically updating parent or hierarchy information because it still lacks built-in point-in-polygon functionality. Support for that functionality is on the list but I haven't quite figured out how best to implement it yet.
+
 ### Examples
 
 ```
@@ -52,6 +54,12 @@ The form view is a limited set of common WOF properties which most often need to
 ![](docs/wof-cli-edit-data.png)
 
 _The `Format` and `Validate` buttons are only enabled in "data" view. Data validation and formatting happens automatically in "form" view whenever a property is updated._
+
+#### Geometries
+
+![](docs/wof-cli-edit-form-geom.png)
+
+![](docs/wof-cli-edit-data-geom.png)
 
 #### Reading and writing from alternates source and targets
 
