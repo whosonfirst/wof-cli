@@ -14,6 +14,7 @@ import (
 	_ "github.com/whosonfirst/go-reader-findingaid/v2"
 	_ "github.com/whosonfirst/go-reader-github/v2"
 
+	"github.com/aaronland/go-http-maps/v2"
 	"github.com/aaronland/gocloud/runtimevar"
 	"github.com/sfomuseum/go-www-show"
 	go_reader "github.com/whosonfirst/go-reader/v2"
@@ -265,6 +266,14 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	// or may not be the same as the source.
 
 	mux := http.NewServeMux()
+
+	map_opts := &maps.AssignMapConfigHandlerOptions{
+		MapProvider:    map_provider,
+		MapTileURI:     map_tile_uri,
+		ProtomapsTheme: protomaps_theme,
+	}
+
+	maps.AssignMapConfigHandler(map_opts, mux, "/map.json")
 
 	list_handler := api.ListHandler(root)
 	mux.Handle("/api/list", list_handler)

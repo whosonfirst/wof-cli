@@ -63,6 +63,8 @@ github.com/aaronland/go-brooklynintegers-api v1.2.10 h1:1X6VOECYIEes1dKkBc/pq4R6
 github.com/aaronland/go-brooklynintegers-api v1.2.10/go.mod h1:pDa3IIC5BUZ03ga8ER6IpiDSZpvfokyBXDtEv8NpJKQ=
 github.com/aaronland/go-http-leaflet v0.5.0 h1:/T5LJR6iwfU/pAi33uz38TcaXu3iInw8AMSS/yVGLnY=
 github.com/aaronland/go-http-leaflet v0.5.0/go.mod h1:Z8InoPjM29554d/zwW94coW2ibJwfVTuOWXmhCgU8rU=
+github.com/aaronland/go-http-maps/v2 v2.0.0 h1:Og+D6FaQIOY4K/FvBXNz00K/0VuL5ejAnR8wCp3xfUE=
+github.com/aaronland/go-http-maps/v2 v2.0.0/go.mod h1:uqEg13cc8YSPPEOsaL6GOvLalD/p8A8R8lKj5mxjznc=
 github.com/aaronland/go-http-rewrite v1.1.0 h1:HhsltNyYRnIz2FR+qANZLx2ykiRuNuNK1JgPonKBLHQ=
 github.com/aaronland/go-http-rewrite v1.1.0/go.mod h1:iA9jQBureJrzO6fTzmRLS+fkbAI1Fna71iTb1hP8n3k=
 github.com/aaronland/go-http-static v0.0.3 h1:0MnYXNwGVDCzre5YwinfPSdAFHInbBbmBv5hJtb/FX8=

@@ -3,6 +3,7 @@ module github.com/whosonfirst/wof
 go 1.25.0
 
 require (
+	github.com/aaronland/go-http-maps/v2 v2.0.0
 	github.com/aaronland/go-http/v3 v3.2.0
 	github.com/aaronland/go-json-query v0.1.6
 	github.com/aaronland/go-roster v1.0.0

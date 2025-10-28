@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/aaronland/go-http-maps/v2"
 	"github.com/sfomuseum/go-flags/flagset"
 )
 
@@ -17,6 +18,10 @@ var ensure_rel_path bool
 
 var verbose bool
 
+var map_provider string
+var map_tile_uri string
+var protomaps_theme string
+
 func DefaultFlagSet() *flag.FlagSet {
 
 	fs := flagset.NewFlagSet("edit")
@@ -25,6 +30,10 @@ func DefaultFlagSet() *flag.FlagSet {
 	fs.StringVar(&writer_uri, "writer-uri", "", "An optional whosonfirst/go-writer/v3.Writer URI used to write records to alternate sources. If defined then the -reader-uri flag must also be populated.")
 
 	fs.BoolVar(&ensure_rel_path, "ensure-relative-path", false, "Boolean flag signaling that each URI should be expanded to its fully-quality WOF-style relative path. This flag is only processed if the -reader-uri flag is not-empty.")
+
+	flag.StringVar(&map_provider, "map-provider", "leaflet", "Valid options are: leaflet, protomaps")
+	flag.StringVar(&map_tile_uri, "map-tile-uri", maps.LEAFLET_OSM_TILE_URL, "A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs.")
+	flag.StringVar(&protomaps_theme, "protomaps-theme", "white", "A valid Protomaps theme label.")
 
 	fs.StringVar(&access_token_uri, "gh-access-token-uri", "", "A valid GitHub API access token. This is only necessary if -writer-uri is \"wof-pr://\".")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")

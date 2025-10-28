@@ -154,6 +154,10 @@ github.com/aaronland/go-brooklynintegers-api
 ## explicit; go 1.22.4
 github.com/aaronland/go-http-leaflet
 github.com/aaronland/go-http-leaflet/static
+# github.com/aaronland/go-http-maps/v2 v2.0.0
+## explicit; go 1.24.0
+github.com/aaronland/go-http-maps/v2
+github.com/aaronland/go-http-maps/v2/static/www
 # github.com/aaronland/go-http-rewrite v1.1.0
 ## explicit; go 1.18
 github.com/aaronland/go-http-rewrite
