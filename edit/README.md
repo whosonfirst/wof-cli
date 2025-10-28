@@ -142,8 +142,6 @@ These access tokens are expected to be defined as valid [gocloud.dev/runtimevar]
 
 Changes made in the `wof edit` tool are not written to disk (or STDOUT) until the `Save` button is pressed.
 
-It is not possible to edit geometries yet. While there is nothing to prevent you from editing geometries in the raw "data" view those changes will not be reflected until the document being edited is saved and reloaded.
-
 There is a noticeable delay at startup while the WASM binary (used for data formatting, validation and other functionality) is initialized. This is not ideal and future work will focus on speeding it up. For the time being it is an accepted inconvenience.
 
 Currently the tool is hard-coded to use (base) map tiles from OpenStreetMap. Future releases will support map tiles from the Protomaps API or a local Protomaps database file.
