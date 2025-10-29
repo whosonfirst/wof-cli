@@ -8,6 +8,8 @@ var wof = wof || {};
 wof.edit = (function () {
 
     var map;
+    var map_cfg;
+    
     var feature_layer;
     var alert_timeout;
 
@@ -48,10 +50,10 @@ wof.edit = (function () {
 	    return new Promise((resolve, reject) => {
 
 		_self.start_spinner();
+
+		console.debug("Load WASM methods");
 		
 		sfomuseum.golang.wasm.fetch("wasm/wof_edit.wasm").then((rsp) => {
-
-		    _self.stop_spinner();		    
 
 		    const home = document.querySelector("#home-button");
 		    
@@ -59,11 +61,25 @@ wof.edit = (function () {
 			_self.list(true);
 			return false;
 		    };
+
+		    console.debug("Load map config");
 		    
-		    resolve();
+		    fetch("/map.json").then(rsp => 
+			rsp.json()
+		    ).then((cfg) => {
+			_self.stop_spinner();
+			map_cfg = cfg;			
+			resolve();
+		    }).catch((err) => {
+			_self.stop_spinner();
+			console.error("Failed to load map config", err);
+			reject("Failed to load map config, " + err);
+		    });
+		    
 		}).catch((err) => {
-		    _self.stop_spinner();		    		    
-		    reject("Failed to load wof_placetypes WASM binary " + err);
+		    _self.stop_spinner();
+		    console.error("Failed to load WASM methods", err);
+		    reject("Failed to load WASM method, " + err);
 		});
 		
 	    });
@@ -298,7 +314,6 @@ wof.edit = (function () {
 		// Set up map
 			
 		map = L.map(map_id);
-		map.setMaxZoom(22);
 		
 		const bounds = whosonfirst.geojson.deriveBboxAsBounds(data);		
 		map.fitBounds(bounds);
@@ -331,8 +346,47 @@ wof.edit = (function () {
 
 		//
 
-		const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
-		osm.addTo(map);
+		var tile_url;
+		var tile_layer;
+		var max_zoom;
+		
+		switch (map_cfg.provider) {
+                    case "leaflet":
+
+			tile_url = map_cfg.tile_url;
+			max_zoom = 19;
+			
+			tile_layer = L.tileLayer(tile_url, {
+                            maxZoom: max_zoom,
+			});
+			
+			break;
+			
+                    case "protomaps":
+			
+			tile_url = map_cfg.tile_url;
+			max_zoom = 22;
+			
+			tile_layer = protomapsL.leafletLayer({
+                            url: tile_url,
+                            theme: map_cfg.protomaps.theme,
+			    maxZoom: max_zoom,
+			})
+			
+			break;
+			
+                    default:
+			console.error("Uknown or unsupported map provider", map_cfg.provider);
+			// return;
+		}
+
+		if (tile_layer){
+		    tile_layer.addTo(map);
+		    map.setMaxZoom(max_zoom);			
+		}
+		
+		// const osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {});
+		// osm.addTo(map);
 		
 		self.draw_feature_geometry(data);
 		
