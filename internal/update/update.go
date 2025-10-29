@@ -17,6 +17,7 @@ type UpdateFeatureOptions struct {
 	Float64Properties multi.KeyValueFloat64
 	BooleanProperties multi.KeyValueBool
 	Geometry          *geojson.Geometry
+	IfMissing         bool
 }
 
 func UpdateFeature(ctx context.Context, body []byte, opts *UpdateFeatureOptions) (bool, []byte, error) {
@@ -37,6 +38,10 @@ func UpdateFeature(ctx context.Context, body []byte, opts *UpdateFeatureOptions)
 			old_value := old_rsp.String()
 
 			if old_value == new_value {
+				update = false
+			}
+
+			if update && opts.IfMissing {
 				update = false
 			}
 		}
@@ -70,6 +75,10 @@ func UpdateFeature(ctx context.Context, body []byte, opts *UpdateFeatureOptions)
 			if old_value == new_value {
 				update = false
 			}
+
+			if update && opts.IfMissing {
+				update = false
+			}
 		}
 
 		if update {
@@ -101,6 +110,10 @@ func UpdateFeature(ctx context.Context, body []byte, opts *UpdateFeatureOptions)
 			if old_value == new_value {
 				update = false
 			}
+
+			if update && opts.IfMissing {
+				update = false
+			}
 		}
 
 		if update {
@@ -130,6 +143,10 @@ func UpdateFeature(ctx context.Context, body []byte, opts *UpdateFeatureOptions)
 			old_value := old_rsp.Bool()
 
 			if old_value == new_value {
+				update = false
+			}
+
+			if update && opts.IfMissing {
 				update = false
 			}
 		}

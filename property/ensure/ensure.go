@@ -96,6 +96,7 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 			Int64Properties:   int_properties,
 			Float64Properties: float_properties,
 			BooleanProperties: bool_properties,
+			IfMissing:         if_missing,
 		}
 
 		has_changes, new_body, err := update.UpdateFeature(ctx, body, opts)
