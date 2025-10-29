@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 
@@ -19,6 +20,7 @@ import (
 	go_reader "github.com/whosonfirst/go-reader/v2"
 	wof_uri "github.com/whosonfirst/go-whosonfirst-uri"
 	gh_writer "github.com/whosonfirst/go-writer-github/v3"
+	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/edit/http/api"
 	"github.com/whosonfirst/wof/edit/http/www"
@@ -55,8 +57,54 @@ func (c *EditCommand) Run(ctx context.Context, args []string) error {
 	fs := DefaultFlagSet()
 	fs.Parse(args)
 
-	uris := fs.Args()
+	var uris []string
 
+	with_iter := true
+	
+	if with_iter {	
+
+		//
+		
+		iter, err := iterate.NewIterator(ctx, "repo://")
+		
+		if err != nil {
+			return err
+		}
+		
+		repo := "/usr/local/data/sfomuseum-data-publicart"
+		
+		for rec, err := range iter.Iterate(ctx, repo) {
+			
+			if err != nil {
+				return err
+			}
+			
+			rec.Body.Close()
+			
+			id, uri_args, err := wof_uri.ParseURI(rec.Path)
+			
+			if err != nil {
+				return err
+			}
+			
+			rel_path, err := wof_uri.Id2RelPath(id, uri_args)
+			
+			if err != nil {
+				return err
+			}
+			
+			data := filepath.Join(repo, "data")
+			abs_path := filepath.Join(data, rel_path)
+			
+			uris = append(uris, abs_path)
+		}
+		
+	} else {
+		uris = fs.Args()
+	}
+	
+	//
+	
 	opts := &RunOptions{
 		URIs:    uris,
 		Verbose: verbose,
