@@ -273,7 +273,11 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		ProtomapsTheme: protomaps_theme,
 	}
 
-	maps.AssignMapConfigHandler(map_opts, mux, "/map.json")
+	err = maps.AssignMapConfigHandler(map_opts, mux, "/map.json")
+
+	if err != nil {
+		return fmt.Errorf("Failed to assign map config handler, %w", err)
+	}
 
 	list_handler := api.ListHandler(root)
 	mux.Handle("/api/list", list_handler)
