@@ -18,6 +18,7 @@ $> ./bin/wof -h
 Usage: wof [CMD] [OPTIONS]
 Valid commands are:
 * centroid
+* deprecate
 * edit
 * emit
 * ensure-property
@@ -48,6 +49,23 @@ Usage:
 ```
 
 Examples can be found in [centroid/README.md](centroid/README.md#examples)
+
+#### wof deprecate
+
+```
+$> ./bin/wof deprecate -h
+Deprecate one or more Who's On First records.
+Usage:
+	 ./bin/wof [options] path(N) path(N)
+  -superseded-by-id -1
+    	The ID to supersede each record with. If -1 then this flag will be ignored. (default -1)
+  -superseded-by-reader-uri -1
+    	A valid whosonfirst/go-reader URI used to load records that are doing the superseding. Required if -superseding-id is not -1. (default "null://")
+  -superseded-by-writer-uri -1
+    	A valid whosonfirst/go-writer URI used to update records that are doing the superseding. Required if -superseding-id is not -1. (default "null://")
+```
+
+Examples can be found in [deprecate/README.md](deprecate/README.md#examples)
 
 #### wof edit
 
