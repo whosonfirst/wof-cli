@@ -370,6 +370,8 @@ wof.edit = (function () {
 			tile_layer = protomapsL.leafletLayer({
                             url: tile_url,
                             flavor: map_cfg.protomaps.theme,
+			    // https://github.com/protomaps/protomaps-leaflet/issues/196
+			    maxDataZoom: 14,
 			})
 
 			// tile_layer = protomapsL.leafletLayer({url:'https://api.protomaps.com/tiles/v4/{z}/{x}/{y}.mvt?key=1003762824b9687f',flavor:'light',lang:"en"})
