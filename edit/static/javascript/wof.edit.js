@@ -369,9 +369,10 @@ wof.edit = (function () {
 			
 			tile_layer = protomapsL.leafletLayer({
                             url: tile_url,
-                            theme: map_cfg.protomaps.theme,
-			    maxZoom: max_zoom,
+                            flavor: map_cfg.protomaps.theme,
 			})
+
+			// tile_layer = protomapsL.leafletLayer({url:'https://api.protomaps.com/tiles/v4/{z}/{x}/{y}.mvt?key=1003762824b9687f',flavor:'light',lang:"en"})
 			
 			break;
 			
