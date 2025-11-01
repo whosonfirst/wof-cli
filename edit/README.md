@@ -174,7 +174,13 @@ If you want to use another raster-based "slippy map" provider, you can do by ass
 
 ##### Protomaps tiles
 
-You can also use local Protomaps PMTiles databases or the [Protomaps API](#) for the base map. To do you need to set the `-map-provider` flag to "leaflet" and specify a Protomaps-specific URL in the `-map-tile-uri` flag. For example to use a local Protomaps database:
+![](docs/wof-cli-edit-pmtiles.png)
+
+You can also use local Protomaps PMTiles databases or the [Protomaps API](https://protomaps.com/api) for the base map.
+
+![](docs/wof-cli-edit-pmtiles-2
+.png)
+To do you need to set the `-map-provider` flag to "leaflet" and specify a Protomaps-specific URL in the `-map-tile-uri` flag. For example to use a local Protomaps database:
 
 ```
 $> ./bin/wof edit \
@@ -184,17 +190,21 @@ $> ./bin/wof edit \
 	/usr/local/data/whosonfirst/whosonfirst-data-admin-us/data/102/527/513/102527513.geojson
 ```
 
-Or to use the [Protomaps API](#). For example:
+![](docs/wof-cli-edit-protomaps-api.png)
+
+Or to use the [Protomaps API](https://protomaps.com/api). For example:
 
 ```
 $> ./bin/wof edit \
 	-map-provider protomaps \
-	-map-tile-uri '...' \
+	-map-tile-uri 'api://{PROTOMAPS_API_KEY}' \
 	-protomaps-theme light \
 	/usr/local/data/whosonfirst/whosonfirst-data-admin-us/data/102/527/513/102527513.geojson
 ```
 
-...using the `extract` tool in the [protomaps/go-pmtiles](#) package. For example:
+_You can sign up for a Protomaps API key at: https://protomaps.com/api#api-keys_
+
+There are a few different ways to create local PMTiles databases. You can download the [nightly global builds](https://maps.protomaps.com/builds/) but keep in mind those are over 100GB each. You can also use the `extract` tool in the [protomaps/go-pmtiles](https://docs.protomaps.com/pmtiles/cli#extract) package to create an area-specific slice from the remotely-hosted nightly builds themselves. For example, to create a local PMTiles database of the area around [SFO](https://spelunker.whosonfirst.org/id/102527513):
 
 ```
 $> cd go-pmtiles
