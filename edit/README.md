@@ -162,13 +162,61 @@ By default the `githubapi-pr://` writer URI requires a lot of configuration opti
 
 These access tokens are expected to be defined as valid [gocloud.dev/runtimevar](https://gocloud.dev/howto/runtimevar/) URIs (in order that the tokens themselves don't need to be exposed on the command line or in process lists). The `wof-cli edit` tool uses the [aaronland/gocloud/runtimevar](https://github.com/aaronland/gocloud/tree/main/runtimevar) package to derive string values from `runtimevar` URIs. Please consult the documentation for those packages for details.
 
+#### Base map tiles
+
+##### Raster tiles
+
+The `edit` defaults to using [OpenStreetMap](https://openstreetmap.org) raster tiles for its base map.
+
+If you want to use another raster-based "slippy map" provider, you can do by assigning it ZXY tile URL with the `-map-tile-uri`. For example:
+
+...
+
+##### Protomaps tiles
+
+You can also use local Protomaps PMTiles databases or the [Protomaps API](#) for the base map. To do you need to set the `-map-provider` flag to "leaflet" and specify a Protomaps-specific URL in the `-map-tile-uri` flag. For example to use a local Protomaps database:
+
+```
+$> ./bin/wof edit \
+	-map-provider protomaps \
+	-map-tile-uri 'file:///usr/local/data/sfo-2.pmtiles' \
+	-protomaps-theme light \
+	/usr/local/data/whosonfirst/whosonfirst-data-admin-us/data/102/527/513/102527513.geojson
+```
+
+Or to use the [Protomaps API](#). For example:
+
+```
+$> ./bin/wof edit \
+	-map-provider protomaps \
+	-map-tile-uri '...' \
+	-protomaps-theme light \
+	/usr/local/data/whosonfirst/whosonfirst-data-admin-us/data/102/527/513/102527513.geojson
+```
+
+...using the `extract` tool in the [protomaps/go-pmtiles](#) package. For example:
+
+```
+$> cd go-pmtiles
+$> go run main.go extract \
+	--bbox="-122.430267,37.582678,-122.334137,37.657732" \
+	https://build.protomaps.com/20251030.pmtiles \
+	/usr/local/data/sfo-2.pmtiles
+
+fetching 8 dirs, 8 chunks, 7 requests
+Region tiles 135, result tile entries 131
+fetching 131 tiles, 31 chunks, 26 requests
+...
+Completed in 7.324686375s with 4 download threads (17.884724383608987 tiles/s).
+Extract required 36 total requests.
+Extract transferred 3.1 MB (overfetch 0.05) for an archive size of 3.0 MB
+```
+
 ## Notes (and caveats)
 
 Changes made in the `wof edit` tool are not written to disk (or STDOUT) until the `Save` button is pressed.
 
 There is a noticeable delay at startup while the WASM binary (used for data formatting, validation and other functionality) is initialized. This is not ideal and future work will focus on speeding it up. For the time being it is an accepted inconvenience.
-
-Currently the tool is hard-coded to use (base) map tiles from OpenStreetMap. Future releases will support map tiles from the Protomaps API or a local Protomaps database file.
 
 ## Under the hood
 
