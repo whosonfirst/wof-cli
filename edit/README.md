@@ -187,7 +187,7 @@ You can also use local Protomaps PMTiles databases or the [Protomaps API](https:
 
 ![](docs/wof-cli-edit-pmtiles-2.png)
 
-To do you need to set the `-map-provider` flag to "leaflet" and specify a Protomaps-specific URL in the `-map-tile-uri` flag. For example to use a local Protomaps database:
+To do you need to set the `-map-provider` flag to "protomaps" and specify a Protomaps-specific URL in the `-map-tile-uri` flag. For example to use a local Protomaps database:
 
 ```
 $> ./bin/wof edit \
@@ -197,9 +197,11 @@ $> ./bin/wof edit \
 	/usr/local/data/whosonfirst/whosonfirst-data-admin-us/data/102/527/513/102527513.geojson
 ```
 
+_As of this writing only local PMTiles databases are supported. It is not possible to specify a PMTiles database hosted in an S3 bucket, or equivalent "cloud" storage, but that functionality will likely be added in time._
+
 ![](docs/wof-cli-edit-protomaps-api.png)
 
-Or to use the [Protomaps API](https://protomaps.com/api). For example:
+To use the [Protomaps API](https://protomaps.com/api) you would set the `-map-tile-uri` flag to be "api://{PROTOMAPS_API_KEY}". For example:
 
 ```
 $> ./bin/wof edit \
