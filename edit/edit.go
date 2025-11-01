@@ -271,6 +271,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		MapProvider:    map_provider,
 		MapTileURI:     map_tile_uri,
 		ProtomapsTheme: protomaps_theme,
+		ProtomapsMaxDataZoom: protomaps_max_data_zoom,
 	}
 
 	err = maps.AssignMapConfigHandler(map_opts, mux, "/map.json")
