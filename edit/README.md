@@ -168,9 +168,16 @@ These access tokens are expected to be defined as valid [gocloud.dev/runtimevar]
 
 The `edit` defaults to using [OpenStreetMap](https://openstreetmap.org) raster tiles for its base map.
 
-If you want to use another raster-based "slippy map" provider, you can do by assigning it ZXY tile URL with the `-map-tile-uri`. For example:
+![](docs/wof-cli-edit-raster.png)
 
-...
+If you want to use another raster-based "slippy map" provider, you can do by assigning it ZXY tile URL with the `-map-tile-uri`. For example to edit the record for the San Francisco Internation Airport (SFO) using tiles of the [airport from 1947](https://millsfield.sfomuseum.org/map/1947):
+
+```
+$> ./bin/wof edit \
+	-map-provider leaflet \
+	-map-tile-uri 'https://static.sfomuseum.org/aerial/1947/{z}/{x}/{-y}.png' \
+	/usr/local/data/whosonfirst/whosonfirst-data-admin-us/data/102/527/513/102527513.geojson
+```
 
 ##### Protomaps tiles
 
