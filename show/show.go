@@ -71,30 +71,6 @@ func (c *ShowCommand) Run(ctx context.Context, args []string) error {
 
 	run_opts.LabelProperties = label_props
 
-	// Ensure custom styles
-
-	if run_opts.Style == nil {
-
-		style, err := sfom_show.UnmarshalStyle(style_json)
-
-		if err != nil {
-			return fmt.Errorf("Failed to unmarshal style, %w", err)
-		}
-
-		run_opts.Style = style
-	}
-
-	if run_opts.PointStyle == nil {
-
-		point_style, err := sfom_show.UnmarshalStyle(point_style_json)
-
-		if err != nil {
-			return fmt.Errorf("Failed to unmarshal point style, %w", err)
-		}
-
-		run_opts.PointStyle = point_style
-	}
-
 	// Derive features to show
 
 	fc := geojson.NewFeatureCollection()

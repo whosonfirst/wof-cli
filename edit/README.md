@@ -13,6 +13,14 @@ Usage:
     	Boolean flag signaling that each URI should be expanded to its fully-quality WOF-style relative path. This flag is only processed if the -reader-uri flag is not-empty.
   -gh-access-token-uri string
     	A valid GitHub API access token. This is only necessary if -writer-uri is "wof-pr://".
+  -map-provider string
+    	Valid options are: leaflet, protomaps (default "leaflet")
+  -map-tile-uri string
+    	A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs. (default "https://tile.openstreetmap.org/{z}/{x}/{y}.png")
+  -protomaps-max-data-zoom int
+    	The maximum zoom (tile) level for data in a PMTiles database. Necessary for "over-zooming".
+  -protomaps-theme string
+    	A valid Protomaps theme label. (default "light")
   -reader-uri string
     	An optional whosonfirst/go-reader/v2.Reader URI used to read WOF records from alternate sources. If defined then the -writer-uri flag must also be populated.
   -verbose
