@@ -187,6 +187,7 @@ You can also use local Protomaps PMTiles databases or the [Protomaps API](https:
 
 ![](docs/wof-cli-edit-pmtiles-2
 .png)
+
 To do you need to set the `-map-provider` flag to "leaflet" and specify a Protomaps-specific URL in the `-map-tile-uri` flag. For example to use a local Protomaps database:
 
 ```
@@ -205,7 +206,7 @@ Or to use the [Protomaps API](https://protomaps.com/api). For example:
 $> ./bin/wof edit \
 	-map-provider protomaps \
 	-map-tile-uri 'api://{PROTOMAPS_API_KEY}' \
-	-protomaps-theme light \
+	-protomaps-theme dark \
 	/usr/local/data/whosonfirst/whosonfirst-data-admin-us/data/102/527/513/102527513.geojson
 ```
 
