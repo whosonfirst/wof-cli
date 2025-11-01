@@ -1,9 +1,99 @@
 window.addEventListener("load", function load(event){
 
     // Null Island
-    var map = L.map('map').setView([0.0, 0.0], 12);
+    const map = L.map('map').setView([0.0, 0.0], 12);
 
-    var select = function(show_id){
+    const applyCustomStyles = function(feature, style){
+
+	if (! "custom" in style){
+	    return style;
+	}
+	
+	if ("color_map" in style.custom){
+	    
+	    const color_map = style.custom.color_map;
+	    const prop = color_map.property;
+	    
+	    if (prop in feature.properties){
+		
+		const v = feature.properties[prop];
+		const str_v = String(v);
+		
+		if (str_v in color_map.key){
+		    
+		    if ("color" in color_map.key[str_v]){
+			style.color = color_map.key[str_v]["color"];
+		    }
+		    
+		    if ("opacity" in color_map.key[v]){
+			style.opacity = color_map.key[v]["opacity"];
+		    }				    
+		}
+	    }
+	}
+	
+	if ("fill_map" in style.custom){
+	    
+	    const fill_map = style.custom.fill_map;
+	    const prop = fill_map.property;
+	    
+	    if (feature.properties[prop]){
+		
+		const v = feature.properties[prop];
+		const str_v = String(v);
+		
+		if (str_v in fill_map.key){
+
+		    if ("color" in fill_map.key[v]){ 
+			style.fillColor = fill_map.key[v]["color"];
+		    }
+		    
+		    if ("opacity" in fill_map.key[v]){ 
+			style.fillOpacity = fill_map.key[v]["opacity"];
+		    }
+		    
+		}
+	    }
+	    
+	}
+	
+	if ("pane_map" in style.custom){
+
+	    const pane_map = style.custom.pane_map;
+	    const prop = pane_map.property;
+
+	    if (prop in feature.properties){
+
+		const v = feature.properties[prop];
+		const str_v = String(v);
+
+		if (str_v in pane_map.key){
+		    
+		    const label = pane_map.key[str_v];
+		    
+		    if (map.getPane(label)){
+			// console.log("YES Assign feature to pane", label);			
+			style.pane = label;
+		    }
+		    
+		} else if ("*" in pane_map.key){
+
+		    const label = pane_map.key["*"];
+		    
+		    if (map.getPane(label)){
+			// console.log("YES Assign feature to pane", label);			
+			style.pane = label;
+		    }
+		} else {
+		    // pass
+		}
+	    }
+	}
+	    
+	return style;
+    };
+    
+    const select = function(show_id){
 
 	unselect();
 	
@@ -16,7 +106,7 @@ window.addEventListener("load", function load(event){
 	
     };
     
-    var unselect = function(){
+    const unselect = function(){
 	
 	var current = document.querySelector(".selected");
 	
@@ -29,7 +119,7 @@ window.addEventListener("load", function load(event){
 	unselect();
     });
     
-    var init = function(cfg) {
+    const init = function(local_cfg, map_cfg) {
 	
 	fetch("/features.geojson")
 	    .then((rsp) => rsp.json())
@@ -70,7 +160,7 @@ window.addEventListener("load", function load(event){
 		    // Remember: Both sfomuseum.wasm.fetch and the WASM binary are imported and registered
 		    // in show.go. For details see: https://github.com/whosonfirst/go-whosonfirst-format-wasm
 		    
-		    sfomuseum.wasm.fetch("/wasm/wof_format.wasm").then(rsp => {
+		    sfomuseum.golang.wasm.fetch("/wasm/wof_format.wasm").then(rsp => {
 			
 			var features = f.features;
 			var count = features.length;
@@ -95,6 +185,7 @@ window.addEventListener("load", function load(event){
 		}
 
 		var geojson_args = {
+		    
 		    onEachFeature: function (feature, layer) {
 
 			layer.on("click", function(e){			    
@@ -102,46 +193,61 @@ window.addEventListener("load", function load(event){
 			    select(show_id);
 			});
 
-			var label_props = cfg.label_properties;
-
-			if (label_props){
-			    var count_props = label_props.length;
+			if (map_cfg.leaflet) {
 			    
-			    if (count_props > 0) {
+			    var label_props = map_cfg.leaflet.label_properties;
+			    
+			    if (label_props){
+				var count_props = label_props.length;
 				
-				var label_text = [];
-				
-				for (var i=0; i < count_props; i++){
+				if (count_props > 0) {
 				    
-				    var prop = label_props[i];
-				    var value = feature.properties[ prop ];
+				    var label_text = [];
 				    
-				    label_text.push("<strong>" + prop + "</strong> " + value);
+				    for (var i=0; i < count_props; i++){
+					
+					var prop = label_props[i];
+					var value = feature.properties[ prop ];
+					
+					label_text.push("<strong>" + prop + "</strong> " + value);
+				    }
+				    
+				    if (label_text.length > 0){ 
+					layer.bindPopup(label_text.join("<br />"));
+				    }
 				}
 				
-				if (label_text.length > 0){ 
-				    layer.bindPopup(label_text.join("<br />"));
-				}
 			    }
 			    
-			}
+			}			
 		    }
 		};
 
-		if (cfg.style){
-		    geojson_args.style = cfg.style;
+		if ((map_cfg.leaflet) && (map_cfg.leaflet.style)){
+		    // This doesn't work because we don't know what feature is...
+		    // const style = applyCustomStyles(feature, map_cfg.leaflet.style);
+		    const style = map_cfg.leaflet.style;
+		    geojson_args.style = style;
 		}
 
-		if (cfg.point_style) {
+		if ((map_cfg.leaflet) && (map_cfg.leaflet.point_style)){
 
 		    geojson_args.pointToLayer = function (feature, latlng) {
-			return L.circleMarker(latlng, cfg.point_style);
+			const style = applyCustomStyles(feature, map_cfg.leaflet.point_style);			
+			return L.circleMarker(latlng, style);
 		    }
 		    
 		}
 
 		var geojson_layer = L.geoJSON(f, geojson_args);
-		geojson_layer.addTo(map);
+
+		if (local_cfg.cluster_markers){
+		    const markers = L.markerClusterGroup();
+		    markers.addLayer(geojson_layer);
+		    markers.addTo(map);
+		} else {
+		    geojson_layer.addTo(map);
+		}
 		
 		var bounds = whosonfirst.spelunker.geojson.derive_bounds(f);
 		
@@ -159,43 +265,67 @@ window.addEventListener("load", function load(event){
 	    });
     };
 
-    fetch("/map.json")
-	.then((rsp) => rsp.json())
-	.then((cfg) => {
+    fetch("/config.json").then(rsp =>
+	rsp.json()
+    ).then((local_cfg) => {
+	
+	fetch("/map.json")
+	    .then((rsp) => rsp.json())
+	    .then((map_cfg) => {
+		
+		switch (map_cfg.provider) {
+		    case "leaflet":
+			
+			var tile_url = map_cfg.tile_url;
+			
+			var tile_layer = L.tileLayer(tile_url, {
+			    maxZoom: 19,
+			});
+			
+			tile_layer.addTo(map);
+			break;
+			
+		    case "protomaps":		    
+			
+			var tile_url = map_cfg.tile_url;		
 
-	    switch (cfg.provider) {
-		case "leaflet":
+			var pm_args = {
+			    url: tile_url,
+			    theme: map_cfg.protomaps.theme,
+			    flavor: map_cfg.protomaps.theme,
+			};
+			
+			if ("max_data_zoom" in map_cfg.protomaps){
+			    pm_args.maxDataZoom = map_cfg.protomaps.max_data_zoom;
+			}
 
-		    var tile_url = cfg.tile_url;
-
-		    var tile_layer = L.tileLayer(tile_url, {
-			maxZoom: 19,
-		    });
+			var tile_layer = protomapsL.leafletLayer(pm_args);
+			
+			tile_layer.addTo(map);
+			break;
+			
+		    default:
+			console.error("Uknown or unsupported map provider");
+			return;
+		}
+		
+		if (("leaflet" in map_cfg) && ("panes" in map_cfg.leaflet)){
 		    
-		    tile_layer.addTo(map);
-		    break;
-		    
-		case "protomaps":		    
-
-		    var tile_url = cfg.tile_url;
-
-		    var tile_layer = protomapsL.leafletLayer({
-			url: tile_url,
-			theme: cfg.protomaps.theme,
-		    })
-
-		    tile_layer.addTo(map);
-		    break;
-		    
-		default:
-		    console.error("Uknown or unsupported map provider");
-		    return;
-	    }
-	    
-	    init(cfg);
-	    
-	}).catch((err) => {
-	    console.error("Failed to retrieve features", err);
-	});
+		    for (label in map_cfg.leaflet.panes){
+			const p = map.createPane(label);
+			p.style.zIndex = map_cfg.leaflet.panes.label;
+			console.debug("Created pane", label, map_cfg.leaflet.panes.label);
+		    }
+		}
+		
+		init(local_cfg, map_cfg);
+		
+	    }).catch((err) => {
+		console.error("Failed to retrieve map config", err);
+	    });
+	
+    }).catch((err) => {
+	console.error("Failed to retrieve local cfg", err);
+    });
     
 });

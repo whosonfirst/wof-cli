@@ -13,6 +13,14 @@ Usage:
     	Boolean flag signaling that each URI should be expanded to its fully-quality WOF-style relative path. This flag is only processed if the -reader-uri flag is not-empty.
   -gh-access-token-uri string
     	A valid GitHub API access token. This is only necessary if -writer-uri is "wof-pr://".
+  -map-provider string
+    	Valid options are: leaflet, protomaps (default "leaflet")
+  -map-tile-uri string
+    	A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs. (default "https://tile.openstreetmap.org/{z}/{x}/{y}.png")
+  -protomaps-max-data-zoom int
+    	The maximum zoom (tile) level for data in a PMTiles database. Necessary for "over-zooming".
+  -protomaps-theme string
+    	A valid Protomaps theme label. (default "light")
   -reader-uri string
     	An optional whosonfirst/go-reader/v2.Reader URI used to read WOF records from alternate sources. If defined then the -writer-uri flag must also be populated.
   -verbose
@@ -154,13 +162,80 @@ By default the `githubapi-pr://` writer URI requires a lot of configuration opti
 
 These access tokens are expected to be defined as valid [gocloud.dev/runtimevar](https://gocloud.dev/howto/runtimevar/) URIs (in order that the tokens themselves don't need to be exposed on the command line or in process lists). The `wof-cli edit` tool uses the [aaronland/gocloud/runtimevar](https://github.com/aaronland/gocloud/tree/main/runtimevar) package to derive string values from `runtimevar` URIs. Please consult the documentation for those packages for details.
 
+#### Base map tiles
+
+##### Raster tiles
+
+The `edit` defaults to using [OpenStreetMap](https://openstreetmap.org) raster tiles for its base map.
+
+![](docs/wof-cli-edit-raster.png)
+
+If you want to use another raster-based "slippy map" provider, you can do by assigning it ZXY tile URL with the `-map-tile-uri`. For example to edit the record for the San Francisco Internation Airport (SFO) using tiles of the [airport from 1947](https://millsfield.sfomuseum.org/map/1947):
+
+```
+$> ./bin/wof edit \
+	-map-provider leaflet \
+	-map-tile-uri 'https://static.sfomuseum.org/aerial/1947/{z}/{x}/{-y}.png' \
+	/usr/local/data/whosonfirst/whosonfirst-data-admin-us/data/102/527/513/102527513.geojson
+```
+
+##### Protomaps tiles
+
+![](docs/wof-cli-edit-pmtiles.png)
+
+You can also use local Protomaps PMTiles databases or the [Protomaps API](https://protomaps.com/api) for the base map.
+
+![](docs/wof-cli-edit-pmtiles-2.png)
+
+To do you need to set the `-map-provider` flag to "protomaps" and specify a Protomaps-specific URL in the `-map-tile-uri` flag. For example to use a local Protomaps database:
+
+```
+$> ./bin/wof edit \
+	-map-provider protomaps \
+	-map-tile-uri 'file:///usr/local/data/sfo-2.pmtiles' \
+	-protomaps-theme light \
+	/usr/local/data/whosonfirst/whosonfirst-data-admin-us/data/102/527/513/102527513.geojson
+```
+
+_As of this writing only local PMTiles databases are supported. It is not possible to specify a PMTiles database hosted in an S3 bucket, or equivalent "cloud" storage, but that functionality will likely be added in time._
+
+![](docs/wof-cli-edit-protomaps-api.png)
+
+To use the [Protomaps API](https://protomaps.com/api) you would set the `-map-tile-uri` flag to be "api://{PROTOMAPS_API_KEY}". For example:
+
+```
+$> ./bin/wof edit \
+	-map-provider protomaps \
+	-map-tile-uri 'api://{PROTOMAPS_API_KEY}' \
+	-protomaps-theme dark \
+	/usr/local/data/whosonfirst/whosonfirst-data-admin-us/data/102/527/513/102527513.geojson
+```
+
+_You can sign up for a Protomaps API key at: https://protomaps.com/api#api-keys_
+
+There are a few different ways to create local PMTiles databases. You can download the [nightly global builds](https://maps.protomaps.com/builds/) but keep in mind those are over 100GB each. You can also use the `extract` tool in the [protomaps/go-pmtiles](https://docs.protomaps.com/pmtiles/cli#extract) package to create an area-specific slice from the remotely-hosted nightly builds themselves. For example, to create a local PMTiles database of the area around [SFO](https://spelunker.whosonfirst.org/id/102527513):
+
+```
+$> cd go-pmtiles
+$> go run main.go extract \
+	--bbox="-122.430267,37.582678,-122.334137,37.657732" \
+	https://build.protomaps.com/20251030.pmtiles \
+	/usr/local/data/sfo-2.pmtiles
+
+fetching 8 dirs, 8 chunks, 7 requests
+Region tiles 135, result tile entries 131
+fetching 131 tiles, 31 chunks, 26 requests
+...
+Completed in 7.324686375s with 4 download threads (17.884724383608987 tiles/s).
+Extract required 36 total requests.
+Extract transferred 3.1 MB (overfetch 0.05) for an archive size of 3.0 MB
+```
+
 ## Notes (and caveats)
 
 Changes made in the `wof edit` tool are not written to disk (or STDOUT) until the `Save` button is pressed.
 
 There is a noticeable delay at startup while the WASM binary (used for data formatting, validation and other functionality) is initialized. This is not ideal and future work will focus on speeding it up. For the time being it is an accepted inconvenience.
-
-Currently the tool is hard-coded to use (base) map tiles from OpenStreetMap. Future releases will support map tiles from the Protomaps API or a local Protomaps database file.
 
 ## Under the hood
 

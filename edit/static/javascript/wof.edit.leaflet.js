@@ -71,7 +71,7 @@ wof.edit.leaflet = (function () {
 	    "weight": 2,
 	    "opacity": 1,
 	    "fillColor": "#ff69b4",
-	    "fillOpacity": 0.6
+	    "fillOpacity": 0.4
 	},
 
 	'parent_polygon': {

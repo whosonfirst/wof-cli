@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/aaronland/go-http-maps/v2"
 	"github.com/sfomuseum/go-flags/flagset"
 )
 
@@ -17,6 +18,11 @@ var ensure_rel_path bool
 
 var verbose bool
 
+var map_provider string
+var map_tile_uri string
+var protomaps_theme string
+var protomaps_max_data_zoom int
+
 func DefaultFlagSet() *flag.FlagSet {
 
 	fs := flagset.NewFlagSet("edit")
@@ -26,6 +32,11 @@ func DefaultFlagSet() *flag.FlagSet {
 
 	fs.BoolVar(&ensure_rel_path, "ensure-relative-path", false, "Boolean flag signaling that each URI should be expanded to its fully-quality WOF-style relative path. This flag is only processed if the -reader-uri flag is not-empty.")
 
+	fs.StringVar(&map_provider, "map-provider", "leaflet", "Valid options are: leaflet, protomaps")
+	fs.StringVar(&map_tile_uri, "map-tile-uri", maps.LEAFLET_OSM_TILE_URL, "A valid Leaflet tile layer URI. See documentation for special-case (interpolated tile) URIs.")
+	fs.StringVar(&protomaps_theme, "protomaps-theme", "light", "A valid Protomaps theme label.")
+	fs.IntVar(&protomaps_max_data_zoom, "protomaps-max-data-zoom", 15, "The maximum zoom (tile) level for data in a PMTiles database. Necessary for \"over-zooming\".")
+	
 	fs.StringVar(&access_token_uri, "gh-access-token-uri", "", "A valid GitHub API access token. This is only necessary if -writer-uri is \"wof-pr://\".")
 	fs.BoolVar(&verbose, "verbose", false, "Enable verbose (debug) logging.")
 

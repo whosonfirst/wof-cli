@@ -3,6 +3,7 @@ module github.com/whosonfirst/wof
 go 1.25.0
 
 require (
+	github.com/aaronland/go-http-maps/v2 v2.3.0
 	github.com/aaronland/go-http/v3 v3.2.0
 	github.com/aaronland/go-json-query v0.1.6
 	github.com/aaronland/go-roster v1.0.0
@@ -12,7 +13,7 @@ require (
 	github.com/paulmach/orb v0.12.0
 	github.com/sfomuseum/go-csvdict/v2 v2.0.1
 	github.com/sfomuseum/go-flags v0.11.0
-	github.com/sfomuseum/go-geojson-show v0.0.13
+	github.com/sfomuseum/go-geojson-show v0.2.1
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.4
 	github.com/sfomuseum/go-www-show v1.0.0
 	github.com/sfomuseum/iso8601duration v1.1.0
@@ -70,9 +71,6 @@ require (
 	github.com/aaronland/go-artisanal-integers v0.9.1 // indirect
 	github.com/aaronland/go-aws/v3 v3.0.2 // indirect
 	github.com/aaronland/go-brooklynintegers-api v1.2.10 // indirect
-	github.com/aaronland/go-http-leaflet v0.5.0 // indirect
-	github.com/aaronland/go-http-rewrite v1.1.0 // indirect
-	github.com/aaronland/go-http-static v0.0.3 // indirect
 	github.com/aaronland/go-pagination v0.3.0 // indirect
 	github.com/aaronland/go-pagination-sql v0.2.0 // indirect
 	github.com/aaronland/go-pool/v2 v2.0.0 // indirect
@@ -187,13 +185,9 @@ require (
 	github.com/sergi/go-diff v1.4.0 // indirect
 	github.com/sfomuseum/go-database v0.0.15 // indirect
 	github.com/sfomuseum/go-edtf v1.2.1 // indirect
-	github.com/sfomuseum/go-http-protomaps v0.3.0 // indirect
-	github.com/sfomuseum/go-http-rollup v0.0.3 // indirect
 	github.com/sfomuseum/go-www-show/v2 v2.0.0 // indirect
 	github.com/skeema/knownhosts v1.3.1 // indirect
 	github.com/spiffe/go-spiffe/v2 v2.5.0 // indirect
-	github.com/tdewolff/minify/v2 v2.24.2 // indirect
-	github.com/tdewolff/parse/v2 v2.8.3 // indirect
 	github.com/tidwall/geoindex v1.4.4 // indirect
 	github.com/tidwall/geojson v1.4.5 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
@@ -205,7 +199,6 @@ require (
 	github.com/whosonfirst/go-whosonfirst-database v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-findingaid/v2 v2.11.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-flags v0.5.2 // indirect
-	github.com/whosonfirst/go-whosonfirst-format-wasm v0.0.1 // indirect
 	github.com/whosonfirst/go-whosonfirst-names v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-sources v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-spelunker v0.0.6 // indirect
