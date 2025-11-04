@@ -71,9 +71,18 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	switch args[2] {
 	case "sql":
+
 		fs := sql_index.DefaultFlagSet()
 		fs.Parse(args[3:])
-		return sql_index.RunWithFlagSet(ctx, fs)
+		args := fs.Args()
+
+		opts, err := sql_index.RunOptionsFromParsedFlags(args...)
+
+		if err != nil {
+			return fmt.Errorf("Failed to derive run options, %w", err)
+		}
+
+		return sql_index.RunWithOptions(ctx, opts)
 	default:
 		return fmt.Errorf("Invalid database target")
 	}
