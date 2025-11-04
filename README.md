@@ -143,6 +143,8 @@ Valid options are:
     	A valid whosonfirst/go-whosonfirst-export/v3.Exporter URI. (default "whosonfirst://")
   -float-property value
     	One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.
+  -geometry-property value
+    	A {KEY}={VALUE} flag indicating the source of the geometry data to assign. Valid options are: wkt={VALID_WKT_GEOMETRY}, geojson={VALID_GEOJSON_GEOMETRY}, file={PATH_TO_GEOJSON_FEATURE}.
   -if-missing
     	Only assign property value if the property key is not set.
   -int-property value

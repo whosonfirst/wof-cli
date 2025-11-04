@@ -16,6 +16,8 @@ Valid options are:
     	A valid whosonfirst/go-whosonfirst-export/v3.Exporter URI. (default "whosonfirst://")
   -float-property value
     	One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.
+  -geometry-property value
+    	A {KEY}={VALUE} flag indicating the source of the geometry data to assign. Valid options are: wkt={VALID_WKT_GEOMETRY}, geojson={VALID_GEOJSON_GEOMETRY}, file={PATH_TO_GEOJSON_FEATURE}.
   -if-missing
     	Only assign property value if the property key is not set.
   -int-property value
@@ -49,4 +51,15 @@ $> ./bin/wof ensure-property \
 2025/07/17 10:57:51 INFO Updated record path=191/466/631/9/1914666319.geojson
 2025/07/17 10:57:51 INFO Updated record path=191/466/637/1/1914666371.geojson
 ... and so on
+```
+
+Or to assign the geometry property for a collection of records (parented by WOF ID `1729828959`):
+
+```
+$> ./bin/ensure-property \
+	-iterator-uri 'repo://?include=properties.wof:parent_id=1729828959' \
+	-geometry-property 'wkt=POINT(-122.37385309950533 37.61939390848619)' \
+	-verbose \
+	-writer-uri repo:///usr/local/data/sfomuseum-data-publicart \
+	/usr/local/data/sfomuseum-data-publicart
 ```

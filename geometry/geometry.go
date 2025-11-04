@@ -41,6 +41,9 @@ func (c *GeometryCommand) Run(ctx context.Context, args []string) error {
 
 	switch action {
 	case "update":
+
+		slog.Warn("The update functionality of the geometry tool has been deprecated and replaced by the `wof ensure-property -geometry-property=...` flag. This functionality will be removed in future releases.")
+		
 		ex, err := export.NewExporter(ctx, "whosonfirst://")
 
 		if err != nil {

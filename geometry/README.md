@@ -17,6 +17,12 @@ Usage:
     	Boolean flag signaling that updated records should be written to STDOUT. If false input files will be overwritten.
 ```
 
+### Deprecation notice
+
+The `-action update` functionality of the geometry tool has been deprecated and replaced by the `wof ensure-property -geometry-property=...` flag. See the [wof ensure-property](https://github.com/whosonfirst/wof-cli/blob/main/property/ensure/README.md) documentation for details.
+
+Update functionality will be removed in future releases.
+
 ### Examples
 
 For example:

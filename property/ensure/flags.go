@@ -35,7 +35,7 @@ func DefaultFlagSet() *flag.FlagSet {
 	fs.Var(&int_properties, "int-property", "One or more {KEY}={VALUE} flag where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.")
 	fs.Var(&float_properties, "float-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.")
 	fs.Var(&bool_properties, "boolean-property", "One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a boolean value.")
-	fs.Var(&geom_property, "geometry-property", "A {KEY}={VALUE} flag...")
+	fs.Var(&geom_property, "geometry-property", "A {KEY}={VALUE} flag indicating the source of the geometry data to assign. Valid options are: wkt={VALID_WKT_GEOMETRY}, geojson={VALID_GEOJSON_GEOMETRY}, file={PATH_TO_GEOJSON_FEATURE}.")
 
 	fs.BoolVar(&if_missing, "if-missing", false, "Only assign property value if the property key is not set.")
 
