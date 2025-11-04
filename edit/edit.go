@@ -268,9 +268,9 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 	mux := http.NewServeMux()
 
 	map_opts := &maps.AssignMapConfigHandlerOptions{
-		MapProvider:    map_provider,
-		MapTileURI:     map_tile_uri,
-		ProtomapsTheme: protomaps_theme,
+		MapProvider:          map_provider,
+		MapTileURI:           map_tile_uri,
+		ProtomapsTheme:       protomaps_theme,
 		ProtomapsMaxDataZoom: protomaps_max_data_zoom,
 	}
 

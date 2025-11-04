@@ -2,10 +2,12 @@ package index
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
+	"os"
 
-	"github.com/whosonfirst/wof"	
 	sql_index "github.com/whosonfirst/go-whosonfirst-database/app/sql/tables/index"
+	"github.com/whosonfirst/wof"
 )
 
 type RunOptions struct {
@@ -19,6 +21,22 @@ type IndexCommand struct {
 func init() {
 	ctx := context.Background()
 	wof.RegisterCommand(ctx, "index", NewIndexCommand)
+}
+
+func usage() {
+
+	fmt.Println("Usage: wof index [TARGET] [OPTIONS]")
+	fmt.Println("Valid commands are:")
+
+	targets := []string{
+		"sql",
+	}
+
+	for _, cmd := range targets {
+		fmt.Printf("* %s\n", cmd)
+	}
+
+	os.Exit(0)
 }
 
 func NewIndexCommand(ctx context.Context, cmd string) (wof.Command, error) {
@@ -45,5 +63,20 @@ func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 		slog.Debug("Verbose logging enabled")
 	}
 
-	return sql_index.Run(ctx)
+	args := os.Args
+
+	if len(args) < 3 {
+		usage()
+	}
+
+	switch args[2] {
+	case "sql":
+		fs := sql_index.DefaultFlagSet()
+		fs.Parse(args[3:])
+		return sql_index.RunWithFlagSet(ctx, fs)
+	default:
+		return fmt.Errorf("Invalid database target")
+	}
+
+	return nil
 }
