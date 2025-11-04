@@ -255,7 +255,6 @@ Examples can be found in [property/README.md](property/README.md#examples)
 
 #### wof rebuild-hierarchy
 
-```
 Rebuild the wof:hierarchy property one or more Who's On First records.
 
 ```
@@ -303,6 +302,8 @@ Valid options are:
 Examples can be found in [property/remove/README.md](property/remove/README.md#examples)
 
 #### wof repos
+
+List repositories for the Who's On First (or other GitHub) organization.
 
 ```
 $> ./bin/wof repos -h
