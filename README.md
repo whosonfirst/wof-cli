@@ -257,7 +257,6 @@ Examples can be found in [property/README.md](property/README.md#examples)
 
 #### wof rebuild-hierarchy
 
-```
 Rebuild the wof:hierarchy property one or more Who's On First records.
 
 ```
@@ -282,7 +281,7 @@ Valid options are:
 
 #### wof remove-property
 
-Ensure typed values for one or more Who's On First records.
+Remove properties from one or more Who's On First records.
 
 ```
 $> ./bin/wof remove-property -h
@@ -305,6 +304,8 @@ Valid options are:
 Examples can be found in [property/remove/README.md](property/remove/README.md#examples)
 
 #### wof repos
+
+List repositories for the Who's On First (or other GitHub) organization.
 
 ```
 $> ./bin/wof repos -h
@@ -336,6 +337,8 @@ Usage:
 Examples can be found in [repos/README.md](repos/README.md#examples)
 
 #### wof show
+
+Command-line tool for serving GeoJSON features from an on-demand web server.
 
 ```
 $> ./bin/wof show -h
@@ -390,6 +393,8 @@ Examples can be found in [supersede/README.md](supersede/README.md#examples)
 
 #### wof uri
 
+Print the nested URI for one or more Who's On First IDs.
+
 ```
 $> ./bin/wof uri -h
 Print the nested URI for one or more Who's On First IDs.
@@ -402,6 +407,8 @@ Usage:
 Examples can be found in [uri/README.md](uri/README.md#examples)
 
 #### wof validate
+
+Validate one or more Who's On First documents.
 
 ```
 $> ./bin/wof validate -h
