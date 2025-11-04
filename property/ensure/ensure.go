@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"io"
 	"log/slog"
+	"os"
 
 	_ "github.com/whosonfirst/go-whosonfirst-iterate-reader/v3"
 
+	"github.com/paulmach/orb/encoding/wkt"
+	"github.com/paulmach/orb/geojson"
 	export "github.com/whosonfirst/go-whosonfirst-export/v3"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
 	uri "github.com/whosonfirst/go-whosonfirst-uri"
@@ -62,6 +65,56 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 		return fmt.Errorf("Failed to create new iterator, %w", err)
 	}
 
+	var geom *geojson.Geometry
+
+	if geom_property.String() != "" {
+
+		geom_k := geom_property.Key()
+		geom_v := geom_property.Value().(string)
+
+		switch geom_k {
+		case "wkt":
+
+			orb_geom, err := wkt.Unmarshal(geom_v)
+
+			if err != nil {
+				return fmt.Errorf("Failed to unmarshal WKT geometry, %w", err)
+			}
+
+			geom = geojson.NewGeometry(orb_geom)
+
+		case "geojson":
+
+			geojson_geom, err := geojson.UnmarshalGeometry([]byte(geom_v))
+
+			if err != nil {
+				return fmt.Errorf("Failed to unmarshal GeoJSON geometry, %w", err)
+			}
+
+			geom = geojson_geom
+
+		case "file":
+
+			body, err := os.ReadFile(geom_v)
+
+			if err != nil {
+				return fmt.Errorf("Failed to read geometry file, %w", err)
+			}
+
+			f, err := geojson.UnmarshalFeature(body)
+
+			if err != nil {
+				return fmt.Errorf("Failed to unmarshal GeoJSON from geometry file, %w", err)
+			}
+
+			orb_geom := f.Geometry
+			geom = geojson.NewGeometry(orb_geom)
+
+		default:
+			return fmt.Errorf("Invalid or unsupported geom property key")
+		}
+	}
+
 	for rec, err := range iter.Iterate(ctx, fs_uris...) {
 
 		if err != nil {
@@ -97,6 +150,10 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 			Float64Properties: float_properties,
 			BooleanProperties: bool_properties,
 			IfMissing:         if_missing,
+		}
+
+		if geom != nil {
+			opts.Geometry = geom
 		}
 
 		has_changes, new_body, err := update.UpdateFeature(ctx, body, opts)
