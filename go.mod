@@ -24,6 +24,7 @@ require (
 	github.com/whosonfirst/go-reader-findingaid/v2 v2.1.1
 	github.com/whosonfirst/go-reader-github/v2 v2.0.1
 	github.com/whosonfirst/go-reader/v2 v2.1.0
+	github.com/whosonfirst/go-whosonfirst-database v0.3.0
 	github.com/whosonfirst/go-whosonfirst-export/v3 v3.3.0
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.29
 	github.com/whosonfirst/go-whosonfirst-format v1.1.0
@@ -61,6 +62,7 @@ require (
 	cloud.google.com/go/monitoring v1.24.2 // indirect
 	cloud.google.com/go/storage v1.55.0 // indirect
 	dario.cat/mergo v1.0.0 // indirect
+	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.18.1 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.11.1 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/storage/azblob v1.6.1 // indirect
@@ -141,6 +143,7 @@ require (
 	github.com/go-jose/go-jose/v4 v4.1.1 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
+	github.com/go-sql-driver/mysql v1.9.3 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect
@@ -163,6 +166,7 @@ require (
 	github.com/klauspost/asmfmt v1.3.2 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
+	github.com/lib/pq v1.10.9 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/minio/asm2plan9s v0.0.0-20200509001527-cdd76441f9d8 // indirect
 	github.com/minio/c2goasm v0.0.0-20190812172519-36a3d3bbc4f3 // indirect
@@ -193,7 +197,7 @@ require (
 	github.com/rs/cors v1.11.1 // indirect
 	github.com/schollz/progressbar/v3 v3.18.0 // indirect
 	github.com/sergi/go-diff v1.4.0 // indirect
-	github.com/sfomuseum/go-database v0.0.15 // indirect
+	github.com/sfomuseum/go-database v0.0.16 // indirect
 	github.com/sfomuseum/go-edtf v1.2.1 // indirect
 	github.com/sfomuseum/go-geojsonld v1.0.0 // indirect
 	github.com/sfomuseum/go-http-opensearch v0.0.2 // indirect
@@ -211,7 +215,6 @@ require (
 	github.com/whosonfirst/go-geojson-svg v0.0.5 // indirect
 	github.com/whosonfirst/go-rfc-5646 v0.1.0 // indirect
 	github.com/whosonfirst/go-sanitize v0.1.0 // indirect
-	github.com/whosonfirst/go-whosonfirst-database v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-findingaid/v2 v2.11.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-flags v0.5.2 // indirect
 	github.com/whosonfirst/go-whosonfirst-names v0.1.0 // indirect
