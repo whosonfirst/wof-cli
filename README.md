@@ -33,6 +33,7 @@ Valid commands are:
 * remove-property
 * repos
 * show
+* spelunker
 * supersede
 * uri
 * validate
@@ -437,6 +438,26 @@ If the only path as input is "-" then data will be read from STDIN.
 ```
 
 Examples can be found in [show/README.md](show/README.md#examples)
+
+#### wof spelunker
+
+Launch a local [Who's On First Spelunker website](https://spelunker.whosonfirst.org) for browsing custom Who's On First style data.
+
+```
+$> ./bin/wof spelunker -h
+  -authenticator-uri string
+    	A valid aaronland/go-http/v3/auth.Authenticator URI. This is future-facing work and can be ignored for now. (default "null://")
+  -protomaps-api-key string
+    	A valid Protomaps API key for displaying maps.
+  -root-url string
+    	The root URL for all public-facing URLs and links. If empty then the value of the -server-uri flag will be used.
+  -server-uri string
+    	A valid `aaronland/go-http/v3/server.Server URI. (default "http://localhost:8080")
+  -spelunker-uri string
+    	A URI in the form of 'sql://{DATABASE_SQL_ENGINE}?dsn={DATABASE_SQL_DSN}' referencing the underlying Spelunker database. For example: sql://sqlite3?dsn=spelunker.db (default "null://")
+```
+
+Examples can be found in [spelunker/README.md](spelunker/README.md#examples)
 
 #### wof supersede
 
