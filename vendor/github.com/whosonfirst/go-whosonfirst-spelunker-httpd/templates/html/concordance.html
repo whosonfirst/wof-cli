@@ -1,0 +1,12 @@
+{{ define "concordance" -}}
+{{ template "inc_head" . -}}
+
+<h2>Places that have a concordance with <span class="hey-look">{{ .Concordance.String }}</span> {{ if .Source }}({{ .Source.Fullname }}){{ end }}</h2>
+
+{{ template "inc_places" . -}}
+
+{{ template "inc_foot" . -}}
+
+<script type="text/javascript" src="{{ .URIs.Static }}javascript/whosonfirst.spelunker.places.init.js"></script>
+<script type="text/javascript" src="{{ .URIs.Static }}javascript/whosonfirst.spelunker.facets.init.js"></script>
+{{ end -}}

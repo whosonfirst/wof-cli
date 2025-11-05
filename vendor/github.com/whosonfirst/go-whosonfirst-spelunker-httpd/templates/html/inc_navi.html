@@ -1,0 +1,21 @@
+{{ define "inc_navi" }}
+<div id="nav" class="container">
+
+    <ul class="list-inline pull-left" id="nav-links">
+      <li>who's on first <a href="{{ .URIs.Index }}" class="hey-look">spelunker</a></li>
+    </ul>
+
+    <div id="search" class="pull-right">
+	<form class="d-flex" action="{{ $.URIs.Search }}" style="margin-bottom:.75em;">
+	    <input class="form-control me-2" type="search" name="q" id="q" placeholder="Search for a place" value="" aria-label="Search">
+	    <button class="btn btn-outline" type="submit">Search</button>
+	</form>	
+      </form>
+    </div>
+
+    <div>
+	<small class="italic pull-right not-a-geocoder">remember — this is a simple full-text search tool and <span class="hey-look">not</span> an&#160;<a href="https://geocode.earth/">actual geocoder</a></small>
+    </div>
+    
+</div>
+{{ end }}
