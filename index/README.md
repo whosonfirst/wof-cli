@@ -73,7 +73,7 @@ As of this writing the `index sql` tool has support for three databases: SQLite,
 
 | Database | Build tag | Notes |
 | --- | --- | --- |
-| SQLite | `sqlite3` | If you are indexing a database with either the "search" or "spelunker" tables you will also need to enable support for the FTS5 extension with the `fts5` build tag. This flag enables SQLite support using the [mattn/go-sqlite3](https://github.com/mattn/go-sqlite3) package. |
+| SQLite | `sqlite3` | This flag enables SQLite support using the [mattn/go-sqlite3](https://github.com/mattn/go-sqlite3) package. If you are indexing a database with either the "search" or "spelunker" tables you will also need to enable support for the FTS5 extension with the `fts5` build tag. |
 | MySQL | `mysql` | This flag enables MySQL support using the [go-sql-driver/mysql](https://github.com/go-sql-driver/mysql) package. |
 | Postgres | `postgres` | The flag enables Postgres support using the [lib/pq](https://github.com/lib/pq) package. |
 
@@ -83,6 +83,8 @@ For example:
 $> cd wof-cli
 $> make cli TAGS=sqlite3,fts5,postgres
 ```
+
+_Support for MySQL and Postgres database should still be considered experimental. Most of the development to date has centered around SQLite so there will almost certainly be "gotchas", maybe even bugs, with other database engines._
 
 ### Database tables
 
