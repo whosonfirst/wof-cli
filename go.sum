@@ -530,10 +530,10 @@ github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.15.3 h1:1+4GwfqzOGGQhrFe
 github.com/whosonfirst/go-whosonfirst-spatial-sqlite v0.15.3/go.mod h1:rx2mzgW7bb0f2SzXAPKRYJJxaw+tAsGsYokXkImiUc0=
 github.com/whosonfirst/go-whosonfirst-spelunker v0.0.7 h1:TvPjFiGaA0OtDrw6lsYOk80mXcNtzZDAkPIzICp08kc=
 github.com/whosonfirst/go-whosonfirst-spelunker v0.0.7/go.mod h1:mR+bU4GkfliIL0i0nlJ7o9eSxm6FNgt5dEtB21gShn8=
-github.com/whosonfirst/go-whosonfirst-spelunker-httpd v0.0.17 h1:bv9vOHpIVgt6IOC6uYoxsZ3ei+e3Wj+dZO0111uQEPQ=
-github.com/whosonfirst/go-whosonfirst-spelunker-httpd v0.0.17/go.mod h1:2A28wvXrQoUNHrxuphRNETINNL5MHHGI5hfr6qHYma0=
-github.com/whosonfirst/go-whosonfirst-spelunker-sql v0.0.2 h1:xNh3rudberFXqw/v3KEBc9xNZ7coL5Ir8zLzMLtJFhA=
-github.com/whosonfirst/go-whosonfirst-spelunker-sql v0.0.2/go.mod h1:Ht2yYyj/9fqfx0CRUL2j3pvZ6LOubtBI+USnnIYE+wg=
+github.com/whosonfirst/go-whosonfirst-spelunker-httpd v0.0.18 h1:5MYRDOOR5G5iAQJyk9w307mv1EGmQSjmH3fVc73syhA=
+github.com/whosonfirst/go-whosonfirst-spelunker-httpd v0.0.18/go.mod h1:2A28wvXrQoUNHrxuphRNETINNL5MHHGI5hfr6qHYma0=
+github.com/whosonfirst/go-whosonfirst-spelunker-sql v0.0.3 h1:zgV1UZybSqDXqQKW4+bSFd8D/Zz70CLZ0605lf9vv3I=
+github.com/whosonfirst/go-whosonfirst-spelunker-sql v0.0.3/go.mod h1:reEPTF/t0ajr8MkoAQvRYfoESX718T3L/nVNoWrz6nQ=
 github.com/whosonfirst/go-whosonfirst-spr/v2 v2.2.1/go.mod h1:3P6fiSVGtIbM3UcyaVMs4i1N6Hi88GmTsdouuXzlr78=
 github.com/whosonfirst/go-whosonfirst-spr/v2 v2.3.8 h1:UNl4QuSdOD8ciZE2vNoZ8nSE38Z5ItWBJVeNS00pCeE=
 github.com/whosonfirst/go-whosonfirst-spr/v2 v2.3.8/go.mod h1:fWGHEhgG0799kSiGQapLuHV9ibXiQkuy48YLJN8gp6U=

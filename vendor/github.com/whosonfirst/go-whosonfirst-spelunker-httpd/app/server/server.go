@@ -12,12 +12,12 @@ import (
 	"github.com/aaronland/go-http/v3/server"
 )
 
-func Run(ctx context.Context, logger *slog.Logger) error {
+func Run(ctx context.Context) error {
 	fs := DefaultFlagSet()
-	return RunWithFlagSet(ctx, fs, logger)
+	return RunWithFlagSet(ctx, fs)
 }
 
-func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet, logger *slog.Logger) error {
+func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
 	opts, err := RunOptionsFromFlagSet(ctx, fs)
 
@@ -25,12 +25,10 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet, logger *slog.Logger) 
 		return fmt.Errorf("Failed to derive run options from flagset, %w", err)
 	}
 
-	return RunWithOptions(ctx, opts, logger)
+	return RunWithOptions(ctx, opts)
 }
 
-func RunWithOptions(ctx context.Context, opts *RunOptions, logger *slog.Logger) error {
-
-	slog.SetDefault(logger)
+func RunWithOptions(ctx context.Context, opts *RunOptions) error {
 
 	// First create a local copy of RunOptions that can't be
 	// modified after the fact. 'run_options' is defined in vars.go

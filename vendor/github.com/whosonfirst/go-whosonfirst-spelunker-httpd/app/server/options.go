@@ -59,6 +59,11 @@ func RunOptionsFromFlagSet(ctx context.Context, fs *flag.FlagSet) (*RunOptions, 
 	if err != nil {
 		return nil, fmt.Errorf("Failed to assign flags from environment variables, %w", err)
 	}
+	
+	return RunOptionsFromParsedFlags(ctx)
+}
+
+func RunOptionsFromParsedFlags(ctx context.Context, args ...string) (*RunOptions, error) {
 
 	if root_url == "" {
 		root_url = server_uri
