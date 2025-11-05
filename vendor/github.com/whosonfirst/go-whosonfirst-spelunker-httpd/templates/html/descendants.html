@@ -1,0 +1,13 @@
+{{ define "descendants" -}}
+{{ template "inc_head" . -}}
+
+<h2>Descendants of <span class="hey-look wof-namify" data-wof-id="{{ .Id }}">{{ .Id }}</span></h2>
+
+{{ template "inc_places" . -}}
+
+{{ template "inc_foot" . -}}
+
+<script type="text/javascript" src="{{ .URIs.Static }}javascript/whosonfirst.spelunker.descendants.init.js"></script>
+<script type="text/javascript" src="{{ .URIs.Static }}javascript/whosonfirst.spelunker.places.init.js"></script>
+<script type="text/javascript" src="{{ .URIs.Static }}javascript/whosonfirst.spelunker.facets.init.js"></script>
+{{ end -}}

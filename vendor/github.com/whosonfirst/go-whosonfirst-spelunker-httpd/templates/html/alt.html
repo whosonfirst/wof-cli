@@ -1,0 +1,43 @@
+{{ define "alt" }}
+{{ template "inc_head" . -}}
+
+<h2>
+    <span class="wof-namify" data-wof-id="{{ .Id }}">{{ .Id }}</span>
+    <small class="rel-path">{{ .RelPath }}</small>
+</h2>
+
+<div id="map-wrapper">
+    <img src="{{ .URIs.SVG }}/{{ .RequestId }}" id="map-svg" loading="lazy" />
+    <div id="map" data-wof-id="{{ .Id }}" data-wof-alt-source="{{ .URIArgs.AltGeom.Source }}" data-wof-alt-function="{{ .URIArgs.AltGeom.Function }}" {{if (IsAvailable "Extra" .URIArgs.AltGeom) }}data-wof-alt-extra="{{ .URIArgs.AltGeom.Extra }}"{{ end }} data-tiles-url="{{ .URIs.Tiles }}"></div>
+</div>
+
+<p>This is an alternate geometry for <a href="{{ URIForId .URIs.Id .Id }}" class="hey-look wof-namify" data-wof-id="{{ .Id }}">{{ .Id }}</a> derived from <span class="hey-look">{{ .URIArgs.AltGeom.Source }}</span>.</p>
+
+<div class="whosonfirst-record" id="whosonfirst-alt-properties" style="display:none;">
+    <div id="whosonfirst-record-properties">
+	<h3>Properties
+
+	    <div id="props-toggle" class="pull-right">
+		<button class="btn btn-sm" id="props-toggle-raw">view raw</button>
+		<button class="btn btn-sm" id="props-toggle-pretty">make pretty</button>
+	    </div>
+	</h3>
+	<div id="props-wrapper" class="table-responsive">
+	<whosonfirst-properties>
+	    <pre id="whosonfirst-properties"></pre>
+	</whosonfirst-properties>
+	</div>
+    </div>
+    <div id="whosonfirst-record-other">
+	<h3>Other</h3>
+	<ul>
+	    <li><a href="{{ .URIs.GeoJSON }}{{ .RequestId }}">Raw data (GeoJSON)</a></li>
+	    <li><a href="{{ .GitHubURL }}" target="github">View on GitHub</a></li>
+	</ul>
+	
+    </div>
+</div>
+
+{{ template "inc_foot" . -}}
+<script type="text/javascript" src="{{ .URIs.Static }}javascript/whosonfirst.spelunker.alt.init.js"></script>
+{{ end }}

@@ -1,0 +1,258 @@
+.yesnofix-asserted {
+}
+
+.yesnofix-asserted-yes {
+    background-color:#98fb98 !important;
+}
+
+.yesnofix-asserted-no {
+    background-color:#db7093 !important;
+}
+
+.yesnofix-asserted-fix {
+    background-color:#ffffb2 !important;
+}
+
+/* yesnofix me please */
+
+#yesnofix-pretty {
+    
+}
+
+#yesnofix-pretty ul {
+    list-style-type: none;
+    margin:0px;
+    padding:0px;
+}
+
+#yesnofix-pretty table {
+    width:100%;
+    line-height:2em;
+}
+
+#yesnofix-pretty tr {
+    vertical-align: top;
+    padding-top:.5em;
+    padding-bottom:.5em;
+}
+
+#yesnofix-pretty th {
+    background-color:#ededed;
+    border-right: .75em solid #fff;
+    padding-left: .5em;
+    padding-right: .5em;
+}
+
+#yesnofix-pretty td {
+    border-bottom: 1px solid #ededed;
+    text-align:left;
+    min-width:65%;
+    max-width:65%;
+}
+
+.yesnofix-trigger {
+    display:none;
+    padding-right: 1em;
+}
+
+.yesnofix-content:hover  {
+    font-weight: 700;
+}
+
+.yesnofix-content:hover .yesnofix-trigger {
+    display:inline;
+}
+
+.yesnofix-locked {
+    display:none;
+    padding-right: 1em;
+}
+
+.yesnofix-content:hover .yesnofix-locked {
+    display:inline;
+}
+
+#yesnofix-pretty td :last-child {
+    border-bottom:none;
+}
+
+.yesnofix-uoc {
+    font-family:monospace;
+}
+
+.yesnofix-assert {
+    margin-top:.5em;
+    margin-bottom:1em;
+}
+
+.yesnofix-assert button {
+    border: 1px dotted #333;
+    margin-left:.25em;
+    margin-right:.25em;
+    font-size:small;
+    width:15%;
+    color:#333;
+}
+
+.yesnofix-assert button:hover {
+    border: none;
+}
+
+.yesnofix-assert-yes:hover {
+    background-color:#98fb98;
+}
+
+.yesnofix-assert-no:hover {
+    background-color:#db7093;
+}
+
+.yesnofix-assert-fix:hover {
+    background-color:#ffffb2;
+}
+
+.yesnofix-assert-cancel:hover {
+    background-color:#666;
+    color:#fff;
+}
+
+.yesnofix-assert-about {
+    padding: 0px !important;
+    font-size:small !important;
+    border: none !important;
+    background-color:#fff !important;
+    width: auto !important;
+    margin-left:1em !important;
+    color: #ccc !important;
+}
+
+.yesnofix-assert-about:hover {
+    color: #ffae19 !important;
+}
+
+#yesnofix-report {
+
+}
+
+#yesnofix-report-buttons button {
+    border: none;
+    font-size: small;
+    padding:.4em;
+    padding-left:.6em;
+    padding-right:.6em;
+    float:left;
+    margin-right:.5em;
+    background-color:#A4DDED;
+}
+
+#yesnofix-report-buttons button:hover {
+    background-color:#72A0C1;
+    color:#fff;
+}
+
+#yesnofix-report-show {
+    display:none;
+}
+
+#yesnofix-report-hide {
+    display:none;
+}
+
+#yesnofix-report-submit {
+    display:none;
+    background-color:#72A0C1 !important;
+}
+
+#yesnofix-report-submit:hover {
+    color:#fff;
+}
+
+#yesnofix-report-body {
+    display:none;
+    margin-top:.5em;
+    margin-top:.3em;
+    border:none;
+    padding:1em;
+    max-height: 100px;
+    overflow: scroll;
+    background-color:#A4DDED;
+}
+
+#yesnofix-about {
+    z-index: 2000 !important;	/* because the leaflet attribution widget is z-index 1000.... */
+    border:8px solid #333;
+    background-color: #fff;
+    min-width: 70%;
+    max-width: 70%;
+    max-height:450px;    
+    max-height:450px;    
+    padding: 1.5em;
+    position: fixed;
+    top: 25%;
+    left:15%;
+
+    font-size:.9em;
+    font-family: sans-serif !important;
+}
+
+#yesnofix-about-text {
+
+    position: relative;
+    min-height: 300px;
+    max-height:300px;
+    overflow: scroll !important;
+    padding-right:6em;
+    padding-bottom:1em !important;
+    font-size:.95em;
+}
+
+#yesnofix-about-close {
+    margin-top:2em;
+    text-align: right;
+    position:absolute;
+    top: .25em;
+    right: 2.5em;
+    border: solid thin;
+}
+
+#yesnofix-about-close-button {
+    border: solid thin;
+    padding: .5em;
+}
+
+#yesnofix-about-close-button:hover {
+    background-color: #999;
+}
+
+#yesnofix-about-submit {
+    margin-top:2em;
+    text-align: right;
+    position:absolute;
+    bottom: 2em;
+    width:90%;
+    border-top: 1px dotted #ccc;
+    padding-top:1em;
+}
+
+#yesnofix-about-cancel-button {
+    border: solid thin;
+    padding: .5em;
+    background-color: #A4DDED;
+}
+
+#yesnofix-about-cancel-button:hover {
+    color: #fff;
+    border: 1px solid #000;
+}
+
+#yesnofix-about-submit-button {
+    border: solid thin;
+    padding: .5em;
+    float: right;
+    margin-left:2em;
+    background-color:#72A0C1;
+}
+
+#yesnofix-about-submit-button:hover {
+    color: #fff;
+    border: 1px solid #000;
+}

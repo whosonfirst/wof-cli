@@ -1,0 +1,25 @@
+{{ define "index" -}}
+{{ template "inc_head" . -}}
+
+<h2>The Who's On First Spelunker</h2>
+
+<ul>
+    <li><a href="{{ .URIs.Placetypes }}">placetypes</a></li>
+    <li><a href="{{ .URIs.Concordances }}">concordances</a></li>
+    <li>
+	recently updated
+	<ul>
+	    <li><a href="{{ URIForRecent .URIs.Recent "P1W" }}">last week</a></li>
+	    <li><a href="{{ URIForRecent .URIs.Recent "P4W" }}">last month</a></li>
+	    <li><a href="{{ URIForRecent .URIs.Recent "P13W" }}">last quarter</a></li>
+	    <li><a href="{{ URIForRecent .URIs.Recent "P1Y" }}">last year</a></li>	    
+	</ul>
+    </li>
+    <li><a href="{{ .URIs.NullIsland }}">visiting null island</a></li>
+    <li><a href="{{ .URIs.About }}">about</a></li>
+    <li><a href="{{ .URIs.Code }}">code</a></li>
+    <!-- <li><a href="{{ .URIs.HowTo }}">how to</a></li>-->
+</ul>
+
+{{ template "inc_foot" . -}}
+{{ end -}}

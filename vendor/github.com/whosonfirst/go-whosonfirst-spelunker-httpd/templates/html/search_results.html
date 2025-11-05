@@ -1,0 +1,8 @@
+{{ define "search_results" -}}
+{{ template "inc_head" . -}}
+<h2>Places matching <q class="hey-look">{{ .SearchOptions.Query }}</q></h2>
+{{ template "inc_places" . -}}
+{{ template "inc_foot" . -}}
+<script type="text/javascript" src="{{ .URIs.Static }}javascript/whosonfirst.spelunker.places.init.js"></script>
+<script type="text/javascript" src="{{ .URIs.Static }}javascript/whosonfirst.spelunker.facets.init.js"></script>
+{{ end -}}

@@ -1,0 +1,12 @@
+{{ define "placetypes" -}}
+{{ template "inc_head" . -}}
+
+<ul class="whosonfirst-facets">
+    {{ range $i, $f := .Facets -}}
+    <li><a href="{{ $.URIs.Placetypes }}/{{ $f.Key }}" class="hey-look">{{ $f.Key }}</a> <small>{{ FormatNumber $f.Count }}</small></li>
+    {{ end -}}
+</ul>
+
+{{ template "inc_foot" . -}}
+
+{{ end -}}

@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS {{ .Name }} (
-      id BIGINT UNSIGNED,
+      id BIGINT(20) UNSIGNED,
       alt VARCHAR(255) NOT NULL,
       body JSON NULL,
       lastmodified INT NOT NULL,

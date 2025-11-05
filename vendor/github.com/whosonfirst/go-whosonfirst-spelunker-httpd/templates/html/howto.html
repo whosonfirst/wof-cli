@@ -1,0 +1,104 @@
+{{ define "howto" -}}
+{{ template "inc_head" . -}}
+
+<h2>How to run the Who's On First Spelunker</h2>
+
+<h3>OpenSearch</h3>
+
+<ol>
+    <li><a href="">Docker</a></li>
+    <li><a href="">go-whosonfirst-spelunker-opensearch</a> repository</li>
+    <li><a href="">whosonfirst-opensearch</a> repository</li>
+    <li><a href="">go-whosonfirst-opensearch</a> repository</li>
+    <li>One or more <a href="">whosonfirst-data</a> repositories</li>
+    <li>A <a href="">Protomaps API key</a></li> 
+</ol>
+
+<h4>Start Docker</h4>
+
+<h4>Start OpenSearch</h2>
+    
+<pre>
+$> cd /usr/local/whosonfirst/go-whosonfirst-spelunker-opensearch
+$> make os
+docker run \
+		-it \
+		-p 9200:9200 \
+		-p 9600:9600 \
+		-e "discovery.type=single-node" \
+		-e "OPENSEARCH_INITIAL_ADMIN_PASSWORD=..." \
+		-v opensearch-data1:/usr/local/data/opensearch \
+		opensearchproject/opensearch:latest
+</pre>
+
+<h4>Create OpenSearch index</h4>
+
+<pre>
+$> cd /usr/local/whosonfirst/whosonfirst-opensearch
+$> make spelunker-local
+cat schema/2.x/mappings.spelunker.json | \
+		curl -k \
+		-H 'Content-Type: application/json' \
+		-X PUT \
+		https://admin:{PASSWORD}@localhost:9200/spelunker \
+		-d @-
+{"acknowledged":true,"shards_acknowledged":true,"index":"spelunker"}curl -k \
+		-H 'Content-type:application/json' \
+		-XPUT https://admin:{PASSWORD}@localhost:9200/spelunker/_settings \
+		-d '{"index.mapping.total_fields.limit": 5000}'
+{"acknowledged":true}
+</pre>
+
+<pre>
+> curl -k -s -H application/json https://admin:{PASSWORD}@localhost:9200/_aliases | jq
+{
+  ".opensearch-observability": {
+    "aliases": {}
+  },
+  ".plugins-ml-config": {
+    "aliases": {}
+  },
+  "security-auditlog-2024.03.26": {
+    "aliases": {}
+  },
+  ".opensearch-sap-log-types-config": {
+    "aliases": {}
+  },
+  ".opendistro_security": {
+    "aliases": {}
+  },
+  "spelunker": {
+    "aliases": {}
+  }
+}
+</pre>
+
+<h4>Index <code>whosonfirst-data</code> repositories in OpenSearch</h4>
+
+<pre>
+$> cd /usr/local/whosonfirst/go-whosonfirst-opensearch
+$> make index-repo REPO=/usr/local/data/whosonfirst-data-admin-ca
+bin/wof-opensearch-index \
+		-writer-uri 'constant://?val=opensearch2%3A%2F%2Flocalhost%3A9200%2Fspelunker%3Fusername%3Dadmin%26password%3D...%26insecure%3Dtrue%26require-tls%3Dtrue' \
+		/usr/local/data/whosonfirst-data-admin-ca
+
+2024/03/25 23:37:10 ERROR Failed to index record path=115/886/316/5/1158863165.geojson type=illegal_argument_exception reason="mapper [can-abog:geocode] cannot be changed from type [text] to [long]"
+2024/03/25 23:37:11 time to index paths (1) 15.302158486s
+2024/03/25 23:37:17 Failed to iterate, Failed to iterate with writer, Failed to close writer, One or more Close operations failed: Indexed (28096) documents with (1) errors
+make: *** [index-repo] Error 1
+</pre>
+
+<h4>Starting the Spelunker</h4>
+
+<pre>
+$> cd /usr/local/whosonfirst/go-whosonfirst-spelunker-opensearch
+$> make server APIKEY=...
+go run -mod readonly cmd/httpd/main.go \
+		-server-uri http://localhost:8080 \
+		-spelunker-uri 'opensearch://?dsn=https%3A%2F%2Flocalhost%3A9200%2Fspelunker%3Fusername%3Dadmin%26password%3D...%26insecure%3Dtrue%26require-tls%3Dtrue' \
+		-protomaps-api-key '...'
+2024/03/25 23:39:00 INFO Listening for requests address=http://localhost:8080
+</pre>
+
+{{ template "inc_foot" . -}}
+{{ end -}}

@@ -1,0 +1,12 @@
+{{ define "concordances" -}}
+{{ template "inc_head" . -}}
+
+<ul class="whosonfirst-facets">
+    {{ range $i, $f := .Facets -}}
+    <li><a href="{{ $.URIs.Concordances }}/{{ $f.Key }}" class="hey-look">{{ $f.Key }}</a> <code>{{ NameForSource $f.Key }}</code> <small>{{ FormatNumber $f.Count }}</small></li>
+    {{ end -}}
+</ul>
+
+{{ template "inc_foot" . -}}
+
+{{ end -}}

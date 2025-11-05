@@ -1,0 +1,100 @@
+@media (max-width: 400px) {
+
+	body {
+		margin: 0px !important;
+	}
+
+	p {
+		font-size: 1.1rem;
+		line-height: 1.4rem;
+	}
+	
+    h3 {
+	line-height:1.5em;
+    }
+
+	ul li {
+		margin-bottom: .25rem;
+	}
+	
+	#footer {
+		margin-left: 1rem !important;
+	}
+
+	#footer .pull-right {
+		display: block !important;
+	}
+	
+	details ul {
+		font-size: 1.1rem;
+		line-height: 1.6rem;
+	}
+
+	.whosonfirst-facets li {
+		display: block;
+	}
+
+	.whosonfirst-record {
+		grid-template-columns: 1fr;
+	}
+	
+    #nav-links {
+	margin-bottom:1em !important;
+    }
+
+    #es-query pre {
+	max-height:100px !important;
+	font-size:.7em !important;
+    }
+
+    #map {
+	height: 200px;
+    }
+
+    .col { 
+	padding-left:0px;
+	padding-right:0px;
+    }
+    
+    #search form {
+	float: none !important;
+	text-align:left !important;
+    }
+
+    #search form .form-group {
+	display: inline !important;
+    }
+    
+    #search form button {
+    }
+    
+    #search form input[type=text] {
+	max-width:60% !important;
+	display: inline !important;
+    }
+
+	#whosonfirst-places {
+		grid-template-columns: 1fr;
+	}
+
+	
+    .not-a-geocoder {
+	display:none !important;
+    }
+
+    ul, ol {
+	margin:0px;
+	padding:0px;
+	line-height: 2em;
+    }
+
+    li {
+	list-style-type: none;
+    }
+
+    /* http://getbootstrap.com/css/#tables */
+
+    @-moz-document url-prefix() {
+	fieldset { display: table-cell; }
+    }
+}

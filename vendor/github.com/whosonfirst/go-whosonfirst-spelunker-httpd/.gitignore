@@ -1,0 +1,5 @@
+*~
+bin
+go.work*
+work
+.DS_Store

@@ -1,0 +1,93 @@
+{{ define "robots_txt" -}}
+X-Robots-Tag: bingbot: nosnippet
+X-Robots-Tag: googlebot: nosnippet
+X-Robots-Tag: noindex
+
+User-agent: *
+Disallow: /cgi-bin/
+Disallow: /tmp/
+Disallow: /junk/
+
+# https://matttproud.com/blog/posts/preventing-llm-crawling.html
+
+# Disable Amazon Alexa and similar.
+#
+# https://developer.amazon.com/amazonbot
+User-agent: Amazonbot
+Disallow: /
+
+# Disable Anthropic.
+#
+# https://www.anthropic.com
+User-agent: anthropic-ai
+Disallow: /
+
+# LLM related to TikTok.
+#
+# https://darkvisitors.com
+User-agent: Bytespider
+Disallow: /
+
+# Disable Common Crawl, which looks like a front for LLM trash.
+#
+# https://commoncrawl.org/collaborators
+User-agent: CCBot
+Disallow: /
+
+# Disable OpenAI and ChatGPT.
+#
+# https://platform.openai.com/docs/plugins/bot
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+# Disable Cohere.
+#
+# https://cohere.com
+User-agent: cohere-ai
+Disallow: /
+
+# Block Facehook.
+#
+# https://developers.facebook.com/docs/sharing/bot
+User-agent: FacebookBot
+Disallow: /
+
+# Block Bard, Gemini, or the name du jour.
+#
+# https://blog.google/technology/ai/an-update-on-web-publisher-controls
+User-agent: Google-Extended
+Disallow: /
+
+# Disable OpenAI and ChatGPT.
+#
+# https://platform.openai.com/docs/gptbot
+User-agent: GPTBot
+Disallow: /
+
+# Disable Omgili content farm.
+#
+# http://buzz.omgili.com/about.html
+User-agent: omgili
+Disallow: /
+
+# Disable Omgili content farm.
+#
+# http://buzz.omgili.com/about.html
+User-agent: Omgilibot
+Disallow: /
+
+# Disable Perplexity.
+#
+# https://www.perplexity.ai
+User-agent: PerplexityBot
+Disallow: /
+
+# Disable You AI product.
+#
+# https://about.you.com/youbot
+User-agent: YouBot
+Disallow: /
+{{ end -}}
