@@ -2,7 +2,6 @@ package spelunker
 
 import (
 	"context"
-	"log/slog"
 	
 	_ "github.com/whosonfirst/go-whosonfirst-spelunker-sql"
 	
@@ -27,20 +26,14 @@ func NewSpelunkerCommand(ctx context.Context, cmd string) (wof.Command, error) {
 
 func (c *SpelunkerCommand) Run(ctx context.Context, args []string) error {
 
-	if len(args) < 2 {
-		return nil
-	}
-
 	fs := server.DefaultFlagSet()
-	fs.Parse(args[2:])
+	fs.Parse(args)
 	
-	logger := slog.Default()
-	
-	opts, err := server.RunOptionsFromFlagSet(ctx, fs)
+	opts, err := server.RunOptionsFromParsedFlags(ctx)
 
 	if err != nil {
 		return err
 	}
 
-	return server.RunWithOptions(ctx, opts, logger)
+	return server.RunWithOptions(ctx, opts)
 }
