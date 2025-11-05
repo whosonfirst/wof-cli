@@ -62,6 +62,8 @@ $> ./bin/wof spelunker \
 2025/11/05 15:17:51 INFO Listening for requests address=http://localhost:8080
 ```
 
+_Note that as of this writing a registered [Protomaps API key](https://protomaps.com/api) is required to render base maps with the Spelunker tool. There is an [open ticket](https://github.com/whosonfirst/go-whosonfirst-spelunker-httpd/issues/54) to add support for other base map sources._
+
 Once you open your web browser to `http://localhost:8080` you should see stuff like this:
 
 ![](docs/wof-cli-spelunker-launch.png)
