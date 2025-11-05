@@ -3,7 +3,7 @@ module github.com/whosonfirst/wof
 go 1.25.0
 
 require (
-	github.com/aaronland/go-http-maps/v2 v2.3.0
+	github.com/aaronland/go-http-maps/v2 v2.3.1
 	github.com/aaronland/go-http/v3 v3.2.0
 	github.com/aaronland/go-json-query v0.1.6
 	github.com/aaronland/go-roster v1.0.0
@@ -12,8 +12,8 @@ require (
 	github.com/natefinch/atomic v1.0.1
 	github.com/paulmach/orb v0.12.0
 	github.com/sfomuseum/go-csvdict/v2 v2.0.1
-	github.com/sfomuseum/go-flags v0.11.0
-	github.com/sfomuseum/go-geojson-show v0.2.1
+	github.com/sfomuseum/go-flags v0.12.1
+	github.com/sfomuseum/go-geojson-show v0.3.0
 	github.com/sfomuseum/go-sfomuseum-mapshaper v0.0.4
 	github.com/sfomuseum/go-www-show v1.0.0
 	github.com/sfomuseum/iso8601duration v1.1.0
@@ -23,7 +23,7 @@ require (
 	github.com/whosonfirst/go-reader-findingaid/v2 v2.1.1
 	github.com/whosonfirst/go-reader-github/v2 v2.0.1
 	github.com/whosonfirst/go-reader/v2 v2.1.0
-	github.com/whosonfirst/go-whosonfirst-database v0.1.0
+	github.com/whosonfirst/go-whosonfirst-database v0.2.0
 	github.com/whosonfirst/go-whosonfirst-export/v3 v3.3.0
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.29
 	github.com/whosonfirst/go-whosonfirst-format v1.1.0
@@ -186,7 +186,7 @@ require (
 	github.com/rs/cors v1.11.1 // indirect
 	github.com/schollz/progressbar/v3 v3.18.0 // indirect
 	github.com/sergi/go-diff v1.4.0 // indirect
-	github.com/sfomuseum/go-database v0.0.15 // indirect
+	github.com/sfomuseum/go-database v0.0.16 // indirect
 	github.com/sfomuseum/go-edtf v1.2.1 // indirect
 	github.com/sfomuseum/go-www-show/v2 v2.0.0 // indirect
 	github.com/skeema/knownhosts v1.3.1 // indirect

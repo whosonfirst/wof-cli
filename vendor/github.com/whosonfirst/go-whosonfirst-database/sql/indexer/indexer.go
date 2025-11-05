@@ -24,8 +24,6 @@ type Indexer struct {
 	table_timings map[string]time.Duration
 	mu            *sync.RWMutex
 	options       *IndexerOptions
-	// Timings is a boolean flag indicating whether timings (time to index records) should be recorded)
-	Timings bool
 }
 
 // IndexerOptions
@@ -39,6 +37,8 @@ type IndexerOptions struct {
 	LoadRecordFunc IndexerLoadRecordFunc
 	// PostIndexFunc is an optional custom function to invoke after a record has been indexed.
 	PostIndexFunc IndexerPostIndexFunc
+	// The maxiumum number of Go routines (workers) to use when indexing records.
+	Workers int
 }
 
 // NewSQLiteInder returns a `Indexer` configured with 'opts'.
@@ -51,7 +51,6 @@ func NewIndexer(opts *IndexerOptions) (*Indexer, error) {
 		table_timings: table_timings,
 		mu:            mu,
 		options:       opts,
-		Timings:       false,
 	}
 
 	return &i, nil
@@ -68,58 +67,74 @@ func (idx *Indexer) IndexURIs(ctx context.Context, iterator_uri string, uris ...
 
 	defer iter.Close()
 
-	done_ch := make(chan bool)
-	t1 := time.Now()
+	iter_workers := idx.options.Workers
+	iter_throttle := make(chan bool, iter_workers)
 
-	// ideally this could be a proper stand-along package method but then
-	// we have to set up a whole bunch of scaffolding just to pass 'indexer'
-	// around so... we're not doing that (20180205/thisisaaronland)
-
-	show_timings := func() {
-
-		t2 := time.Since(t1)
-		i := iter.Seen()
-
-		slog.Info("Time to index all", "count", i, "time", t2)
+	for i := 0; i < iter_workers; i++ {
+		iter_throttle <- true
 	}
 
-	if idx.Timings {
+	iter_ctx, iter_cancel := context.WithCancel(ctx)
+	iter_wg := new(sync.WaitGroup)
 
-		go func() {
+	iter_err_ch := make(chan error)
+	var iter_err error
 
-			for {
+	go func() {
 
-				select {
-				case <-done_ch:
-					return
-				case <-time.After(1 * time.Minute):
-					show_timings()
-				}
+		for {
+			select {
+			case err := <-iter_err_ch:
+				iter_err = err
+				iter_cancel()
+				return
 			}
-		}()
+		}
+	}()
 
-		defer func() {
-			done_ch <- true
-		}()
+	for rec, err := range iter.Iterate(iter_ctx, uris...) {
+
+		if err != nil {
+			return err
+		}
+
+		select {
+		case <-iter_ctx.Done():
+			break
+		default:
+			<-iter_throttle
+		}
+
+		select {
+		case <-iter_ctx.Done():
+			break
+		default:
+			// carry on
+		}
+
+		iter_wg.Go(func() {
+
+			logger := slog.Default()
+			logger = logger.With("path", rec.Path)
+
+			defer func() {
+				rec.Body.Close()
+				iter_throttle <- true
+			}()
+
+			err = idx.IndexIteratorRecord(ctx, rec)
+
+			if err != nil {
+				logger.Error("Failed to index record", "error", err)
+				iter_err_ch <- err
+			}
+		})
 	}
 
-	for rec, err := range iter.Iterate(ctx, uris...) {
+	iter_wg.Wait()
 
-		if err != nil {
-			return err
-		}
-
-		logger := slog.Default()
-		logger = logger.With("path", rec.Path)
-
-		defer rec.Body.Close()
-
-		err = idx.IndexIteratorRecord(ctx, rec)
-
-		if err != nil {
-			logger.Error("Failed to index record", "error", err)
-			return err
-		}
+	if iter_err != nil {
+		return iter_err
 	}
 
 	return nil
@@ -134,7 +149,7 @@ func (idx *Indexer) IndexIteratorRecord(ctx context.Context, rec *iterate.Record
 	record, err := idx.options.LoadRecordFunc(ctx, rec.Path, rec.Body)
 
 	if err != nil {
-		return err
+		return fmt.Errorf("Failed to load record func, %w", err)
 	}
 
 	if record == nil {
@@ -142,7 +157,7 @@ func (idx *Indexer) IndexIteratorRecord(ctx context.Context, rec *iterate.Record
 	}
 
 	idx.mu.Lock()
-	idx.mu.Unlock()
+	defer idx.mu.Unlock()
 
 	err = database_sql.IndexRecord(ctx, idx.options.DB, record, idx.options.Tables...)
 
@@ -155,7 +170,7 @@ func (idx *Indexer) IndexIteratorRecord(ctx context.Context, rec *iterate.Record
 		err := idx.options.PostIndexFunc(ctx, idx.options.DB, idx.options.Tables, record)
 
 		if err != nil {
-			return err
+			return fmt.Errorf("Post index func failed, %w", err)
 		}
 	}
 

@@ -11,7 +11,7 @@ import (
 	_ "github.com/whosonfirst/go-whosonfirst-database/sql"
 
 	database_sql "github.com/sfomuseum/go-database/sql"
-	"github.com/sfomuseum/go-flags/flagset"
+	_ "github.com/sfomuseum/go-flags/flagset"
 	"github.com/whosonfirst/go-reader/v2"
 	"github.com/whosonfirst/go-whosonfirst-database/sql/indexer"
 	"github.com/whosonfirst/go-whosonfirst-database/sql/tables"
@@ -28,30 +28,39 @@ func Run(ctx context.Context) error {
 
 func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
-	flagset.Parse(fs)
+	opts, err := RunOptionsFromFlagSet(fs)
 
-	if verbose {
+	if err != nil {
+		return err
+	}
+
+	return RunWithOptions(ctx, opts)
+}
+
+func RunWithOptions(ctx context.Context, opts *RunOptions) error {
+
+	if opts.Verbose {
 		slog.SetLogLoggerLevel(slog.LevelDebug)
 		slog.Debug("Verbose logging enabled")
 	}
 
-	runtime.GOMAXPROCS(procs)
+	runtime.GOMAXPROCS(opts.MaxProcesses)
 
-	if spatial_tables {
-		rtree = true
-		geojson = true
-		properties = true
-		spr = true
+	if opts.SpatialTables {
+		opts.RTreeTable = true
+		opts.GeoJSONTable = true
+		opts.PropertiesTable = true
+		opts.SPRTable = true
 	}
 
-	if spelunker_tables {
+	if opts.SpelunkerTables {
 		// rtree = true
-		spr = true
-		spelunker = true
-		geojson = true
-		concordances = true
-		ancestors = true
-		search = true
+		opts.SPRTable = true
+		opts.SpelunkerTable = true
+		opts.GeoJSONTable = true
+		opts.ConcordancesTable = true
+		opts.AncestorsTable = true
+		opts.SearchTable = true
 
 		to_index_alt := []string{
 			tables.GEOJSON_TABLE_NAME,
@@ -60,7 +69,7 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 		for _, table_name := range to_index_alt {
 
 			if !slices.Contains(index_alt, table_name) {
-				index_alt = append(index_alt, table_name)
+				opts.IndexAlt = append(opts.IndexAlt, table_name)
 			}
 		}
 
@@ -68,7 +77,7 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
 	logger := slog.Default()
 
-	db, err := database_sql.OpenWithURI(ctx, db_uri)
+	db, err := database_sql.OpenWithURI(ctx, opts.DatabaseURI)
 
 	if err != nil {
 		return err
@@ -92,7 +101,7 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 
 		// optimize query performance
 		// https://www.sqlite.org/pragma.html#pragma_optimize
-		if optimize {
+		if opts.Optimize {
 
 			defer func() {
 
@@ -109,21 +118,21 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 	}
 
 	init_opts := &tables.InitTablesOptions{
-		RTree:           rtree,
-		GeoJSON:         geojson,
-		Properties:      properties,
-		SPR:             spr,
-		Spelunker:       spelunker,
-		Concordances:    concordances,
-		Ancestors:       ancestors,
-		Search:          search,
-		Names:           names,
-		Supersedes:      supersedes,
-		SpatialTables:   spatial_tables,
-		SpelunkerTables: spelunker_tables,
-		All:             all,
-		IndexAlt:        index_alt,
-		StrictAltFiles:  strict_alt_files,
+		RTree:           opts.RTreeTable,
+		GeoJSON:         opts.GeoJSONTable,
+		Properties:      opts.PropertiesTable,
+		SPR:             opts.SPRTable,
+		Spelunker:       opts.SpelunkerTable,
+		Concordances:    opts.ConcordancesTable,
+		Ancestors:       opts.AncestorsTable,
+		Search:          opts.SearchTable,
+		Names:           opts.NamesTable,
+		Supersedes:      opts.SupersedesTable,
+		SpatialTables:   opts.SpatialTables,
+		SpelunkerTables: opts.SpelunkerTables,
+		All:             opts.AllTables,
+		IndexAlt:        opts.IndexAlt,
+		StrictAltFiles:  opts.StrictAltFiles,
 	}
 
 	to_index, err := tables.InitTables(ctx, db, init_opts)
@@ -137,7 +146,7 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 	}
 
 	record_opts := &indexer.LoadRecordFuncOptions{
-		StrictAltFiles: strict_alt_files,
+		StrictAltFiles: opts.StrictAltFiles,
 	}
 
 	record_func := indexer.LoadRecordFunc(record_opts)
@@ -146,14 +155,15 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 		DB:             db,
 		Tables:         to_index,
 		LoadRecordFunc: record_func,
+		Workers:        opts.MaxProcesses,
 	}
 
-	if index_relations {
+	if opts.IndexRelations {
 
-		r, err := reader.NewReader(ctx, relations_uri)
+		r, err := reader.NewReader(ctx, opts.RelationsURI)
 
 		if err != nil {
-			return fmt.Errorf("Failed to load reader (%s), %v", relations_uri, err)
+			return fmt.Errorf("Failed to load reader (%s), %v", opts.RelationsURI, err)
 		}
 
 		belongsto_func := indexer.IndexRelationsFunc(r)
@@ -166,11 +176,7 @@ func RunWithFlagSet(ctx context.Context, fs *flag.FlagSet) error {
 		return fmt.Errorf("failed to create sqlite indexer because %v", err)
 	}
 
-	idx.Timings = timings
-
-	uris := fs.Args()
-
-	err = idx.IndexURIs(ctx, iterator_uri, uris...)
+	err = idx.IndexURIs(ctx, opts.IteratorURI, opts.IteratorSources...)
 
 	if err != nil {
 		return fmt.Errorf("Failed to index paths in %s mode because: %s", iterator_uri, err)

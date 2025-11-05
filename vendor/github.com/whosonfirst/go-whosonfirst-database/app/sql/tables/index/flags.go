@@ -31,7 +31,6 @@ var supersedes bool
 var spatial_tables bool
 var spelunker_tables bool
 
-var timings bool
 var optimize bool
 
 var strict_alt_files bool
@@ -70,7 +69,6 @@ func DefaultFlagSet() *flag.FlagSet {
 	fs.BoolVar(&spatial_tables, "spatial-tables", false, "If true then index the necessary tables for use with the whosonfirst/go-whosonfirst-spatial-sqlite package.")
 	fs.BoolVar(&spelunker_tables, "spelunker-tables", false, "If true then index the necessary tables for use with the whosonfirst/go-whosonfirst-spelunker packages")
 
-	fs.BoolVar(&timings, "timings", false, "Display timings during and after indexing")
 	fs.BoolVar(&optimize, "optimize", true, "Attempt to optimize the database before closing connection")
 
 	fs.Var(&index_alt, "index-alt", "Zero or more table names where alt geometry files should be indexed.")
