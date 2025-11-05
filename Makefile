@@ -1,8 +1,10 @@
 GOMOD=$(shell test -f "go.work" && echo "readonly" || echo "vendor")
 LDFLAGS=-s -w
 
+TAGS=wof
+
 cli:
-	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/wof cmd/wof/main.go
+	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -tags $(TAGS) -o bin/wof cmd/wof/main.go
 
 wasmjs:
 	GOOS=js GOARCH=wasm \
