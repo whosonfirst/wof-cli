@@ -8,7 +8,7 @@ import (
 	io_fs "io/fs"
 	"net/url"
 
-	"github.com/aaronland/go-http-server/handler"
+	"github.com/aaronland/go-http/v3/handlers"
 	"github.com/mitchellh/copystructure"
 	"github.com/sfomuseum/go-flags/flagset"
 	sfom_funcs "github.com/sfomuseum/go-template/funcs"
@@ -19,15 +19,15 @@ import (
 )
 
 type RunOptions struct {
-	ServerURI         string                              `json:"server_uri"`
-	SpelunkerURI      string                              `json:"spelunker_uri"`
-	AuthenticatorURI  string                              `json:"authenticator_uri"`
-	URIs              *httpd.URIs                         `json:"uris"`
-	HTMLTemplates     []io_fs.FS                          `json:"templates,omitemtpy"`
-	HTMLTemplateFuncs html_template.FuncMap               `json:"template_funcs,omitempty"`
-	StaticAssets      io_fs.FS                            `json:"static_assets,omitempty"`
-	CustomHandlers    map[string]handler.RouteHandlerFunc `json:"custom_handlers,omitempty"`
-	ProtomapsApiKey   string                              `json:"protomaps_api_key"`
+	ServerURI         string                               `json:"server_uri"`
+	SpelunkerURI      string                               `json:"spelunker_uri"`
+	AuthenticatorURI  string                               `json:"authenticator_uri"`
+	URIs              *httpd.URIs                          `json:"uris"`
+	HTMLTemplates     []io_fs.FS                           `json:"templates,omitemtpy"`
+	HTMLTemplateFuncs html_template.FuncMap                `json:"template_funcs,omitempty"`
+	StaticAssets      io_fs.FS                             `json:"static_assets,omitempty"`
+	CustomHandlers    map[string]handlers.RouteHandlerFunc `json:"custom_handlers,omitempty"`
+	ProtomapsApiKey   string                               `json:"protomaps_api_key"`
 }
 
 func (o *RunOptions) Clone() (*RunOptions, error) {

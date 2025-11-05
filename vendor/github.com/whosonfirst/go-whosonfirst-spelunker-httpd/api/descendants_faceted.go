@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	// TBD...
-	// "github.com/sfomuseum/go-http-auth"
+	// "github.com/aaronland/go-http/v3/auth"
 	"github.com/whosonfirst/go-whosonfirst-spelunker"
 	"github.com/whosonfirst/go-whosonfirst-spelunker-httpd"
 )

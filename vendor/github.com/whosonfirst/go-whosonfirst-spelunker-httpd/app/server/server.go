@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/aaronland/go-http-server"
-	"github.com/aaronland/go-http-server/handler"
+	"github.com/aaronland/go-http/v3/handlers"
+	"github.com/aaronland/go-http/v3/server"
 )
 
 func Run(ctx context.Context, logger *slog.Logger) error {
@@ -54,7 +54,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions, logger *slog.Logger) 
 		return fmt.Errorf("Failed to construct path for whosonfirst.spelunker.uris.js, %w", err)
 	}
 
-	handlers := map[string]handler.RouteHandlerFunc{
+	mux_handlers := map[string]handlers.RouteHandlerFunc{
 
 		// Common handler things
 		"/robots.txt": robotsTxtHandlerFunc,
@@ -101,33 +101,30 @@ func RunWithOptions(ctx context.Context, opts *RunOptions, logger *slog.Logger) 
 		run_options.URIs.SVG:                      svgHandlerFunc,
 	}
 
-	assign_handlers := func(handler_map map[string]handler.RouteHandlerFunc, paths []string, handler_func handler.RouteHandlerFunc) {
+	assign_handlers := func(handler_map map[string]handlers.RouteHandlerFunc, paths []string, handler_func handlers.RouteHandlerFunc) {
 
 		for _, p := range paths {
 			handler_map[p] = handler_func
 		}
 	}
 
-	assign_handlers(handlers, run_options.URIs.IdAlt, idHandlerFunc)
-	assign_handlers(handlers, run_options.URIs.DescendantsAlt, descendantsHandlerFunc)
+	assign_handlers(mux_handlers, run_options.URIs.IdAlt, idHandlerFunc)
+	assign_handlers(mux_handlers, run_options.URIs.DescendantsAlt, descendantsHandlerFunc)
 
 	// API/machine-readable
-	assign_handlers(handlers, run_options.URIs.GeoJSONAlt, geoJSONHandlerFunc)
-	assign_handlers(handlers, run_options.URIs.GeoJSONLDAlt, geoJSONLDHandlerFunc)
-	assign_handlers(handlers, run_options.URIs.NavPlaceAlt, navPlaceHandlerFunc)
-	assign_handlers(handlers, run_options.URIs.SelectAlt, selectHandlerFunc)
-	assign_handlers(handlers, run_options.URIs.RecentAlt, recentHandlerFunc)
-	assign_handlers(handlers, run_options.URIs.SPRAlt, sprHandlerFunc)
-	assign_handlers(handlers, run_options.URIs.SVGAlt, svgHandlerFunc)
+	assign_handlers(mux_handlers, run_options.URIs.GeoJSONAlt, geoJSONHandlerFunc)
+	assign_handlers(mux_handlers, run_options.URIs.GeoJSONLDAlt, geoJSONLDHandlerFunc)
+	assign_handlers(mux_handlers, run_options.URIs.NavPlaceAlt, navPlaceHandlerFunc)
+	assign_handlers(mux_handlers, run_options.URIs.SelectAlt, selectHandlerFunc)
+	assign_handlers(mux_handlers, run_options.URIs.RecentAlt, recentHandlerFunc)
+	assign_handlers(mux_handlers, run_options.URIs.SPRAlt, sprHandlerFunc)
+	assign_handlers(mux_handlers, run_options.URIs.SVGAlt, svgHandlerFunc)
 
-	log_logger := slog.NewLogLogger(logger.Handler(), slog.LevelInfo)
-
-	route_handler_opts := &handler.RouteHandlerOptions{
-		Handlers: handlers,
-		Logger:   log_logger,
+	route_handler_opts := &handlers.RouteHandlerOptions{
+		Handlers: mux_handlers,
 	}
 
-	route_handler, err := handler.RouteHandlerWithOptions(route_handler_opts)
+	route_handler, err := handlers.RouteHandlerWithOptions(route_handler_opts)
 
 	if err != nil {
 		return fmt.Errorf("Failed to configure route handler, %w", err)
@@ -145,7 +142,7 @@ func RunWithOptions(ctx context.Context, opts *RunOptions, logger *slog.Logger) 
 	}
 
 	go func() {
-		for uri, h := range handlers {
+		for uri, h := range mux_handlers {
 			slog.Debug("Enable handler", "uri", uri, "handler", fmt.Sprintf("%T", h))
 		}
 	}()

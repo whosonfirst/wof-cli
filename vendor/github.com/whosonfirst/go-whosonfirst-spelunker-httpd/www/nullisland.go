@@ -5,8 +5,8 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/aaronland/go-http/v3/auth"
 	"github.com/aaronland/go-pagination"
-	"github.com/sfomuseum/go-http-auth"
 	"github.com/whosonfirst/go-whosonfirst-spelunker"
 	"github.com/whosonfirst/go-whosonfirst-spelunker-httpd"
 	"github.com/whosonfirst/go-whosonfirst-spr/v2"

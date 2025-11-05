@@ -9,7 +9,7 @@ import (
 	"github.com/whosonfirst/go-whosonfirst-spelunker"
 	"github.com/whosonfirst/go-whosonfirst-spelunker/document"
 	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
-	"github.com/whosonfirst/go-whosonfirst-sql/tables"
+	"github.com/whosonfirst/go-whosonfirst-database/sql/tables"
 	"github.com/whosonfirst/go-whosonfirst-sqlite-spr"
 	"github.com/whosonfirst/go-whosonfirst-uri"
 )

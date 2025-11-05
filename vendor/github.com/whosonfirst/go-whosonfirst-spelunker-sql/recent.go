@@ -9,7 +9,7 @@ import (
 	"github.com/aaronland/go-pagination"
 	"github.com/whosonfirst/go-whosonfirst-spelunker"
 	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
-	"github.com/whosonfirst/go-whosonfirst-sql/tables"
+	"github.com/whosonfirst/go-whosonfirst-database/sql/tables"
 )
 
 func (s *SQLSpelunker) GetRecent(ctx context.Context, pg_opts pagination.Options, d time.Duration, filters []spelunker.Filter) (wof_spr.StandardPlacesResults, pagination.Results, error) {

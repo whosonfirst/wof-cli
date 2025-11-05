@@ -7,9 +7,9 @@ import (
 	"regexp"
 	"time"
 
+	"github.com/aaronland/go-http/v3/auth"
 	"github.com/aaronland/go-pagination"
 	"github.com/dustin/go-humanize"
-	"github.com/sfomuseum/go-http-auth"
 	"github.com/sfomuseum/iso8601duration"
 	"github.com/whosonfirst/go-whosonfirst-spelunker"
 	"github.com/whosonfirst/go-whosonfirst-spelunker-httpd"

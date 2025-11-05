@@ -5,7 +5,7 @@ import (
 	"regexp"
 
 	"encoding/json"
-	"github.com/aaronland/go-http-sanitize"
+	"github.com/aaronland/go-http/v3/sanitize"
 	"github.com/tidwall/gjson"
 	"github.com/whosonfirst/go-whosonfirst-spelunker"
 	"github.com/whosonfirst/go-whosonfirst-spelunker-httpd"

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/aaronland/go-http-sanitize"
+	"github.com/aaronland/go-http/v3/sanitize"
 	"github.com/whosonfirst/go-whosonfirst-spelunker"
 )
 

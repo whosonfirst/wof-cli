@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/aaronland/go-http-sanitize"
-	// "github.com/sfomuseum/go-http-auth"
+	"github.com/aaronland/go-http/v3/sanitize"
+	// "github.com/aaronland/go-http/v3auth"
 	"github.com/whosonfirst/go-whosonfirst-spelunker"
 	"github.com/whosonfirst/go-whosonfirst-spelunker-httpd"
 )

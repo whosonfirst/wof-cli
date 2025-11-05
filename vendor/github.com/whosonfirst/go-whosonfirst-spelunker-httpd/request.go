@@ -9,11 +9,11 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/aaronland/go-http-sanitize"
+	"github.com/aaronland/go-http/v3/sanitize"
 	"github.com/aaronland/go-pagination"
 	"github.com/aaronland/go-pagination/countable"
 	"github.com/aaronland/go-pagination/cursor"
-	"github.com/whosonfirst/go-reader"
+	"github.com/whosonfirst/go-reader/v2"
 	"github.com/whosonfirst/go-whosonfirst-spelunker"
 	"github.com/whosonfirst/go-whosonfirst-spelunker-httpd/webfinger"
 	"github.com/whosonfirst/go-whosonfirst-spr/v2"

@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	// "github.com/sfomuseum/go-http-auth"
+	// TBD
+	// "github.com/aaronland/go-http/v3/auth"
 	"github.com/whosonfirst/go-whosonfirst-spelunker"
 	"github.com/whosonfirst/go-whosonfirst-spelunker-httpd"
 )
