@@ -23,7 +23,7 @@ require (
 	github.com/whosonfirst/go-reader-findingaid/v2 v2.1.1
 	github.com/whosonfirst/go-reader-github/v2 v2.0.1
 	github.com/whosonfirst/go-reader/v2 v2.1.0
-	github.com/whosonfirst/go-whosonfirst-database v0.2.0
+	github.com/whosonfirst/go-whosonfirst-database v0.3.0
 	github.com/whosonfirst/go-whosonfirst-export/v3 v3.3.0
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.29
 	github.com/whosonfirst/go-whosonfirst-format v1.1.0
@@ -158,6 +158,7 @@ require (
 	github.com/klauspost/asmfmt v1.3.2 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
+	github.com/lib/pq v1.10.9 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-sqlite3 v1.14.32 // indirect
 	github.com/minio/asm2plan9s v0.0.0-20200509001527-cdd76441f9d8 // indirect
@@ -203,7 +204,7 @@ require (
 	github.com/whosonfirst/go-whosonfirst-flags v0.5.2 // indirect
 	github.com/whosonfirst/go-whosonfirst-names v0.1.0 // indirect
 	github.com/whosonfirst/go-whosonfirst-sources v0.1.0 // indirect
-	github.com/whosonfirst/go-whosonfirst-spelunker v0.0.6 // indirect
+	github.com/whosonfirst/go-whosonfirst-spelunker v0.0.7 // indirect
 	github.com/whosonfirst/go-whosonfirst-sqlite-spr/v2 v2.1.0 // indirect
 	github.com/whosonfirst/gpq-fork v0.0.1 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect

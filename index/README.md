@@ -2,7 +2,20 @@
 
 ## index
 
+Index one or more Who's On First style data sources.
+
+```
+$> ./bin/wof index -h
+Usage: wof index [TARGET] [OPTIONS]
+Valid commands are:
+* sql
+```
+
+_Support for indexing data sources in to an OpenSearch database is available in a separate [whosonfirst/go-whosonfirst-opensearch](https://github.com/whosonfirst/go-whosonfirst-opensearch) package which will, eventually, also be available from this tool._
+
 ### sql
+
+Index one or more Who's On First style data sources in to a [database/sql](https://pkg.go.dev/database/sql) compatible database.
 
 ```
 $> ./bin/wof index sql -h
@@ -54,18 +67,41 @@ $> ./bin/wof index sql -h
     	Enable verbose (debug) logging
 ```
 
-### Examples
+### Database support
+
+As of this writing the `index sql` tool has support for three databases: SQLite, MySQL and Postgres. Database support is NOT enabled by default and needs to be specified when you build the `wof` tool. These defaults may change in future releases but for the time being that's how it works.
+
+| Database | Build tag | Notes |
+| --- | --- | --- |
+| SQLite | `sqlite3` | If you are indexing a database with either the "search" or "spelunker" tables you will also need to enable support for the FTS5 extension with the `fts5` build tag. |
+| MySQL | `mysql` | |
+| Postgres | `postgres` | |
+
+For example:
+
+```
+$> cd wof-cli
+$> make cli TAGS=sqlite3,fts5,postgres
+```
+
+### Database tables
+
+Database tables and their schemas are defined in the [whosonfirst/go-whosonfirst-database/sql/tables](https://github.com/whosonfirst/go-whosonfirst-database/tree/main/sql/tables) package.
+
+## Examples
+
+Create a SQLite database with both the "spelunker" and "spatial" tables derived from three separate [sfomuseum-data](https://github.com/sfomuseum-data) repositories.
 
 ```
 $> ./bin/wof index sql \
+	-database-uri 'sql://sqlite3?dsn=test2.db' \
 	-spatial-tables \
-	-processes 100 \
-	-database-uri 'sql://sqlite3?dsn=test.db' \
-	/usr/local/data/whosonfirst-data-admin-us
-
-2025/11/04 15:59:15 INFO Iterator stats elapsed=1m0.000103458s seen=87054 allocated="3.1 MB" "total allocated"="14 GB" sys="51 MB" numgc=4166
-2025/11/04 16:00:15 INFO Iterator stats elapsed=2m0.000590291s seen=213928 allocated="4.9 MB" "total allocated"="27 GB" sys="135 MB" numgc=8454
-2025/11/04 16:01:15 INFO Iterator stats elapsed=3m0.000484375s seen=321211 allocated="4.3 MB" "total allocated"="45 GB" sys="135 MB" numgc=17088
-2025/11/04 16:02:15 INFO Iterator stats elapsed=4m0.0007335s seen=421566 allocated="5.2 MB" "total allocated"="61 GB" sys="135 MB" numgc=24467
-2025/11/04 16:02:43 INFO Iterator stats elapsed=4m28.389431541s seen=448570 allocated="6.0 MB" "total allocated"="65 GB" sys="135 MB" numgc=26423
+	-spelunker-tables \
+	/usr/local/data/sfomuseum-data-publicart \
+	/usr/local/data/sfomuseum-data-architecture \
+	/usr/local/data/sfomuseum-data-whosonfirst
+	
+2025/11/05 09:44:15 INFO Iterator stats elapsed=24.544807417s seen=4501 allocated="19 MB" "total allocated"="18 GB" sys="513 MB" numgc=694
 ```
+
+_Note that indexing databases with the "spelunker" or "search" tables can take a long time for large data sources (for example `whosonfirst-data-admin-us`) because of the time it takes to index the search table._

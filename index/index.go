@@ -3,16 +3,11 @@ package index
 import (
 	"context"
 	"fmt"
-	"log/slog"
 	"os"
 
 	sql_index "github.com/whosonfirst/go-whosonfirst-database/app/sql/tables/index"
 	"github.com/whosonfirst/wof"
 )
-
-type RunOptions struct {
-	Verbose bool
-}
 
 type IndexCommand struct {
 	wof.Command
@@ -46,34 +41,15 @@ func NewIndexCommand(ctx context.Context, cmd string) (wof.Command, error) {
 
 func (c *IndexCommand) Run(ctx context.Context, args []string) error {
 
-	fs := DefaultFlagSet()
-	fs.Parse(args)
-
-	opts := &RunOptions{
-		Verbose: verbose,
-	}
-
-	return RunWithOptions(ctx, opts)
-}
-
-func RunWithOptions(ctx context.Context, opts *RunOptions) error {
-
-	if opts.Verbose {
-		slog.SetLogLoggerLevel(slog.LevelDebug)
-		slog.Debug("Verbose logging enabled")
-	}
-
-	args := os.Args
-
-	if len(args) < 3 {
+	if len(args) < 2 {
 		usage()
 	}
 
-	switch args[2] {
+	switch args[0] {
 	case "sql":
 
 		fs := sql_index.DefaultFlagSet()
-		fs.Parse(args[3:])
+		fs.Parse(args[1:])
 		args := fs.Args()
 
 		opts, err := sql_index.RunOptionsFromParsedFlags(args...)
