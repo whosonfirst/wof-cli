@@ -24,7 +24,7 @@ require (
 	github.com/whosonfirst/go-reader-findingaid/v2 v2.1.1
 	github.com/whosonfirst/go-reader-github/v2 v2.0.1
 	github.com/whosonfirst/go-reader/v2 v2.1.0
-	github.com/whosonfirst/go-whosonfirst-database v0.3.0
+	github.com/whosonfirst/go-whosonfirst-database v0.3.1
 	github.com/whosonfirst/go-whosonfirst-export/v3 v3.3.0
 	github.com/whosonfirst/go-whosonfirst-feature v0.0.29
 	github.com/whosonfirst/go-whosonfirst-format v1.1.0
@@ -197,7 +197,7 @@ require (
 	github.com/rs/cors v1.11.1 // indirect
 	github.com/schollz/progressbar/v3 v3.18.0 // indirect
 	github.com/sergi/go-diff v1.4.0 // indirect
-	github.com/sfomuseum/go-database v0.0.16 // indirect
+	github.com/sfomuseum/go-database v0.0.17 // indirect
 	github.com/sfomuseum/go-edtf v1.2.1 // indirect
 	github.com/sfomuseum/go-geojsonld v1.0.0 // indirect
 	github.com/sfomuseum/go-http-opensearch v0.0.2 // indirect
