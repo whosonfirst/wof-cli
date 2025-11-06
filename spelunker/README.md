@@ -68,6 +68,6 @@ Once you open your web browser to `http://localhost:8080` you should see stuff l
 
 ![](docs/wof-cli-spelunker-launch.png)
 
-![](docs/wof-cli-spelunker-descendants.png)
+![](docs/wof-cli-spelunker-search.png)
 
 ![](docs/wof-cli-spelunker-record.png)

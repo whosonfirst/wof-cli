@@ -205,6 +205,24 @@ q {
 	margin-right:.25rem;	
 }
 
+.header-dates {
+	font-size: small !important;
+	font-style: italic;
+}
+
+.header-dates .hey-look {
+	font-weight: 700 !important;
+}
+
+
+.hey-look-list .hey-look-list-item:after {
+	content: ", ";
+}
+
+.hey-look-list .hey-look-list-item:last-child:after {
+	content: "";
+}
+
 #nav {
     border-bottom:1px solid #999;
     margin-bottom:1em;
