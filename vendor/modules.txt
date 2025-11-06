@@ -1127,7 +1127,7 @@ github.com/whosonfirst/go-whosonfirst-spatial-sqlite/wkttoorb
 ## explicit; go 1.24.0
 github.com/whosonfirst/go-whosonfirst-spelunker
 github.com/whosonfirst/go-whosonfirst-spelunker/document
-# github.com/whosonfirst/go-whosonfirst-spelunker-httpd v0.0.19
+# github.com/whosonfirst/go-whosonfirst-spelunker-httpd v0.0.20
 ## explicit; go 1.25.0
 github.com/whosonfirst/go-whosonfirst-spelunker-httpd
 github.com/whosonfirst/go-whosonfirst-spelunker-httpd/api
