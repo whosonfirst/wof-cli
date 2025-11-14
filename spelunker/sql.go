@@ -1,4 +1,5 @@
 //go:build sqlite3
+
 package spelunker
 
 import (

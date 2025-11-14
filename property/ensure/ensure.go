@@ -11,6 +11,8 @@ import (
 
 	"github.com/paulmach/orb/encoding/wkt"
 	"github.com/paulmach/orb/geojson"
+	"github.com/sfomuseum/go-flags/multi"
+	"github.com/tidwall/gjson"
 	export "github.com/whosonfirst/go-whosonfirst-export/v3"
 	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
 	uri "github.com/whosonfirst/go-whosonfirst-uri"
@@ -142,6 +144,94 @@ func (c *EnsurePropertyCommand) Run(ctx context.Context, args []string) error {
 		if err != nil {
 			logger.Error("Failed to read body", "error", err)
 			return err
+		}
+
+		if str_properties_from != "" && len(str_properties) > 0 {
+
+			rsp := gjson.GetBytes(body, str_properties_from)
+
+			if !rsp.Exists() {
+				return fmt.Errorf("Record is missing '%s' property", str_properties_from)
+			}
+
+			if rsp.Type != gjson.String {
+				return fmt.Errorf("%s property for record is not a string", str_properties_from)
+			}
+
+			derived_props := multi.KeyValueString{}
+
+			for _, pr := range str_properties {
+				str_fl := fmt.Sprintf("%s=%s", pr.Key(), rsp.String())
+				derived_props.Set(str_fl)
+			}
+
+			str_properties = derived_props
+		}
+
+		if int_properties_from != "" {
+
+			rsp := gjson.GetBytes(body, int_properties_from)
+
+			if !rsp.Exists() {
+				return fmt.Errorf("Record is missing '%s' property", int_properties_from)
+			}
+
+			if rsp.Type != gjson.Number {
+				return fmt.Errorf("%s property for record is not an int", int_properties_from)
+			}
+
+			derived_props := multi.KeyValueInt64{}
+
+			for _, pr := range int_properties {
+				int_fl := fmt.Sprintf("%s=%d", pr.Key(), rsp.Int())
+				derived_props.Set(int_fl)
+			}
+
+			int_properties = derived_props
+		}
+
+		if float_properties_from != "" {
+
+			rsp := gjson.GetBytes(body, float_properties_from)
+
+			if !rsp.Exists() {
+				return fmt.Errorf("Record is missing '%s' property", float_properties_from)
+			}
+
+			if rsp.Type != gjson.Number {
+				return fmt.Errorf("%s property for record is not a number", float_properties_from)
+			}
+
+			derived_props := multi.KeyValueFloat64{}
+
+			for _, pr := range float_properties {
+				float_fl := fmt.Sprintf("%s=%v", pr.Key(), rsp.Float())
+				derived_props.Set(float_fl)
+			}
+
+			float_properties = derived_props
+		}
+
+		if bool_properties_from != "" {
+
+			rsp := gjson.GetBytes(body, bool_properties_from)
+
+			if !rsp.Exists() {
+				return fmt.Errorf("Record is missing '%s' property", bool_properties_from)
+			}
+
+			if rsp.Type != gjson.True && rsp.Type != gjson.False {
+				return fmt.Errorf("%s property for record is not a boolean", bool_properties_from)
+			}
+
+			derived_props := multi.KeyValueBool{}
+
+			for _, pr := range bool_properties {
+				bool_fl := fmt.Sprintf("%s=%v", pr.Key(), rsp.Bool())
+				derived_props.Set(bool_fl)
+			}
+
+			bool_properties = derived_props
 		}
 
 		opts := &update.UpdateFeatureOptions{
