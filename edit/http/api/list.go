@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/aaronland/go-http/v3/slog"
+	"github.com/aaronland/go-http/v4/slog"
 )
 
 func ListHandler(data_root *os.Root) http.Handler {
