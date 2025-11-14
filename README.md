@@ -139,22 +139,30 @@ Ensure typed values for one or more Who's On First records.
 Usage:
 	./bin/wof [options] path(N) path(N)
 Valid options are:
+  -bool-property-from string
+    	A valid tidwall/gjson path used to erive the value of the -bool-property from a property in the same document.
   -boolean-property value
     	One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a boolean value.
   -exporter-uri string
     	A valid whosonfirst/go-whosonfirst-export/v3.Exporter URI. (default "whosonfirst://")
   -float-property value
     	One or more {KEY}={VALUE} flags where {KEY} is a valid tidwall/gjson path and {VALUE} is a float(64) value.
+  -float-property-from string
+    	A valid tidwall/gjson path used to erive the value of the -float-property from a property in the same document.
   -geometry-property value
     	A {KEY}={VALUE} flag indicating the source of the geometry data to assign. Valid options are: wkt={VALID_WKT_GEOMETRY}, geojson={VALID_GEOJSON_GEOMETRY}, file={PATH_TO_GEOJSON_FEATURE}.
   -if-missing
     	Only assign property value if the property key is not set.
   -int-property value
     	One or more {KEY}={VALUE} flag where {KEY} is a valid tidwall/gjson path and {VALUE} is a int(64) value.
+  -int-property-from string
+    	A valid tidwall/gjson path used to erive the value of the -int-property from a property in the same document.
   -iterator-uri string
     	A valid whosonfirst/go-whosonfirst-iterate/v3.Iterator URI. (default "repo://")
   -string-property value
     	One or more {KEY}={VALUE} flag where {KEY} is a valid tidwall/gjson path and {VALUE} is a string value.
+  -string-property-from string
+    	A valid tidwall/gjson path used to erive the value of the -string-property from a property in the same document.
   -verbose
     	Enable verbose (debug) logging
   -writer-uri string

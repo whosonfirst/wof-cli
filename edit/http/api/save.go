@@ -10,7 +10,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/aaronland/go-http/v3/slog"
+	"github.com/aaronland/go-http/v4/slog"
 	"github.com/google/uuid"
 	"github.com/whosonfirst/go-whosonfirst-export/v3"
 	"github.com/whosonfirst/go-whosonfirst-feature/properties"

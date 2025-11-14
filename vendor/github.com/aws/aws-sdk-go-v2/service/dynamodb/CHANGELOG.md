@@ -1,3 +1,11 @@
+# v1.51.0 (2025-10-02)
+
+* **Feature**: Add support for dual-stack account endpoint generation
+
+# v1.50.5 (2025-09-26)
+
+* **Dependency Update**: Updated to the latest SDK module versions
+
 # v1.50.4 (2025-09-23)
 
 * **Dependency Update**: Updated to the latest SDK module versions
