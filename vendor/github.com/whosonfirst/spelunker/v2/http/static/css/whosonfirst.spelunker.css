@@ -1,0 +1,621 @@
+body {
+    padding:0px;
+    margin:2em;
+    margin-right:3em;
+    font-family:sans-serif;
+    line-height: 1.4em;
+    background-color: #fff !important;
+}
+
+a {
+	color: #fe1e9f !important;;
+}
+
+code {
+	padding-left: .5rem;
+	padding-right: .5rem;
+	color: initial !important;
+	margin: initial !important;	
+}
+
+.pcode {
+	font-size: 1.4rem !important;
+	color:#000 !important;
+	font-weight: 400;
+}
+
+p {
+    font-family: sans-serif;
+    font-size:1.4em;
+    line-height:1.6em;
+    margin-top:.75em;
+    margin-bottom:.75em;
+    color:#333;
+}
+
+pre {
+	font-size: initial !important;
+	color:#000 !important;
+	font-family:monospace;
+}
+
+details {
+	margin-bottom: 1rem;
+}
+
+details ul {
+	margin-left: 1rem;
+	margin-top:1rem;
+	margin-bottom:1rem;
+}
+
+h2 {
+	font-size: 1.8rem !important;
+	font-weight: 700;
+}
+
+h3 {
+	font-size: 1.5rem !important;
+	font-weight: 600;
+	color:#333;
+}
+
+h4 {
+	font-size: 1.3rem !important;
+}
+
+summary {
+	font-weight: 600;
+	font-size: 1.2rem;
+}
+
+.biglink {
+	display:flex;
+	justify-content: center;
+	font-size: 1.3rem;
+}
+
+
+.leaflet-control-attribution {
+	display:none;
+}
+
+.deprecated {
+	color: red !important;
+}
+
+.underline {
+	text-decoration: underline;
+}
+
+#map-wrapper:after {
+	display: flex;
+	justify-content: right;
+	font-size: x-small;
+	color: #666;
+	content: "Map data © OpenStreetMap";
+}
+
+.rel-path {
+	display: block;
+	font-size:small;
+	margin-top:.3rem;
+}
+
+.whosonfirst-places-list {
+	line-height: 1.4rem !important;
+	padding: 0px !important;
+}
+
+.whosonfirst-places-list li {
+	margin-bottom:1.5rem !important;
+}
+
+#whosonfirst-alt-geoms {
+	font-style:italic;
+}
+
+#whosonfirst-alt-geoms ul {
+	display: inline;
+	padding:0px;
+	margin:0px;	
+}
+
+#whosonfirst-alt-geoms ul li {
+	list-style-type: none;
+	display:inline;
+	padding:0px;
+	margin:0px;
+}
+
+#whosonfirst-alt-geoms ul li:after {
+	content:", ";
+}
+
+#whosonfirst-alt-geoms ul li:last-child:after {
+	content:"" !important;
+}
+
+#nav-links {
+    margin:0px !important;
+    padding:0px !important;
+    font-size: small;
+}
+
+#nav-links li:after {
+}
+
+#nav-links li:last-child:after {
+}
+
+whosonfirst-map img {
+	max-height: 200px;
+}
+
+.whosonfirst-record {
+	display:grid;
+	grid-template-columns: 1fr 1fr;
+	column-gap: 2em;
+}
+
+#whosonfirst-places {
+	display:grid;
+	grid-template-columns: 1fr 1fr;
+	column-gap: 2em;
+}
+
+.whosonfirst-facets {
+}
+
+.whosonfirst-facets li {
+	display:inline-flex;
+}
+
+ol, ul {
+    line-height: 1.7em;
+}
+
+li {
+    list-style-type: none;
+}
+
+q {
+    font-weight: 700;
+}
+
+.footer {
+    margin-top:5em;
+    padding-top:2em;
+    margin-bottom:2em;
+    border-top: .5px dotted #ededed;
+    font-size:small;
+}
+
+.debug {
+    /* border: 1px solid red; */
+}
+
+.row {
+    /* border: 1px solid blue !important; */
+}
+
+.hey-look {
+	font-weight:700;
+	margin-left:.25rem;
+	margin-right:.25rem;	
+}
+
+.header-dates {
+	font-size: small !important;
+	font-style: italic;
+}
+
+.header-dates .hey-look {
+	font-weight: 700 !important;
+}
+
+
+.hey-look-list .hey-look-list-item:after {
+	content: ", ";
+}
+
+.hey-look-list .hey-look-list-item:last-child:after {
+	content: "";
+}
+
+#nav {
+    border-bottom:1px solid #999;
+    margin-bottom:1em;
+}
+
+#nav-search {
+    float:right;
+}
+
+#pagination  {
+	text-align:center;
+	margin-top:4em;
+	
+	display:flex;
+	justify-content:center;
+}
+
+#pagination-current {
+	margin-left:.75rem;
+	margin-right:.75rem;	
+}
+
+
+.meta {
+    display:block;
+    border: solid thin;
+    padding: 2em;
+    float:left;
+    margin-right:2em;
+    margin-bottom:2em;
+}
+
+.geom {
+    color:#ccc;
+    font-family:monospace;
+    line-height:1.4em;
+}
+
+#es-query pre {
+    max-height:400px;
+    overflow:scroll;
+}
+
+#map {
+    height: 400px;
+    width:100%;
+    border: solid thin;
+	margin-bottom:.75em;
+	display:none;
+}
+
+#map-svg {
+	display:none;
+}
+
+.facet {
+
+}
+
+.facet-details {
+    max-height:200px;
+    overflow:scroll;
+    border-bottom:solid thin;
+    margin-bottom:2em;
+}
+
+.facet-details-list-item {
+    color: darkslategrey;
+    line-height:1.6em !important;
+}
+
+
+.facetbox {
+    border:none;
+    float:right;
+    max-width:30%;
+    padding:2em;
+    padding-top:.5em;
+}
+
+.facetbox ul {
+    padding: 0px;
+    margin: 0px;
+    display: inline !important;
+}
+.facetbox ul li {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    display: inline !important;
+}
+
+.facetbox small {
+    color:#ccc;
+    font-size: .8em;
+}
+
+#wof-id {
+}
+
+.iso-country:after {
+    font-size:.6em;
+    color: #ccc;
+    content: attr(data-iso-code);
+    padding-left: .5em;
+    text-transform: uppercase;
+}
+
+.italic {
+    font-style:italic;
+}
+
+.not-a-geocoder {
+	margin-bottom:.3em;
+	font-size:x-small;
+}
+
+.missing-or-invalid {
+    color: #666;
+}
+
+.dates {
+    color: #000;
+}
+
+.dates-cessation {
+    color: #800000;
+}
+
+.flagged {
+    color: #800000;
+}
+
+.noslash:before {
+    content:"" !important;
+}
+
+.loading {
+
+}
+
+.loading:before {
+    content: "⏳";
+    padding-right: .5em;
+}
+
+.timings {
+    font-size:small;
+    color: #777;
+}
+
+.timings:before {
+    content: "⏳";
+    padding-right: .5em;
+}
+
+.timings-right {
+    float:right;
+    font-size:small;
+    color: #777;
+}
+
+.timings-right:after {
+    content: "⏳";
+    padding-left: .5em;
+}
+
+.translations-missing {
+    font-size:small !important;
+    color: #666;
+    margin-bottom:.75em;
+}
+
+.warning {
+
+}
+
+.warning:before {
+    content: "🚨";
+    padding-right: .5em;
+}
+
+#props-toggle {
+    display: none;
+    font-family:monospace;
+}
+
+#props-toggle-raw {
+    display: none;
+}
+
+#props-toggle-pretty {
+    display: none;
+}
+
+.see-also {
+    display:block;
+    margin-top:.75em;
+    margin-bottom:1em;
+}
+
+.see-also-mt {
+    font-size: small;
+    margin-left: .25em;
+    color: #999;
+}
+
+.see-also-mt:before {
+    content: "see also";
+    font-weight: 700;
+}
+
+.caveat {
+    color:#666;
+    background-color: #ffff99;
+    padding:.35em;
+    padding-left:.6em;
+    padding-right:.6em;
+}
+
+.caveat:before {
+    /* content: " – "; */
+}
+
+.pull-right {
+	display: flex;
+	justify-content: right;
+}
+
+.pull-right a {
+}
+
+input {
+    border-radius: 0px !important;
+}
+
+button {
+    border-radius: 0px !important;
+}
+
+pre {
+    border-radius: 0px !important;
+}
+
+.dropdown-menu {
+    border-radius: 0px !important;
+}
+
+#slippymap-coords:before {
+    content:"the map is currently centered at ";
+}
+
+#slippymap-coords {
+    float: right;
+    font-size:.8em;
+    color:#666;
+    margin-bottom:1em;
+}
+
+#slippymap-coords:hover {
+    color: #000;
+}
+
+#wof-bundler {
+    padding-bottom: 1.5em;
+}
+
+#wof-bundler ul {
+    padding-left: 0;
+    padding-top: 0.5em;
+    margin-bottom: 0;
+}
+
+#bundle-options,
+#bundle-controls {
+    border-top: 1px solid #ccc;
+    margin-top: 1em;
+    padding-top: 1em;
+}
+
+.bundle-option {
+    padding-top: 5px;
+}
+
+#bundle-options label {
+    font-weight: bold;
+}
+
+#start-btn, #bundle-btns {
+    padding-top: 0.5em;
+}
+
+#bundle-btns {
+    margin-bottom: 1em;
+}
+
+#bundle-status,
+#bundle-github {
+    margin-top: 0.5em;
+}
+
+#bundle-github-login,
+#bundle-github-logout,
+#bundle-github-waiting,
+#bundle-github-uploading,
+#bundle-github-done,
+#bundle-github-error {
+    display: none;
+}
+
+#bundle-github.login #bundle-github-login,
+#bundle-github.logout #bundle-github-logout,
+#bundle-github.waiting #bundle-github-waiting,
+#bundle-github.uploading #bundle-github-uploading,
+#bundle-github.done #bundle-github-done,
+#bundle-github.error #bundle-github-error {
+    display: block;
+}
+
+#bundle-status {
+    margin-top: 0.5em;
+}
+
+#bundle-warning {
+    margin-top: 0.5em;
+}
+
+#bundle-github-done {
+    margin-top: 1.5em;
+}
+
+#bundle-github-done a {
+    display: inline-block;
+    margin-top: 3px;
+}
+
+#gist-raw-url {
+    border: 1px solid #ccc;
+    padding: 5px 7px;
+    display: block;
+    width: 300px;
+    margin-top: 5px;
+}
+
+#gist-raw-url:focus {
+    border: 1px solid #666;
+}
+
+.preview-controls {
+    padding-top: 15px;
+}
+
+.preview-controls label {
+    margin-right: 5px;
+}
+
+#download-feature-credit {
+    float: left;
+    font-size: 11px;
+    color: #666;
+}
+
+#download-feature-credit:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.inc-docs-meta {
+    color:#999;
+    font-size:small;
+    margin-bottom:.5em;
+}
+
+.inc-docs-meta li:after {
+    content: " /";
+}
+
+.inc-docs-meta li:first-child {
+
+}
+
+.inc-docs-meta li:last-child:after {
+    content: "" !important;
+}
+
+#gist-status {
+	margin-top: 10px;
+	font-size: small;
+}
+
+/* This is important as the default margin: 12px 0px; make OSM leaflet tiles sad */
+
+.whosonfirst-image-box, img {
+	margin: 0px 0px !important;
+}

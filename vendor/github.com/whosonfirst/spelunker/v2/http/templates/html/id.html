@@ -1,0 +1,73 @@
+{{ define "id" -}}
+{{ template "inc_head" . -}}
+
+<h2>
+    {{ GjsonGet .Properties "wof:name" }}
+    <small class="header-dates"><span class="hey-look">{{ if eq (GjsonGet .Properties "edtf:inception") "" }}date unknown{{ else if eq (GjsonGet .Properties "edtf:inception") "uuuu" }}date unknown{{ else }}{{ GjsonGet .Properties "edtf:inception" }}{{ end }}</span> to <span class="hey-look">{{ if eq (GjsonGet .Properties "edtf:cessation") "" }}unknown{{ else if eq (GjsonGet .Properties "edtf:cessation") "uuuu" }}date unknown{{ else }}{{ GjsonGet .Properties "edtf:cessation" }}{{ end }}</span></small>
+    <small class="rel-path">{{ .RelPath }}</small>
+</h2>
+
+<div id="map-wrapper">
+    <img src="{{ URIForId .URIs.SVG .Id }}" id="map-svg" loading="lazy" />
+    <div id="map" data-wof-id="{{ .Id }}"></div>
+</div>
+
+<p>{{ GjsonGet .Properties "wof:name" }} is a <span class="hey-look">{{ GjsonGet .Properties "wof:placetype" }}</span> and its consensus geometry is derived from <span class="hey-look">{{ GjsonGet .Properties "src:geom" }}</span>.</p>
+
+<div id="whosonfirst-alt-geoms">
+{{/* This is populated by whosonfirst.spelunker.id.init.js */}}
+</div>
+
+<div class="whosonfirst-record">
+    <div id="whosonfirst-record-properties">
+	<h3>Properties
+
+	    <div id="props-toggle" class="pull-right">
+		<button class="btn btn-sm" id="props-toggle-raw">view raw</button>
+		<button class="btn btn-sm" id="props-toggle-pretty">make pretty</button>
+	    </div>
+	</h3>
+	<div id="props-wrapper" class="table-responsive">
+	<whosonfirst-properties>
+	    <pre id="whosonfirst-properties">{{ .Properties }}</pre>
+	</whosonfirst-properties>
+	</div>
+    </div>
+    <div id="whosonfirst-record-other">
+	<details open>
+	    <summary>Hierarchy</summary>
+	    {{ range $i, $hier := .Hierarchies -}}	
+	    <ul>
+		{{ range $j, $a := $hier -}}  
+		<li>the <span class="hey-look">{{ $a.Placetype }}</span> of <a href="{{ URIForId $.URIs.Id $a.Id }}" class="wof-namify" data-wof-id="{{ $a.Id }}">{{ $a.Id }}</a></li>
+		{{ end -}}
+	    </ul>
+	    {{ end -}}
+	</details>
+
+	<details open>
+	    <summary>Other</summary>
+	    <ul>
+		{{ if eq .CountDescendants 0 -}}
+		<li>This record has no descendants</li>
+		{{ else -}}
+		<li><a href="{{ URIForId .URIs.Descendants .Id }}">See all the descendants of {{ GjsonGet .Properties "wof:name" }}</a></li>
+		{{ end -}}
+		<li><a href="{{ URIForId .URIs.GeoJSON .Id }}">As GeoJSON (raw data)</a></li>
+		{{ $geom_type := GjsonGet .Properties "geom:type" -}}
+		{{ if eq $geom_type "Polygon" -}}
+		<li><a href="{{ URIForId .URIs.SVG .Id }}">As SVG</a></li>
+		{{ else if eq $geom_type "MultiPolygon" -}}
+		<li><a href="{{ URIForId .URIs.SVG .Id }}">As SVG</a></li>		
+		{{ end -}}
+		<li><a href="{{ .GitHubURL }}" target="github">View on GitHub</a></li>
+		<li id="writefield-link"><a href="https://writefield.nextzen.org/place/edit?url={{ .WriteFieldURL }}" target="writefield">Edit in Write Field</a></li>
+	    </ul>
+	</details>
+    </div>
+</div>
+
+{{ template "inc_foot" . -}}
+
+<script type="text/javascript" src="{{ .URIs.Static }}javascript/whosonfirst.spelunker.id.init.js"></script>
+{{ end -}}
