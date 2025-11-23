@@ -1,0 +1,75 @@
+{{ define "inc_places" -}}
+<div id="map-wrapper">
+    <div id="map"></div>
+</div>
+
+<div class="pagination-counts">
+    {{ if (IsAvailable "Pagination" .) -}}
+    {{ if eq .Pagination.Total 0 -}}
+    {{ if and (IsAvailable "Feature" .) .Feature -}}
+    <p>There is <span class="hey-look">one place</span></p>
+    {{ else -}}
+    <p>There are no places</p>
+    {{ end -}}
+    {{ else if eq .Pagination.Total 1 -}}
+    <p>There is <span class="hey-look">one place</span></p>
+    {{ else -}}
+    <p>There are <span class="hey-look">{{ FormatNumber .Pagination.Total }}</span> places{{ if gt .Pagination.Pages 1 }} and this is <span class="hey-look">{{if eq .Pagination.Page -1 }}one page{{ else }}page {{ FormatNumber .Pagination.Page }}{{ end }}</span> of <span class="hey-look">{{ FormatNumber .Pagination.Pages }}{{ end }}</span></p>
+    {{ end -}}
+    {{ end -}}
+</div>
+
+<div id="whosonfirst-places">
+    <div>
+	<ul class="whosonfirst-places-list">
+	    {{ if and (IsAvailable "Feature" .) .Feature -}}
+	    <li class="spr-place" data-id="{{ .Feature.Id }}" data-latitude="{{ .Feature.Latitude }}" data-longitude="{{ .Feature.Longitude }}" style="margin-bottom:.5rem;">
+		<div>
+		    <a href="/id/{{ .Feature.Id }}" class="wof-place-name hey-look">{{ .Feature.Name }}</a> &#8212; <small>this is <span class="hey-look">{{ IsAPlacetype .Feature.Placetype }}</span></small>
+		</div>
+		<div style="font-size:small;margin-top:.3rem;">
+		    <div style="font-style:italic;">This record is included because its <code>wof:id</code> value matches your query string.</div>
+		    <div>Repo <span class="hey-look">{{ .Feature.Repo }}</span>/{{ .Feature.Path }}</div>
+
+		    <div>ID <span class="hey-look">{{ .Feature.Id }}</span>{{ if gt (len .Feature.Supersedes) 0 }} Supersedes <span class="hey-look">{{ range $s_idx, $id := .Feature.Supersedes }}<a href="/id/{{ $id }}">{{ $id }}</a>{{ end }}</span>{{ end }}{{ if gt (len .Feature.SupersededBy) 0 }} Superseded by <span class="hey-look">{{ range $s_idx, $id := .Feature.SupersededBy }}<a href="/id/{{ $id }}">{{ $id }}</a>{{ end }}</span>{{ end }}</div>
+		    
+		    <div>Inception <span class="hey-look">{{ if eq .Feature.Inception.String "" }}date unknown{{ else }}{{ .Feature.Inception }}{{ end }}</span> Cessation <span class="hey-look">{{ if eq .Feature.Cessation.String "" }}date unknown{{ else }}{{ .Feature.Cessation }}{{ end }}</span></div>
+		    
+		    <div>It was last modified <span class="hey-look">{{ FormatUnixTime .Feature.LastModified "January 02, 2006" }}</span>.{{ if eq .Feature.IsDeprecated.Flag 1 }} <span class="hey-look deprecated">This record is deprecated.</span>{{ end }}</div>
+		</div>
+		
+	    </li>
+	    {{ end -}}
+	    {{ range $idx, $spr := .Places -}}
+	    <li class="spr-place" data-id="{{ $spr.Id }}" data-latitude="{{ $spr.Latitude }}" data-longitude="{{ $spr.Longitude }}" style="margin-bottom:.5rem;">
+		<div>
+		    <a href="/id/{{ $spr.Id }}" class="wof-place-name hey-look">{{ $spr.Name }}</a> &#8212; <small>this is <span class="hey-look">{{ IsAPlacetype $spr.Placetype }}</span> {{ if eq $spr.IsCurrent.StringFlag "1" }}marked as <span class="hey-look">current</span>{{ end }}</small>
+		</div>
+		<div style="font-size:small;margin-top:.3rem;">
+		    <div>Repo <span class="hey-look">{{ $spr.Repo }}</span>/{{ $spr.Path }}</div>
+		    
+		    <div>ID <span class="hey-look">{{ $spr.Id }}</span>{{ if gt (len $spr.Supersedes) 0 }} Supersedes <span class="hey-look hey-look-list">{{ range $s_idx, $id := $spr.Supersedes }}<a href="/id/{{ $id }}" class="hey-look-list-item">{{ $id }}</a>{{ end }}</span>{{ end }}{{ if gt (len $spr.SupersededBy) 0 }} Superseded by <span class="hey-look" class="hey-look-list">{{ range $s_idx, $id := $spr.SupersededBy }}<a href="/id/{{ $id }}" class="hey-look-list-item">{{ $id }}</a>{{ end }}</span>{{ end }}</div>
+		    
+		    <div>Inception <span class="hey-look">{{ if eq $spr.Inception.String "" }}date unknown{{ else }}{{ $spr.Inception }}{{ end }}</span> Cessation <span class="hey-look">{{ if eq $spr.Cessation.String "" }}date unknown{{ else }}{{ $spr.Cessation }}{{ end }}</span></div>
+		    
+		    <div>It was last modified <span class="hey-look">{{ FormatUnixTime $spr.LastModified "January 02, 2006" }}</span>.{{ if eq $spr.IsDeprecated.Flag 1 }} <span class="hey-look deprecated">This record is deprecated.</span>{{ end }}</div>
+		    
+		</div>
+	    </li>
+	    {{ end -}}
+	</ul>
+    </div>   
+    <div id="whosonfirst-places-other">
+	{{ if gt (len .Places) 0 -}}
+	{{ if (IsAvailable "FacetsURL" .) -}}
+	{{ if (IsAvailable "FacetsContextURL" .) -}}
+	<div id="whosonfirst-facets" data-current-url="{{ $.FacetsContextURL }}" data-facets-url="{{ $.FacetsURL }}" data-facets="country,placetype,iscurrent,isdeprecated">
+	    {{ end -}}
+	{{ end -}}	    
+	</div>
+	{{ end -}}
+    </div>
+</div>
+
+{{ template "inc_pagination" . -}}
+{{ end -}}

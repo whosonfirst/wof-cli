@@ -3,9 +3,7 @@ package spelunker
 import (
 	"context"
 
-	_ "github.com/whosonfirst/go-whosonfirst-spelunker-sql"
-
-	"github.com/whosonfirst/go-whosonfirst-spelunker-httpd/app/server"
+	"github.com/whosonfirst/spelunker/v2/app/httpd/server"
 	"github.com/whosonfirst/wof"
 )
 

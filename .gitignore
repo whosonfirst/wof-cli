@@ -5,3 +5,4 @@ work
 *.geoparquet
 *.parquet
 .DS_Store
+*.db
