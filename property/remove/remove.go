@@ -111,7 +111,7 @@ func (c *RemovePropertyCommand) Run(ctx context.Context, args []string) error {
 			rsp := gjson.GetBytes(body, parts[0])
 			count := len(rsp.Array())
 
-			for i := 0; i < count; i++ {
+			for i := range count {
 				path = fmt.Sprintf("%s.%d.%s", parts[0], i, parts[1])
 				to_remove = append(to_remove, path)
 			}

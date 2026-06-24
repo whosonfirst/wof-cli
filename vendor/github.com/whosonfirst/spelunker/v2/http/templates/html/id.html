@@ -3,7 +3,7 @@
 
 <h2>
     {{ GjsonGet .Properties "wof:name" }}
-    <small class="header-dates"><span class="hey-look">{{ if eq (GjsonGet .Properties "edtf:inception") "" }}date unknown{{ else if eq (GjsonGet .Properties "edtf:inception") "uuuu" }}date unknown{{ else }}{{ GjsonGet .Properties "edtf:inception" }}{{ end }}</span> to <span class="hey-look">{{ if eq (GjsonGet .Properties "edtf:cessation") "" }}unknown{{ else if eq (GjsonGet .Properties "edtf:cessation") "uuuu" }}date unknown{{ else }}{{ GjsonGet .Properties "edtf:cessation" }}{{ end }}</span></small>
+    <small class="header-dates"><span class="hey-look">{{ if eq (GjsonGet .Properties "edtf:inception") "" }}date unknown{{ else if eq (GjsonGet .Properties "edtf:inception") "uuuu" }}date unknown{{ else }}{{ GjsonGet .Properties "edtf:inception" }}{{ end }}</span> to <span class="hey-look">{{ if eq (GjsonGet .Properties "edtf:cessation") "" }}unknown{{ else if eq (GjsonGet .Properties "edtf:cessation") "uuuu" }}date unknown{{else if eq (GjsonGet .Properties "edtf:cessation") ".." }}present{{ else }}{{ GjsonGet .Properties "edtf:cessation" }}{{ end }}</span></small>
     <small class="rel-path">{{ .RelPath }}</small>
 </h2>
 

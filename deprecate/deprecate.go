@@ -78,7 +78,7 @@ func (c *DeprecateCommand) Run(ctx context.Context, args []string) error {
 
 		now := time.Now()
 
-		updates := map[string]interface{}{
+		updates := map[string]any{
 			"properties.edtf:deprecated": now.Format("2006-01-02"),
 			"properties.mz:is_current":   0,
 		}

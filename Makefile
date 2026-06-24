@@ -3,6 +3,9 @@ LDFLAGS=-s -w
 
 TAGS=sqlite3
 
+vuln:
+	govulncheck -show verbose ./...
+
 cli:
 	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -tags $(TAGS) -o bin/wof cmd/wof/main.go
 
@@ -20,4 +23,4 @@ tiny:
 
 # https://github.com/marcboeker/go-duckdb?tab=readme-ov-file#vendoring
 modvendor:
-        modvendor -copy="**/*.a **/*.h" -v
+	modvendor -copy="**/*.a **/*.h" -v

@@ -134,7 +134,7 @@ func (a *JWTAuthenticator) GetAccountForRequest(req *http.Request) (Account, err
 	m := re_auth.FindStringSubmatch(auth_header)
 	str_token := m[1]
 
-	parse_func := func(token *jwt.Token) (interface{}, error) {
+	parse_func := func(token *jwt.Token) (any, error) {
 		return []byte(a.secret), nil
 	}
 

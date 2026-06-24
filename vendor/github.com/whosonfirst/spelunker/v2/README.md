@@ -38,7 +38,7 @@ That's it. Point your web browser at `http://localhost:8080` and happy spelunkin
 
 ## Documentation
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/whosonfirst/spelunker/v2.svg)](https://pkg.go.dev/github.com/whosonfirst/spelunker/v2)
+[![Go Reference](https://pkg.go.dev/badge/github.com/whosonfirst/spelunker.svg)](https://pkg.go.dev/github.com/whosonfirst/spelunker)
 
 Or run the handy `godoc` Makefile target to launch a local "godoc" browser for this package at `http://localhost:6060`:
 

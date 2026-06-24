@@ -62,7 +62,7 @@ func (c *GeometryCommand) Run(ctx context.Context, args []string) error {
 
 		geom_cb = func(ctx context.Context, uri string, body []byte) error {
 
-			updates := map[string]interface{}{
+			updates := map[string]any{
 				"geometry": source_geom,
 			}
 

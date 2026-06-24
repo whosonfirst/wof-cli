@@ -158,8 +158,8 @@ func MapConfigFromOptions(opts *AssignMapConfigHandlerOptions) (*MapConfig, erro
 		}
 	}
 
-	switch opts.MapProvider {
-	case "leaflet":
+	switch {
+	case opts.MapProvider == "leaflet":
 
 		if opts.LeafletStyle != "" || opts.LeafletPointStyle != "" {
 
@@ -190,7 +190,7 @@ func MapConfigFromOptions(opts *AssignMapConfigHandlerOptions) (*MapConfig, erro
 			map_cfg.Leaflet = leaflet_cfg
 		}
 
-	case "protomaps":
+	case strings.HasPrefix(opts.MapProvider, "protomaps"):
 
 		u, err := url.Parse(opts.MapTileURI)
 

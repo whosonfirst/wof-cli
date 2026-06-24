@@ -33,7 +33,7 @@
 
 		    <div>ID <span class="hey-look">{{ .Feature.Id }}</span>{{ if gt (len .Feature.Supersedes) 0 }} Supersedes <span class="hey-look">{{ range $s_idx, $id := .Feature.Supersedes }}<a href="/id/{{ $id }}">{{ $id }}</a>{{ end }}</span>{{ end }}{{ if gt (len .Feature.SupersededBy) 0 }} Superseded by <span class="hey-look">{{ range $s_idx, $id := .Feature.SupersededBy }}<a href="/id/{{ $id }}">{{ $id }}</a>{{ end }}</span>{{ end }}</div>
 		    
-		    <div>Inception <span class="hey-look">{{ if eq .Feature.Inception.String "" }}date unknown{{ else }}{{ .Feature.Inception }}{{ end }}</span> Cessation <span class="hey-look">{{ if eq .Feature.Cessation.String "" }}date unknown{{ else }}{{ .Feature.Cessation }}{{ end }}</span></div>
+		    <div>Inception <span class="hey-look">{{ if eq .Feature.Inception.String "" }}date unknown{{ else }}{{ .Feature.Inception }}{{ end }}</span> Cessation <span class="hey-look">{{ if eq .Feature.Cessation.String "" }}date unknown{{ else if eq .Feature.Cessation.String "uuuu"}}date unknown{{ else if eq .Feature.Cessation.String ".." }}present{{ else }}{{ .Feature.Cessation }}{{ end }}</span></div>
 		    
 		    <div>It was last modified <span class="hey-look">{{ FormatUnixTime .Feature.LastModified "January 02, 2006" }}</span>.{{ if eq .Feature.IsDeprecated.Flag 1 }} <span class="hey-look deprecated">This record is deprecated.</span>{{ end }}</div>
 		</div>

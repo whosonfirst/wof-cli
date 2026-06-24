@@ -15,6 +15,7 @@ import (
 	smithy "github.com/aws/smithy-go"
 	smithyauth "github.com/aws/smithy-go/auth"
 	smithyendpoints "github.com/aws/smithy-go/endpoints"
+	"github.com/aws/smithy-go/endpoints/private/rulesfn"
 	"github.com/aws/smithy-go/middleware"
 	"github.com/aws/smithy-go/ptr"
 	"github.com/aws/smithy-go/tracing"
@@ -222,12 +223,14 @@ func bindRegion(region string) (*string, error) {
 	if region == "" {
 		return nil, nil
 	}
-	if !smithyhttp.ValidHostLabel(region) {
+	if !rulesfn.IsValidHostLabel(region, true) {
 		return nil, fmt.Errorf("invalid input region %s", region)
 	}
 
 	return aws.String(endpoints.MapFIPSRegion(region)), nil
 }
+
+var _ = rulesfn.StringSlice(nil)
 
 // EndpointParameters provides the parameters that influence how endpoints are
 // resolved.
@@ -311,17 +314,6 @@ func (p EndpointParameters) WithDefaults() EndpointParameters {
 	return p
 }
 
-type stringSlice []string
-
-func (s stringSlice) Get(i int) *string {
-	if i < 0 || i >= len(s) {
-		return nil
-	}
-
-	v := s[i]
-	return &v
-}
-
 // EndpointResolverV2 provides the interface for resolving service endpoints.
 type EndpointResolverV2 interface {
 	// ResolveEndpoint attempts to resolve the endpoint with the provided options,
@@ -381,7 +373,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -411,7 +403,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -441,7 +433,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -471,7 +463,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -501,7 +493,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -531,7 +523,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -561,7 +553,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -591,7 +583,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -621,7 +613,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -651,7 +643,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -681,7 +673,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -711,7 +703,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -741,7 +733,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -771,7 +763,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -801,7 +793,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -831,7 +823,7 @@ func (r *resolver) ResolveEndpoint(
 										var out smithy.Properties
 										smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 											{
-												SchemeID: "aws.auth#sigv4",
+												SchemeID: "sigv4",
 												SignerProperties: func() smithy.Properties {
 													var sp smithy.Properties
 													smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -867,7 +859,7 @@ func (r *resolver) ResolveEndpoint(
 									var out smithy.Properties
 									smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 										{
-											SchemeID: "aws.auth#sigv4",
+											SchemeID: "sigv4",
 											SignerProperties: func() smithy.Properties {
 												var sp smithy.Properties
 												smithyhttp.SetSigV4SigningName(&sp, "sts")
@@ -1021,7 +1013,7 @@ func (r *resolver) ResolveEndpoint(
 						var out smithy.Properties
 						smithyauth.SetAuthOptions(&out, []*smithyauth.Option{
 							{
-								SchemeID: "aws.auth#sigv4",
+								SchemeID: "sigv4",
 								SignerProperties: func() smithy.Properties {
 									var sp smithy.Properties
 									smithyhttp.SetSigV4SigningName(&sp, "sts")

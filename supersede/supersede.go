@@ -113,7 +113,7 @@ func (c *SupersedeCommand) Run(ctx context.Context, args []string) error {
 				return fmt.Errorf("Failed to derive new ID, %w", err)
 			}
 
-			updates := map[string]interface{}{
+			updates := map[string]any{
 				"id":                           new_id,
 				"properties.wof:id":            new_id,
 				"properties.edtf:inception":    now.Format("2006-01-02"),
@@ -171,7 +171,7 @@ func (c *SupersedeCommand) Run(ctx context.Context, args []string) error {
 				supersedes = append(supersedes, old_id)
 			}
 
-			updates := map[string]interface{}{
+			updates := map[string]any{
 				"properties.wof:supersede": supersedes,
 			}
 
@@ -197,7 +197,7 @@ func (c *SupersedeCommand) Run(ctx context.Context, args []string) error {
 			superseded_by = append(superseded_by, cb_superseding_id)
 		}
 
-		updates := map[string]interface{}{
+		updates := map[string]any{
 			"properties.mz:is_current":     0,
 			"properties.edtf:cessation":    now.Format("2006-01-02"),
 			"properties.wof:superseded_by": superseded_by,
