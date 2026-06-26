@@ -5,7 +5,7 @@ import (
 	"fmt"
 	_ "log/slog"
 
-	"github.com/whosonfirst/go-whosonfirst-validate"
+	"github.com/whosonfirst/go-whosonfirst/v4/validate"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"

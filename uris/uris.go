@@ -7,8 +7,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
-	"github.com/whosonfirst/go-whosonfirst-uri"
+	"github.com/whosonfirst/go-whosonfirst/v4/iterate"
+	"github.com/whosonfirst/go-whosonfirst/v4/uri"
 	"github.com/whosonfirst/wof/reader"
 )
 

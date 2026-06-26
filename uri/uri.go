@@ -6,7 +6,7 @@ import (
 	_ "log/slog"
 	"path/filepath"
 
-	wof_uri "github.com/whosonfirst/go-whosonfirst-uri"
+	wof_uri "github.com/whosonfirst/go-whosonfirst/v4/uri"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/uris"
 )

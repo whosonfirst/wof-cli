@@ -9,7 +9,7 @@ import (
 	"github.com/aaronland/go-json-query"
 	"github.com/sfomuseum/go-flags/flagset"
 	"github.com/sfomuseum/go-flags/multi"
-	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
+	"github.com/whosonfirst/go-whosonfirst/v4/iterate"
 	"github.com/whosonfirst/go-writer/v3"
 )
 

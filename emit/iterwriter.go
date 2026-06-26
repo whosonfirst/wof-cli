@@ -17,11 +17,11 @@ import (
 	"github.com/aaronland/go-json-query"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
-	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
-	"github.com/whosonfirst/go-whosonfirst-iterwriter/v4"
-	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
-	wof_spr_util "github.com/whosonfirst/go-whosonfirst-spr/v2/util"
-	"github.com/whosonfirst/go-whosonfirst-uri"
+	"github.com/whosonfirst/go-whosonfirst/v4/iterate"
+	"github.com/whosonfirst/go-whosonfirst/v4/iterate/writer"
+	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
+	wof_spr_util "github.com/whosonfirst/go-whosonfirst/v4/spr/util"
+	"github.com/whosonfirst/go-whosonfirst/v4/uri"
 	"github.com/whosonfirst/go-writer/v3"
 )
 

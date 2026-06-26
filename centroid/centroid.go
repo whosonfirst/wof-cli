@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"github.com/sfomuseum/go-csvdict/v2"
-	"github.com/whosonfirst/go-whosonfirst-feature/properties"
+	"github.com/whosonfirst/go-whosonfirst/v4/feature/properties"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"

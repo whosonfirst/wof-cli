@@ -12,9 +12,9 @@ import (
 
 	"github.com/aaronland/go-http/v4/slog"
 	"github.com/google/uuid"
-	"github.com/whosonfirst/go-whosonfirst-export/v3"
-	"github.com/whosonfirst/go-whosonfirst-feature/properties"
-	"github.com/whosonfirst/go-whosonfirst-validate"
+	"github.com/whosonfirst/go-whosonfirst/v4/export"
+	"github.com/whosonfirst/go-whosonfirst/v4/feature/properties"
+	"github.com/whosonfirst/go-whosonfirst/v4/validate"
 	gh_writer "github.com/whosonfirst/go-writer-github/v3"
 	"github.com/whosonfirst/go-writer/v3"
 )
