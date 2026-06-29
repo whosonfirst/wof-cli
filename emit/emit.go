@@ -10,7 +10,7 @@ import (
 	_ "github.com/whosonfirst/go-writer-jsonl/v3"
 
 	"github.com/aaronland/go-json-query"
-	iterwriter_app "github.com/whosonfirst/go-whosonfirst/v4/app/iterate/writer"	
+	iterwriter_app "github.com/whosonfirst/go-whosonfirst/v4/app/iterate/writer"
 	"github.com/whosonfirst/go-writer/v3"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/uris"
