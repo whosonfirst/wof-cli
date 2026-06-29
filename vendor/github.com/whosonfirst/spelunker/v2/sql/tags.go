@@ -1,14 +1,14 @@
 package sql
 
 // Tags are not currently indexed in any SQL tables
-// https://github.com/whosonfirst/go-whosonfirst-sql/tree/main/tables
-// https://github.com/whosonfirst/go-whosonfirst-sqlite-features/tree/main/tables
+// https://github.com/whosonfirst/go-whosonfirst/v4/sql/tree/main/tables
+// https://github.com/whosonfirst/go-whosonfirst/v4/sqlite-features/tree/main/tables
 
 import (
 	"context"
 
 	"github.com/aaronland/go-pagination"
-	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
+	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
 	"github.com/whosonfirst/spelunker/v2"
 )
 

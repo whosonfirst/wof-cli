@@ -281,3 +281,56 @@ go run cmd/example/main.go \
 ```
 
 MapLibre styling rules are not part of the map "config" file and need to be added manually in your JavaScript code. See [static/www/javascript/index.init.js](static/www/javascript/index.init.js) for details.
+
+## Protomaps
+
+## Extracting slices from the nightly builds
+
+This is the easiest way to generate Protomaps slices. Simply run the `extract` command from the `go-pmtiles` tool with a `--bbox` flag. For example:
+
+```
+$> cd /usr/local/src/go-pmtiles
+$> go run main.go extract \
+	--bbox=-122.408061,37.601617,-122.354907,37.640167 \
+	https://build.protomaps.com/{YYYYMMDD}.pmtiles \
+	sfo-src.pmtiles
+
+fetching 7 dirs, 7 chunks, 7 requests
+Region tiles 51, result tile entries 51
+fetching 51 tiles, 21 chunks, 17 requests
+fetching chunks 100%  (1.3/1.3 MB, 1.1 MB/s)        
+Completed in 7.269754041s with 4 download threads (7.015367816594351 tiles/s).
+Extract required 27 total requests.
+Extract transferred 1.3 MB (overfetch 0.05) for an archive size of 1.3 MB
+```
+
+```
+$> go run main.go show sfo-src.pmtiles
+pmtiles spec version: 3
+tile type: mvt
+bounds: (long: -122.408061, lat: 37.601617) (long: -122.354907, lat: 37.640167)
+min zoom: 0
+max zoom: 15
+center: (long: -122.381484, lat: 37.620892)
+center zoom: 0
+addressed tiles count: 51
+tile entries count: 51
+tile contents count: 51
+clustered: true
+internal compression: gzip
+tile compression: gzip
+vector_layers <object...>
+pgf:devanagari:name NotoSansDevanagari-Regular
+pgf:devanagari:version 1
+planetiler:osm:osmosisreplicationseq 115029
+planetiler:osm:osmosisreplicationtime 2025-10-27T04:00:00Z
+planetiler:osm:osmosisreplicationurl https://planet.osm.org/replication/hour/
+type baselayer
+version 4.12.0
+attribution <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap</a>
+description Basemap layers derived from OpenStreetMap and Natural Earth
+name Protomaps Basemap
+planetiler:buildtime 2025-05-06T00:22:16.609Z
+planetiler:githash 2c91725f6d048fd60b02d3e7c29bb88838451048
+planetiler:version 0.9.0
+```

@@ -8,6 +8,9 @@ GOTAGS_OPENSEARCH=opensearch
 
 GOTAGS=$(GOTAGS_SQLITE),$(GOTAGS_OPENSEARCH)
 
+vuln:
+	govulncheck -show verbose ./...
+
 godoc:
 	godoc -http=:6060
 

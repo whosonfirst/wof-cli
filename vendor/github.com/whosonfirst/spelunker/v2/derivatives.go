@@ -6,18 +6,18 @@ import (
 	"io"
 
 	"github.com/whosonfirst/go-ioutil"
-	"github.com/whosonfirst/go-whosonfirst-derivatives"
-	"github.com/whosonfirst/go-whosonfirst-uri"
+	"github.com/whosonfirst/go-whosonfirst/v4/derivatives"
+	"github.com/whosonfirst/go-whosonfirst/v4/uri"
 )
 
-// SpelunkerDerivativesProvider implements the `go-whosonfirst-derivatives.Provider` interface
+// SpelunkerDerivativesProvider implements the `go-whosonfirst/v4/derivatives.Provider` interface
 // retrieving records from a `Spelunker` instance.
 type SpelunkerDerivativesProvider struct {
 	derivatives.Provider
 	spelunker Spelunker
 }
 
-// NewDerivativesProvider returns an implementation of the `go-whosonfirst-derivatives.Provider` interface
+// NewDerivativesProvider returns an implementation of the `go-whosonfirst/v4/derivatives.Provider` interface
 // using 'sp' to retrieve records.
 func NewDerivativesProvider(sp Spelunker) derivatives.Provider {
 

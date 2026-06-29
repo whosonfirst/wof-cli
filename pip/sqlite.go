@@ -6,5 +6,5 @@ package pip
 // binaries if they want to
 
 import (
-	_ "github.com/whosonfirst/go-whosonfirst-spatial-sqlite"
+	_ "github.com/whosonfirst/go-whosonfirst/v4/spatial/sqlite"
 )

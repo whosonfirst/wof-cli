@@ -16,9 +16,9 @@ import (
 
 	"github.com/aaronland/go-pagination"
 	"github.com/aaronland/go-pagination/countable"
-	"github.com/whosonfirst/go-whosonfirst-database/sql/tables"
-	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
-	"github.com/whosonfirst/go-whosonfirst-sqlite-spr"
+	"github.com/whosonfirst/go-whosonfirst/v4/database/sql/tables"
+	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
+	spr "github.com/whosonfirst/go-whosonfirst/v4/spr/sqlite"
 	"github.com/whosonfirst/spelunker/v2"
 )
 
@@ -208,13 +208,13 @@ func (s *SQLSpelunker) CountDescendants(ctx context.Context, id int64) (int64, e
 	}
 }
 
-func (s *SQLSpelunker) descendantsQueryWhere(ctx context.Context, id int64, filters []spelunker.Filter) ([]string, []interface{}, error) {
+func (s *SQLSpelunker) descendantsQueryWhere(ctx context.Context, id int64, filters []spelunker.Filter) ([]string, []any, error) {
 
 	where := []string{
 		fmt.Sprintf("%s.ancestor_id = ?", tables.ANCESTORS_TABLE_NAME),
 	}
 
-	args := []interface{}{
+	args := []any{
 		id,
 	}
 

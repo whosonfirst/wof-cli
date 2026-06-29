@@ -1,6 +1,0 @@
-*~
-bin
-*.db
-!fixtures/*.db
-go.work*
-work

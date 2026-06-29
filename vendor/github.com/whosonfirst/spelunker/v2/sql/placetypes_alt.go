@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/aaronland/go-pagination"
-	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
+	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
 	"github.com/whosonfirst/spelunker/v2"
 )
 

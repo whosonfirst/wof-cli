@@ -1,7 +1,7 @@
 GOMOD=$(shell test -f "go.work" && echo "readonly" || echo "vendor")
 LDFLAGS=-s -w
 
-TAGS=sqlite3
+TAGS=sqlite,sqlite3
 
 vuln:
 	govulncheck -show verbose ./...

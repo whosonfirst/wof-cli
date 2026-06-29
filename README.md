@@ -641,12 +641,4 @@ This affects the `wof emit` command.
 
 ## See also
 
-* https://github.com/whosonfirst/go-whosonfirst-export
-* https://github.com/whosonfirst/go-whosonfirst-format
-* https://github.com/whosonfirst/go-whosonfirst-github
-* https://github.com/whosonfirst/go-whosonfirst-validate
-* https://github.com/whosonfirst/go-whosonfirst-spatial
-* https://github.com/whosonfirst/go-whosonfirst-spatial-pmtiles
-* https://github.com/whosonfirst/go-whosonfirst-spatial-sqlite
-* https://github.com/whosonfirst/go-whosonfirst-iterate
-* https://github.com/sfomuseum/go-sfomuseum-mapshaper
+* https://github.com/whosonfirst/go-whosonfirst

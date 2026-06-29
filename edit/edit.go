@@ -18,7 +18,7 @@ import (
 	"github.com/aaronland/gocloud/runtimevar"
 	"github.com/sfomuseum/go-www-show"
 	go_reader "github.com/whosonfirst/go-reader/v2"
-	wof_uri "github.com/whosonfirst/go-whosonfirst-uri"
+	wof_uri "github.com/whosonfirst/go-whosonfirst/v4/uri"
 	gh_writer "github.com/whosonfirst/go-writer-github/v3"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/edit/http/api"

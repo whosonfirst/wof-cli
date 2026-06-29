@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"regexp"
 
-	derivatives_api "github.com/whosonfirst/go-whosonfirst-derivatives/http/api"
+	derivatives_api "github.com/whosonfirst/go-whosonfirst/v4/derivatives/http/api"
 	"github.com/whosonfirst/spelunker/v2/http/api"
 )
 

@@ -5,11 +5,11 @@ import (
 	"log"
 	"syscall/js"
 
-	placetypes "github.com/whosonfirst/go-whosonfirst-placetypes/wasm"
-	format "github.com/whosonfirst/go-whosonfirst-format/wasm"
-	"github.com/whosonfirst/go-whosonfirst-validate"			
-	validate_wasm "github.com/whosonfirst/go-whosonfirst-validate/wasm"
-	export_wasm "github.com/whosonfirst/go-whosonfirst-export/v3/wasm"			
+	placetypes "github.com/whosonfirst/go-whosonfirst/v4/placetypes/wasm"
+	format "github.com/whosonfirst/go-whosonfirst/v4/format/wasm"
+	"github.com/whosonfirst/go-whosonfirst/v4/validate"			
+	validate_wasm "github.com/whosonfirst/go-whosonfirst/v4/validate/wasm"
+	export_wasm "github.com/whosonfirst/go-whosonfirst/v4/export/wasm"			
 )
 
 func main() {

@@ -135,7 +135,7 @@ func RouteHandlerWithOptions(opts *RouteHandlerOptions) (http.Handler, error) {
 			}
 		}
 
-		logger.Debug("Serve derived handler", "pattern", derive_rsp.MatchingPattern, "path values", derive_rsp.PathValues)		
+		logger.Debug("Serve derived handler", "pattern", derive_rsp.MatchingPattern, "path values", derive_rsp.PathValues)
 		derive_rsp.Handler.ServeHTTP(rsp, req)
 		return
 	}

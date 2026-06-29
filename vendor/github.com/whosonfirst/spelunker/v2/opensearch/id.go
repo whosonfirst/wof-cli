@@ -11,8 +11,8 @@ import (
 	"github.com/tidwall/gjson"
 	"github.com/whosonfirst/go-reader-cachereader/v2"
 	"github.com/whosonfirst/go-reader/v2"
-	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
-	"github.com/whosonfirst/go-whosonfirst-uri"
+	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
+	"github.com/whosonfirst/go-whosonfirst/v4/uri"
 )
 
 // GetRecordForId retrieves properties (or more specifically the "document") for a given ID in an OpenSearchSpelunker index.

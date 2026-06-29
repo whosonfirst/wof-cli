@@ -7,13 +7,13 @@ import (
 	"log/slog"
 	"strings"
 
-	_ "github.com/whosonfirst/go-whosonfirst-iterate-reader/v3"
+	_ "github.com/whosonfirst/go-whosonfirst/v4/iterate/reader"
 
 	"github.com/tidwall/gjson"
-	export "github.com/whosonfirst/go-whosonfirst-export/v3"
-	"github.com/whosonfirst/go-whosonfirst-iterate/v3"
-	uri "github.com/whosonfirst/go-whosonfirst-uri"
-	wof_writer "github.com/whosonfirst/go-whosonfirst-writer/v3"
+	export "github.com/whosonfirst/go-whosonfirst/v4/export"
+	"github.com/whosonfirst/go-whosonfirst/v4/iterate"
+	uri "github.com/whosonfirst/go-whosonfirst/v4/uri"
+	wof_writer "github.com/whosonfirst/go-whosonfirst/v4/writer"
 	"github.com/whosonfirst/go-writer/v3"
 	"github.com/whosonfirst/wof"
 )

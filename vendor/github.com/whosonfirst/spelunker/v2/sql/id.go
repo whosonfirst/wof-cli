@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/whosonfirst/go-whosonfirst-database/opensearch/document"
-	"github.com/whosonfirst/go-whosonfirst-database/sql/tables"
-	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
-	"github.com/whosonfirst/go-whosonfirst-sqlite-spr"
-	"github.com/whosonfirst/go-whosonfirst-uri"
+	"github.com/whosonfirst/go-whosonfirst/v4/database/opensearch/document"
+	"github.com/whosonfirst/go-whosonfirst/v4/database/sql/tables"
+	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
+	spr "github.com/whosonfirst/go-whosonfirst/v4/spr/sqlite"
+	"github.com/whosonfirst/go-whosonfirst/v4/uri"
 	"github.com/whosonfirst/spelunker/v2"
 )
 
@@ -37,7 +37,7 @@ func (s *SQLSpelunker) GetSPRForId(ctx context.Context, id int64, uri_args *uri.
 
 	q := fmt.Sprintf("SELECT %s FROM %s WHERE id = ?", strings.Join(cols, ", "), tables.SPR_TABLE_NAME)
 
-	args := []interface{}{
+	args := []any{
 		id,
 	}
 
@@ -50,7 +50,7 @@ func (s *SQLSpelunker) GetFeatureForId(ctx context.Context, id int64, uri_args *
 
 	q := fmt.Sprintf("SELECT body FROM %s WHERE id = ?", tables.GEOJSON_TABLE_NAME)
 
-	args := []interface{}{
+	args := []any{
 		id,
 	}
 
@@ -70,7 +70,7 @@ func (s *SQLSpelunker) GetFeatureForId(ctx context.Context, id int64, uri_args *
 	return s.getById(ctx, q, args...)
 }
 
-func (s *SQLSpelunker) getById(ctx context.Context, q string, args ...interface{}) ([]byte, error) {
+func (s *SQLSpelunker) getById(ctx context.Context, q string, args ...any) ([]byte, error) {
 
 	var body []byte
 

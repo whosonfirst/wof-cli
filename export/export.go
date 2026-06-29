@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/whosonfirst/go-whosonfirst-export/v3"
+	"github.com/whosonfirst/go-whosonfirst/v4/export"
 	"github.com/whosonfirst/wof"
 	"github.com/whosonfirst/wof/reader"
 	"github.com/whosonfirst/wof/uris"

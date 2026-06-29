@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/aaronland/go-pagination"
-	"github.com/whosonfirst/go-whosonfirst-database/sql/tables"
-	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
+	"github.com/whosonfirst/go-whosonfirst/v4/database/sql/tables"
+	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
 	"github.com/whosonfirst/spelunker/v2"
 )
 
@@ -62,7 +62,7 @@ func (s *SQLSpelunker) GetRecentFaceted(ctx context.Context, d time.Duration, fi
 	return results, nil
 }
 
-func (s *SQLSpelunker) getRecentQueryWhere(d time.Duration, filters []spelunker.Filter) ([]string, []interface{}, error) {
+func (s *SQLSpelunker) getRecentQueryWhere(d time.Duration, filters []spelunker.Filter) ([]string, []any, error) {
 
 	now := time.Now()
 	then := now.Unix() - int64(d.Seconds())
@@ -71,7 +71,7 @@ func (s *SQLSpelunker) getRecentQueryWhere(d time.Duration, filters []spelunker.
 		"lastmodified >= ?",
 	}
 
-	args := []interface{}{
+	args := []any{
 		then,
 	}
 
