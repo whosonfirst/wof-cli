@@ -18,7 +18,7 @@ import (
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-whosonfirst/v4/iterate"
-	"github.com/whosonfirst/go-whosonfirst/v4/iterate/writer"
+	iterwriter "github.com/whosonfirst/go-whosonfirst/v4/iterate/writer"
 	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
 	wof_spr_util "github.com/whosonfirst/go-whosonfirst/v4/spr/util"
 	"github.com/whosonfirst/go-whosonfirst/v4/uri"

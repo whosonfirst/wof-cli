@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/aaronland/go-pagination"
-	"github.com/whosonfirst/go-whosonfirst-database/sql/tables"
-	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
+	"github.com/whosonfirst/go-whosonfirst/v4/database/sql/tables"
+	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
 	"github.com/whosonfirst/spelunker/v2"
 )
 
@@ -61,14 +61,14 @@ func (s *SQLSpelunker) VisitingNullIslandFaceted(ctx context.Context, filters []
 	return results, nil
 }
 
-func (s *SQLSpelunker) visitingNullIslandQueryWhere(filters []spelunker.Filter) ([]string, []interface{}, error) {
+func (s *SQLSpelunker) visitingNullIslandQueryWhere(filters []spelunker.Filter) ([]string, []any, error) {
 
 	where := []string{
 		"latitude = ?",
 		"longitude = ?",
 	}
 
-	args := []interface{}{
+	args := []any{
 		0.0,
 		0.0,
 	}

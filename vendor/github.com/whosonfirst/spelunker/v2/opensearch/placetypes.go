@@ -7,8 +7,8 @@ import (
 
 	"github.com/aaronland/go-pagination"
 	opensearchapi "github.com/opensearch-project/opensearch-go/v4/opensearchapi"
-	"github.com/whosonfirst/go-whosonfirst-placetypes"
-	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
+	"github.com/whosonfirst/go-whosonfirst/v4/placetypes"
+	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
 	"github.com/whosonfirst/spelunker/v2"
 )
 

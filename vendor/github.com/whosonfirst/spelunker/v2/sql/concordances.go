@@ -8,9 +8,9 @@ import (
 
 	"github.com/aaronland/go-pagination"
 	"github.com/aaronland/go-pagination/countable"
-	"github.com/whosonfirst/go-whosonfirst-database/sql/tables"
-	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
-	"github.com/whosonfirst/go-whosonfirst-sqlite-spr"
+	"github.com/whosonfirst/go-whosonfirst/v4/database/sql/tables"
+	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
+	spr "github.com/whosonfirst/go-whosonfirst/v4/spr/sqlite"
 	"github.com/whosonfirst/spelunker/v2"
 )
 
@@ -71,7 +71,7 @@ func (s *SQLSpelunker) HasConcordance(ctx context.Context, pg_opts pagination.Op
 	var q string
 
 	where := make([]string, 0)
-	args := make([]interface{}, 0)
+	args := make([]any, 0)
 
 	switch {
 	case namespace != "" && predicate != "":
@@ -168,7 +168,7 @@ func (s *SQLSpelunker) HasConcordance(ctx context.Context, pg_opts pagination.Op
 		return nil, nil, fmt.Errorf("Failed to execute query, %w", err)
 	}
 
-	ids := make([]interface{}, 0)
+	ids := make([]any, 0)
 	qms := make([]string, 0)
 
 	for rows.Next() {
@@ -209,7 +209,7 @@ func (s *SQLSpelunker) HasConcordance(ctx context.Context, pg_opts pagination.Op
 func (s *SQLSpelunker) HasConcordanceFaceted(ctx context.Context, namespace string, predicate string, value any, filters []spelunker.Filter, facets []*spelunker.Facet) ([]*spelunker.Faceting, error) {
 
 	where := make([]string, 0)
-	args := make([]interface{}, 0)
+	args := make([]any, 0)
 
 	switch {
 	case namespace != "" && predicate != "":

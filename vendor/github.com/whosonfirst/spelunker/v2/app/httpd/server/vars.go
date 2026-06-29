@@ -6,7 +6,7 @@ import (
 
 	"github.com/aaronland/go-http/v4/auth"
 	"github.com/rs/cors"
-	"github.com/whosonfirst/go-whosonfirst-derivatives"
+	"github.com/whosonfirst/go-whosonfirst/v4/derivatives"
 	"github.com/whosonfirst/spelunker/v2"
 	wof_http "github.com/whosonfirst/spelunker/v2/http"
 )

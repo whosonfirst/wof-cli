@@ -9,8 +9,8 @@ import (
 	"github.com/aaronland/go-pagination"
 	"github.com/aaronland/go-pagination/countable"
 	"github.com/aaronland/go-pagination/cursor"
-	"github.com/whosonfirst/go-whosonfirst-spr/v2"
-	wof_http "github.com/whosonfirst/go-whosonfirst/http"
+	wof_http "github.com/whosonfirst/go-whosonfirst/v4/http"
+	"github.com/whosonfirst/go-whosonfirst/v4/spr"
 	"github.com/whosonfirst/spelunker/v2"
 )
 

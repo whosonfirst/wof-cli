@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/aaronland/go-pagination"
-	"github.com/whosonfirst/go-whosonfirst-database/sql/tables"
-	"github.com/whosonfirst/go-whosonfirst-placetypes"
-	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
+	"github.com/whosonfirst/go-whosonfirst/v4/database/sql/tables"
+	"github.com/whosonfirst/go-whosonfirst/v4/placetypes"
+	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
 	"github.com/whosonfirst/spelunker/v2"
 )
 
@@ -111,13 +111,13 @@ func (s *SQLSpelunker) HasPlacetypeFaceted(ctx context.Context, pt *placetypes.W
 	return results, nil
 }
 
-func (s *SQLSpelunker) hasPlacetypeQueryWhere(pt *placetypes.WOFPlacetype, filters []spelunker.Filter) ([]string, []interface{}, error) {
+func (s *SQLSpelunker) hasPlacetypeQueryWhere(pt *placetypes.WOFPlacetype, filters []spelunker.Filter) ([]string, []any, error) {
 
 	where := []string{
 		"placetype = ?",
 	}
 
-	args := []interface{}{
+	args := []any{
 		pt.Name,
 	}
 

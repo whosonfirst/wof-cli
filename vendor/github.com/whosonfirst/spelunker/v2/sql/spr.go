@@ -7,11 +7,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/whosonfirst/go-whosonfirst-database/sql/tables"
+	"github.com/whosonfirst/go-whosonfirst/v4/database/sql/tables"
 	"github.com/whosonfirst/spelunker/v2"
 )
 
-func (s *SQLSpelunker) facetSPR(ctx context.Context, facet *spelunker.Facet, where string, args ...interface{}) ([]*spelunker.FacetCount, error) {
+func (s *SQLSpelunker) facetSPR(ctx context.Context, facet *spelunker.Facet, where string, args ...any) ([]*spelunker.FacetCount, error) {
 
 	q := fmt.Sprintf("SELECT %s, COUNT(id) AS count FROM %s WHERE %s GROUP BY %s ORDER BY count DESC", facet, tables.SPR_TABLE_NAME, where, facet)
 

@@ -24,7 +24,7 @@ func (s *SQLSpelunker) facetLabel(f *spelunker.Facet) string {
 	return facet_label
 }
 
-func (s *SQLSpelunker) facetWithQuery(ctx context.Context, q string, args ...interface{}) ([]*spelunker.FacetCount, error) {
+func (s *SQLSpelunker) facetWithQuery(ctx context.Context, q string, args ...any) ([]*spelunker.FacetCount, error) {
 
 	rows, err := s.db.QueryContext(ctx, q, args...)
 

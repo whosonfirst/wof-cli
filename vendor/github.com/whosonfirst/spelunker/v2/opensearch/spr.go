@@ -7,10 +7,10 @@ import (
 	"github.com/sfomuseum/go-edtf/common"
 	"github.com/sfomuseum/go-edtf/parser"
 	"github.com/tidwall/gjson"
-	"github.com/whosonfirst/go-whosonfirst-flags"
-	"github.com/whosonfirst/go-whosonfirst-flags/existential"
-	wof_spr "github.com/whosonfirst/go-whosonfirst-spr/v2"
-	"github.com/whosonfirst/go-whosonfirst-uri"
+	"github.com/whosonfirst/go-whosonfirst/v4/flags"
+	"github.com/whosonfirst/go-whosonfirst/v4/flags/existential"
+	wof_spr "github.com/whosonfirst/go-whosonfirst/v4/spr"
+	"github.com/whosonfirst/go-whosonfirst/v4/uri"
 )
 
 // SpelunkerRecordSPR implements the `whosonfirst/go-whosonfirst-spr/v2.StandardPlacesResult` interface for Who's On First records stored in an OpenSearch index.

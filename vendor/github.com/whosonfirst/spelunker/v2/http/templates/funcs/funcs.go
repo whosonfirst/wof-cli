@@ -8,7 +8,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/whosonfirst/go-whosonfirst-sources"
+	"github.com/whosonfirst/go-whosonfirst/v4/sources"
 	"golang.org/x/text/language"
 	"golang.org/x/text/message"
 )

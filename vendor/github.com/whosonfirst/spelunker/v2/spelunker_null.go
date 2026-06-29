@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/aaronland/go-pagination"
-	"github.com/whosonfirst/go-whosonfirst-placetypes"
-	"github.com/whosonfirst/go-whosonfirst-spr/v2"
-	"github.com/whosonfirst/go-whosonfirst-uri"
+	"github.com/whosonfirst/go-whosonfirst/v4/placetypes"
+	"github.com/whosonfirst/go-whosonfirst/v4/spr"
+	"github.com/whosonfirst/go-whosonfirst/v4/uri"
 )
 
 // NullSpelunker implements the [Spelunker] interface but returns an `ErrNotImplemented` error for every method.

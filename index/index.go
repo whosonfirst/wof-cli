@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	sql_index "github.com/whosonfirst/go-whosonfirst/v4/database/app/sql/tables/index"
+	sql_index "github.com/whosonfirst/go-whosonfirst/v4/app/database/sql/tables/index"
 	"github.com/whosonfirst/wof"
 )
 
