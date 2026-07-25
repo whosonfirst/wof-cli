@@ -23,3 +23,10 @@ func NewRecord(path string, r io.ReadSeekCloser) *Record {
 
 	return rec
 }
+
+// ReadAllAndClose will read and then close the `io.ReadSeekCloser` instance wrapped by 'r'.
+func (r *Record) ReadAllAndClose() ([]byte, error) {
+
+	defer r.Body.Close()
+	return io.ReadAll(r.Body)
+}

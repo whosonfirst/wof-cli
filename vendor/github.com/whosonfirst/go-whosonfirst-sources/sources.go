@@ -3,13 +3,12 @@ package sources
 import (
 	"encoding/json"
 	"errors"
-	"log"
-
 	"github.com/whosonfirst/go-whosonfirst-sources/sources"
+	"log"
 )
 
 type WOFSource struct {
-	Id          int64  `json:"id"`
+	Id          int    `json:"id"`
 	Fullname    string `json:"fullname"`
 	Name        string `json:"name"`
 	Prefix      string `json:"prefix"`
@@ -25,46 +24,40 @@ var specification *WOFSourceSpecification
 
 func init() {
 
-	r, err := sources.FS.Open("spec.json")
+	var err error
+
+	specification, err = Spec()
 
 	if err != nil {
-		log.Fatalf("Failed to open spec for reading, %v", err)
+		log.Fatal("Failed to parse specification", err)
 	}
-
-	defer r.Close()
-
-	dec := json.NewDecoder(r)
-	err = dec.Decode(&specification)
-
-	if err != nil {
-		log.Fatalf("Failed to decode spec, %v", err)
-	}
-
 }
 
 func Spec() (*WOFSourceSpecification, error) {
 
-	return specification, nil
+	var spec WOFSourceSpecification
+	err := json.Unmarshal([]byte(sources.Specification), &spec)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &spec, nil
 }
 
 func IsValidSource(source string) bool {
 
 	for _, details := range *specification {
 
-		switch {
-		case details.Prefix == source:
+		if details.Name == source {
 			return true
-		case details.Name == source:
-			return true
-		default:
-			// continue
 		}
 	}
 
 	return false
 }
 
-func IsValidSourceId(source_id int64) bool {
+func IsValidSourceId(source_id int) bool {
 
 	for _, details := range *specification {
 
@@ -74,18 +67,6 @@ func IsValidSourceId(source_id int64) bool {
 	}
 
 	return false
-}
-
-func GetSourceByPrefix(source string) (*WOFSource, error) {
-
-	for _, details := range *specification {
-
-		if details.Prefix == source {
-			return &details, nil
-		}
-	}
-
-	return nil, errors.New("Invalid source")
 }
 
 func GetSourceByName(source string) (*WOFSource, error) {
@@ -100,7 +81,7 @@ func GetSourceByName(source string) (*WOFSource, error) {
 	return nil, errors.New("Invalid source")
 }
 
-func GetSourceById(source_id int64) (*WOFSource, error) {
+func GetSourceById(source_id int) (*WOFSource, error) {
 
 	for _, details := range *specification {
 

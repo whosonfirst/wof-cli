@@ -24,7 +24,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/sfomuseum/go-sfomuseum-mapshaper"
+	"github.com/sfomuseum/go-sfomuseum/mapshaper"
 	"github.com/tidwall/sjson"
 	"github.com/whosonfirst/go-whosonfirst/v4/export"
 	"github.com/whosonfirst/go-whosonfirst/v4/spatial/database"

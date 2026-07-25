@@ -8,7 +8,7 @@ import (
 
 	"github.com/paulmach/orb"
 	"github.com/paulmach/orb/geojson"
-	"github.com/sfomuseum/go-sfomuseum-mapshaper"
+	"github.com/sfomuseum/go-sfomuseum/mapshaper"
 	"github.com/tidwall/gjson"
 	"github.com/whosonfirst/go-reader/v2"
 	"github.com/whosonfirst/go-whosonfirst/v4/export"
